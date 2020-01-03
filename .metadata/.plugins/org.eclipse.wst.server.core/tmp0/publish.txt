@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Fri Jan 03 14:45:46 CST 2020
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\lei_zhou\\.m2\\repository\\org\\springframework\\spring-web\\4.3.9.RELEASE\\spring-web-4.3.9.RELEASE.jar=WEB-INF/lib/spring-web-4.3.9.RELEASE.jar
+org.eclipse.jst.j2ee.server\:Utility=WEB-INF/lib/Utility-0.0.1-SNAPSHOT.jar
