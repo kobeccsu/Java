@@ -1,5 +1,0 @@
-INDEX VERSION 1.131
-C:\Users\lei_zhou\CODE\JavaProj\Java\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2118592607.index
-\Web1\src
-C:\Users\lei_zhou\CODE\JavaProj\Java\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2517387423.index
-\Web1\src
