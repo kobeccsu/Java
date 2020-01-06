@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,8 +12,15 @@
 </style>
 </head>
 <body>
-	<h1>Login</h1>
+	<% HttpSession session1 = request.getSession();
+	   Object username = session1.getAttribute("user");
+	%>
+
+	
+	
 	<div>
+	<%if(username == null) {%>
+		<h1>Login</h1>
 		<form action="/Web1/leizhou/HandleThis" method="post">
 			<div >
 				<span class="label"><label>用户名:</label></span>
@@ -25,6 +34,9 @@
 				<input type="submit" value="Submit" />
 			</div>
 		</form>
+		<%} else{%>
+			<%= "Welcome back " + username.toString() %>
+		<%} %>
 	</div>
 </body>
 </html>

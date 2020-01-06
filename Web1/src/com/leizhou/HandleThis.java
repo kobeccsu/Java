@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.leizhou.biz.DBUsers;
+import com.leizhou.dto.UserBean;
+import com.leizhou.www.Utility.PasswordUtils;
+
 /**
  * Servlet implementation class HandleThis
  */
@@ -34,13 +38,24 @@ public class HandleThis extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("password").equals("123456") && request.getParameter("username").equals("zhoulei")) {
+		boolean isValidUser = false;
+	
+		UserBean userBean = new DBUsers().getUser(request.getParameter("username"));
+		if(userBean != null)
+			isValidUser = PasswordUtils.verifyUserPassword(request.getParameter("password"), userBean.getPassword(), userBean.getSalt());
+		
+		if (isValidUser) {
 			HttpSession session = request.getSession();
-			session.setAttribute("user", "zhoulei");
-			getServletContext().getRequestDispatcher("/Index.html").forward(request, response);
+			session.setAttribute("user", userBean.getUsername());
+			getServletContext().getRequestDispatcher("/Index.jsp").forward(request, response);
 			return;
 		}
+			
+		HttpSession session = request.getSession();
+		session.setAttribute("user", null);
 		getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+		
+		
 	}
 
 }

@@ -73,7 +73,7 @@
 		<p style="font-size:<%= i * 10 %>px">我是一个字体</p>
 	<%} %>
 	
-	<jsp:include page="Index.html"></jsp:include>
+	<jsp:include page="Index.jsp"></jsp:include>
 	<br/>
 	<h2>try to use bean</h2>
 	<p>the user name : <%= lei.getName() %></p>
