@@ -103,8 +103,7 @@
 	<dependency>
 		<groupId>com.leizhou.www</groupId>
 		<artifactId>Utility</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+		</dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>

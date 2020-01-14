@@ -21,7 +21,7 @@
 	<div>
 	<%if(username == null) {%>
 		<h1>Login</h1>
-		<form action="/Web1/leizhou/HandleThis" method="post">
+		<form action="<%=request.getContextPath()%>/leizhou/HandleThis" method="post">
 			<div >
 				<span class="label"><label>用户名:</label></span>
 				<span><input type="text" name="username" /></span>

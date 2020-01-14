@@ -43,13 +43,15 @@ public class DB {
 	public Connection getConnection() throws SQLException {
 		String dbName = System.getenv("RDS_DB_NAME"); 
 		dbName = dbName != null ? dbName : "mall";
-	    String userName = System.getenv("RDS_USERNAME");
+	    String userName = System.getProperty("RDS_USERNAME");
+	    System.out.println("username" + userName);
 	    userName = userName != null ? userName : "root";
-	    String password = System.getenv("RDS_PASSWORD");
+	    String password = System.getProperty("RDS_PASSWORD");
 	    password = password != null ? password : _password;
-	    String hostname = System.getenv("RDS_HOSTNAME");
+	    String hostname = System.getProperty("RDS_HOSTNAME");
+	    System.out.println("hostname" + hostname);
 	    hostname = hostname != null ? hostname : "127.0.0.1";
-	    String port = System.getenv("RDS_PORT");
+	    String port = System.getProperty("RDS_PORT");
 	    port = port != null ? port : "3306";
 	    String jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName 
 	    		+ "?user=" + userName + "&password=" + password;
