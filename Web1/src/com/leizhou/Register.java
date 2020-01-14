@@ -54,7 +54,7 @@ public class Register extends HttpServlet {
 		new DBUsers().register(userBean);
 		HttpSession session = request.getSession();
 		session.setAttribute("user", userBean.getUsername());
-		getServletContext().getRequestDispatcher("/Index.html").forward(request, response);
+		getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		return;
 		//doGet(request, response);
 	}
