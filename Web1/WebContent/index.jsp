@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="X-Frame-Options" content="allow">
 <title>我的Java主页</title>
 <style type="text/css">
 	.label{
@@ -16,8 +17,6 @@
 	   Object username = session1.getAttribute("user");
 	%>
 
-	
-	
 	<div>
 	<%if(username == null) {%>
 		<h1>Login</h1>
@@ -37,6 +36,7 @@
 		<%} else{%>
 			<%= "Welcome back " + username.toString() %>
 		<%} %>
+		
 	</div>
 </body>
 </html>
