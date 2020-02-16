@@ -20,28 +20,46 @@
 		<table>
 			<thead>
 				<tr>
-					<th>User name</th><th>Role</th><th>Operate</th>
+					<th>Policy</th><th>Operate</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td></td><td></td><td></td>
+					<td></td><td></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<div class="addUser" style="display:none;">
-		<div>
-			<span>policy</span>
-			<span><input type="text" name="policy" /></span>
-		</div>
-		<div>
-			<input type="button" value="Create" />
-		</div>
+		<hr/>
+			<div>
+				<span>policy</span>
+				<span><input type="text" name="policy" id="policyname" /></span>
+			</div>
+			<div>
+				<input type="button" value="Create" id="btnCreatePolicy" />
+			</div>
 	</div>
 	<script>
 		$("#btnAddPolicy").on("click", function(){
 			$(".addUser,.table").toggle();
+		});
+		
+		$("#btnCreatePolicy").on("click", function(){
+			$.ajax({
+				method:"POST",
+				url: "<%=request.getContextPath()%>/Policy",
+				data:{"policyname": $("#policyname").val()},
+				dataType:"json",
+				contentType:"application/json",
+				success:function(){
+					alter("success");
+				},
+				error:function(e){
+					alert(e.status);
+				}
+				
+			});
 		});
 	</script>
 	</div>

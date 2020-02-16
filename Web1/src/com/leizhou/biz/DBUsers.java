@@ -10,7 +10,7 @@ import com.leizhou.dto.UserBean;
 public class DBUsers {
 	public boolean register(UserBean user) {
 		String sql = "insert into users(uname, password, salt) values('" + user.getUsername() + "', '"+ user.getPassword() 
-			+"','"+ user.getSalt()+"')";
+			+ "','" + user.getSalt() + "')";
 		return new DB().insert(sql);
 	}
 	
