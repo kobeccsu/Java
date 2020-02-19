@@ -103,7 +103,13 @@
 	<dependency>
 		<groupId>com.leizhou.www</groupId>
 		<artifactId>Utility</artifactId>
-		</dependency>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.json/json -->
+	<dependency>
+	    <groupId>org.json</groupId>
+	    <artifactId>json</artifactId>
+	    <version>20160810</version>
+	</dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>

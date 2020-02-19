@@ -16,20 +16,21 @@
 				<input type="button" value="search" />
 				<input type="button" value="add role" id="btnAddPolicy"/>
 			</div>
-		</div><div class="table">
-		<table>
-			<thead>
-				<tr>
-					<th>Policy</th><th>Operate</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td></td><td></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+		</div>
+		<div class="table">
+			<table>
+				<thead>
+					<tr>
+						<th>Policy</th><th>Operate</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td><td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	<div class="addUser" style="display:none;">
 		<hr/>
 			<div>
@@ -47,9 +48,9 @@
 		
 		$("#btnCreatePolicy").on("click", function(){
 			$.ajax({
-				method:"POST",
+				method:"post",
 				url: "<%=request.getContextPath()%>/Policy",
-				data:{"policyname": $("#policyname").val()},
+				data: JSON.stringify({'policyname': $("#policyname").val()}),
 				dataType:"json",
 				contentType:"application/json",
 				success:function(){
@@ -58,7 +59,6 @@
 				error:function(e){
 					alert(e.status);
 				}
-				
 			});
 		});
 	</script>
