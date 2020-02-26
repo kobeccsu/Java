@@ -11,7 +11,7 @@ public class DBUsers {
 	public boolean register(UserBean user) {
 		String sql = "insert into users(uname, password, salt) values('" + user.getUsername() + "', '"+ user.getPassword() 
 			+ "','" + user.getSalt() + "')";
-		return new DB().insert(sql);
+		return new DB().execute(sql);
 	}
 	
 	public UserBean getUser(String username) {

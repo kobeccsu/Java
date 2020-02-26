@@ -12,7 +12,7 @@ public class DB {
 	final String _username = "root";
 	final String _password = "zl7758258";
 	
-	public boolean insert(String sql) {
+	public boolean execute(String sql) {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
