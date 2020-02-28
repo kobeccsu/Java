@@ -6,11 +6,13 @@
 	<meta charset="UTF-8">
 	<title>Policy Management</title>
 	<script type="text/javascript" src="../static/js/jquery.min.js"></script>
-	<script type="text/javascript" src="../static/js/jquery.template.js"></script>
 	<style>
-		.edit,.del{
+		.edit,.del,.pager .wrap-pager span{
 			color:blue;
 			cursor:pointer;
+		}
+		.pager .wrap-pager span{
+			margin-right:10px;
 		}
 	</style>
 </head>
@@ -19,8 +21,8 @@
 		<div class="searchbar">
 			<div>
 				<label>search name</label>
-				<input type="text" name="search_policyname" placeholder="input some info" />
-				<input type="button" value="search" />
+				<input type="text" id="search_content" name="search_policyname" placeholder="input some info" />
+				<input type="button" value="search" id="search" />
 				<input type="button" value="add policy" id="btnAddPolicy"/>
 			</div>
 		</div>
@@ -36,6 +38,11 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="pager">
+			<div class="wrap-pager" id="pager">
+				
+			</div>
+		</div>
 	<div class="addUser" style="display:none;">
 		<hr/>
 			<div>
@@ -47,6 +54,23 @@
 			</div>
 	</div>
 	<script>
+		function buildPager(currentIndex, totalPageSize){
+
+			var html = "";
+			html += "<span>First</span>"
+			if (currentIndex - 5 > 0){
+				html += "<span>...</span>"
+			}
+			for (var i = currentIndex - 5 > 0 ? curentIndex - 5 : 1 ; i <= totalPageSize; i++){
+				html += "<span data-pageindex='" + i + "'>" + i + '</span>';
+			}
+			if (totalPageSize - currentIndex > 5){
+				html += "<span>...</span>"
+			}
+			html += "<span>Last</span>"
+			return html;
+		}
+	
 		$("#btnAddPolicy").on("click", function(){
 			$(".addUser,.table").toggle();
 			$("#btnCreatePolicy").data('editid', '').data('action', 'add').val('Create');
@@ -57,14 +81,14 @@
 			$.ajax({
 				method:"post",
 				url: "<%=request.getContextPath()%>/Policy",
-				data: JSON.stringify({'action':$(obj).data('action'),id:$(obj).data('editid'),'policyname': $("#policyname").val()}),
+				data: JSON.stringify({'action': $(obj).data('action'), id:$(obj).data('editid'),'policyname': $("#policyname").val()}),
 				dataType:"json",
 				contentType:"application/json",
 				success:function(){
 					console.log('add success');
 					$(".addUser,.table").toggle();
 					$("#policyname").val('');
-					loadData();
+					loadData(1);
 				},
 				error:function(e){
 					alert(e.statusText);
@@ -96,7 +120,7 @@
 					dataType:"json",
 					contentType:"application/json",
 					success:function(){
-						loadData();
+						loadData(1);
 					},
 					error:function(e){
 						alert(e.statusText);
@@ -107,22 +131,35 @@
 		
 		// load data
 		$(document).ready(function(){
-			loadData();
+			loadData(1);
 		});
 		
-		function loadData(){
+		$(document).on('click', '.pager .wrap-pager span', function(){
+			loadData($(this).data('pageindex'));
+		});
+		
+		$('#search').on('click', function(){
+			loadData(1);
+		});
+		
+		function loadData(pageIndex){
 			$.ajax({
 				method:'get',
 				url:'<%=request.getContextPath()%>/Policy',
+				data: {pageIndex: pageIndex, pageSize:10, queryText:$('#search_content').val()},
 				success:function(result){
-					var data = eval(result);
+					var json = eval(result);
 					var concatTr = '';
-					for(var item in data){
+					for(var item in json.data){
 						concatTr += '<tr>';
-						concatTr += "<td>" + data[item].policyname + "</td><td><span class='edit' data-id='" + data[item].id + "'>Edit</span>|<span class='del' data-id='" + data[item].id + "'>Delete</span></td>"
+						concatTr += "<td>" + json.data[item].policyname + "</td><td><span class='edit' data-id='" +
+							json.data[item].id + "'>Edit</span>|<span class='del' data-id='" + json.data[item].id + "'>Delete</span></td>"
 						concatTr += '</tr>';
 					}
+					var pagerHtml = buildPager(1, json.totalCount);
+					
 					$("#tableBody").html(concatTr);
+					$('#pager').html(pagerHtml);
 				},
 				error:function(){
 					alert(e.statusText);

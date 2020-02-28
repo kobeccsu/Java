@@ -35,11 +35,18 @@ public class Policy extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBPolicy db = new DBPolicy();
+		int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
+		int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+		String queryText = request.getParameter("queryText");
+		
 		try {
-			LinkedList<com.leizhou.dto.Policy> list = db.getPolicyList();
+			LinkedList<com.leizhou.dto.Policy> list = db.getPolicyList(pageIndex,pageSize, queryText);
 			Gson json = new Gson();
-			String result = json.toJson(list);
-			response.getWriter().append(result);
+			int totalCount  = db.getTotalCount(queryText);
+			response.setContentType("application/json"); 
+			response.setCharacterEncoding("utf-8"); 
+			response.getWriter().append("{\"data\":"+ json.toJson(list) + " ,\"totalCount\":" 
+					+ (totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1) + "}");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

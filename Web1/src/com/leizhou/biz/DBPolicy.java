@@ -15,11 +15,13 @@ public class DBPolicy {
 		return new DB().execute("insert into policy (policyname, uid) values ('" + name + "', uuid());");
 	}
 	
-	public LinkedList<Policy> getPolicyList() throws ClassNotFoundException, SQLException{
+	public LinkedList<Policy> getPolicyList(int pageIndex, int pageSize, String queryText) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet result = stmt.executeQuery("select * from policy");
+		ResultSet result = stmt.executeQuery("select * from policy "
+				+ (queryText.contentEquals("") ? "" : " where policyname like '" + queryText + "%'") +
+				" limit " + pageSize + " offset " + (pageIndex - 1) * pageSize);
 		LinkedList<Policy> list = new LinkedList<Policy>();
 		while (result.next()) {
 			Policy po = new Policy();
@@ -38,5 +40,15 @@ public class DBPolicy {
 	
 	public boolean updatePolicy(Policy po) {
 		return new DB().execute("update policy set policyname = '"+po.getPolicyname()+"' where id= " + po.getId());
+	}
+	
+	public int getTotalCount(String policyname) throws SQLException {
+		Connection con = new DB().getConnection();
+		Statement stmt = con.createStatement();
+		ResultSet resultSet = stmt.executeQuery("select count(*) as totalcount from policy where policyname like '" + policyname + "%' ");
+		resultSet.next();
+		int count = resultSet.getInt("totalcount");
+		resultSet.close();
+		return count;
 	}
 }
