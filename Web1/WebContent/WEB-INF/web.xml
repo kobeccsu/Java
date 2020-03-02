@@ -30,6 +30,15 @@
     <servlet-name>UploadServlet</servlet-name>
     <url-pattern>/leizhou/UploadServlet</url-pattern>
   </servlet-mapping>
+  <!-- <servlet>
+  	<display-name>PolicyServlet</display-name>
+  	<servlet-name>PolicyServlet</servlet-name>
+  	<servlet-class>com.leizhou.Policy</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>PolicyServlet</servlet-name>
+  	<url-pattern>/Policy/*</url-pattern>
+  </servlet-mapping> -->
   <jsp-config>
     <taglib>
       <taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri>
@@ -63,5 +72,9 @@
       <taglib-uri>http://java.sun.com/jsp/jstl/x-rt</taglib-uri>
       <taglib-location>/WEB-INF/x-1_0-rt.tld</taglib-location>
     </taglib>
+    <jsp-property-group>
+        <url-pattern>*.jsp</url-pattern>
+        <page-encoding>UTF-8</page-encoding>
+    </jsp-property-group>
   </jsp-config>
 </web-app>

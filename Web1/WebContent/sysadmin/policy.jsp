@@ -80,12 +80,11 @@
 		function addOrUpdate(obj){
 			$.ajax({
 				method:"post",
-				url: "<%=request.getContextPath()%>/Policy",
-				data: JSON.stringify({'action': $(obj).data('action'), id:$(obj).data('editid'),'policyname': $("#policyname").val()}),
+				url: "<%=request.getContextPath()%>/Policy/" + $(obj).data('action'),
+				data: JSON.stringify({ id:$(obj).data('editid'), 'policyname': $("#policyname").val()}),
 				dataType:"json",
 				contentType:"application/json",
 				success:function(){
-					console.log('add success');
 					$(".addUser,.table").toggle();
 					$("#policyname").val('');
 					loadData(1);
@@ -105,7 +104,7 @@
 			$(".table").hide();
 			
 			$("#btnCreatePolicy").data('editid', $(this).data("id"));
-			$("#btnCreatePolicy").data('action', 'edit');
+			$("#btnCreatePolicy").data('action', 'update');
 			$("#btnCreatePolicy").val('Update');
 			$("#policyname").val($(this).closest("tr").find('td:first').text());
 		});
@@ -115,8 +114,8 @@
 				var id = $(this).data('id');
 				$.ajax({
 					method:'post',
-					url: "<%=request.getContextPath()%>/Policy",
-					data: JSON.stringify({'action':'delete', 'id':id}),
+					url: "<%=request.getContextPath()%>/Policy/delete",
+					data: JSON.stringify({'id':id}),
 					dataType:"json",
 					contentType:"application/json",
 					success:function(){

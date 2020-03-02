@@ -54,7 +54,7 @@ public class DB {
 	    String port = System.getProperty("RDS_PORT");
 	    port = port != null ? port : "3306";
 	    String jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName 
-	    		+ "?user=" + userName + "&password=" + password;
+	    		+ "?useUnicode=true&characterEncoding=utf-8&user=" + userName + "&password=" + password;
 		
 	    return DriverManager.getConnection(jdbcUrl);
 	}

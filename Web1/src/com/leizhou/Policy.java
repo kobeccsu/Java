@@ -19,7 +19,7 @@ import com.leizhou.biz.DBPolicy;
 /**
  * Servlet implementation class Policy
  */
-@WebServlet("/Policy")
+@WebServlet("/Policy/*")
 public class Policy extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -58,6 +58,12 @@ public class Policy extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		String requestPath = request.getPathInfo();
+		int subString = requestPath.lastIndexOf("/") + 1;
+		String action =  requestPath.substring(subString, requestPath.length());
+		
+		 
 		StringBuffer strBuffer = new StringBuffer();
 		String str = null;
 		BufferedReader reader = request.getReader();
@@ -67,15 +73,16 @@ public class Policy extends HttpServlet {
 		
 		JSONObject jsonObject = new JSONObject(strBuffer.toString());
 		
-		String action = jsonObject.getString("action");
+		//String action = jsonObject.getString("action");
 		boolean isSuccess = false;
+		
 		if (action.equalsIgnoreCase("add")){
 			String policyName = jsonObject.getString("policyname");
 			isSuccess = new DBPolicy().addPolicy(policyName);
 		} else if(action.equalsIgnoreCase("delete")){
 			int id = jsonObject.getInt("id");
 			isSuccess = new DBPolicy().deletePolicy(id);
-		} else if(action.equalsIgnoreCase("edit")){
+		} else if(action.equalsIgnoreCase("update")){
 			com.leizhou.dto.Policy policy =new com.leizhou.dto.Policy();
 			policy.setId(jsonObject.getInt("id"));
 			policy.setPolicyname(jsonObject.getString("policyname"));
