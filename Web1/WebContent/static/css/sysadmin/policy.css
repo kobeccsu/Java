@@ -1,0 +1,7 @@
+.edit,.del,.pager span{
+    color:blue;
+    cursor:pointer;
+}
+.pager span{
+    margin-right:10px;
+}
