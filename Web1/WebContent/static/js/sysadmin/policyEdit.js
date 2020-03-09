@@ -16,7 +16,7 @@ export default class AddEdit extends React.Component{
 		axios.post('../Policy/' + (this.props.isAdd ? 'add' : 'update'),
 			{id: this.props.id, 'policyname': this.props.policyname})
 		.then((response)=>{
-			this.props.reloader(1, '');
+			this.props.reloader();
 		});
 	}
 
@@ -32,7 +32,7 @@ export default class AddEdit extends React.Component{
                         onChange={(e)=>{ this.props.updateP({policyname: e.target.value}) }} /></span>
 				</div>
 				<div>
-					<input type="button" value="Create" onClick={this.addUpdateData} />
+					<input type="button" value={this.props.isAdd ? 'Create' : 'Update'} onClick={this.addUpdateData} />
 				</div>
 			</div>
 		);

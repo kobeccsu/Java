@@ -2,6 +2,9 @@
     color:blue;
     cursor:pointer;
 }
+.pager span.gray{
+    color: gray;
+}
 .pager span{
     margin-right:10px;
 }

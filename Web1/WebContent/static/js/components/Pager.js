@@ -3,21 +3,29 @@ import React from 'react'
 class Pager extends React.Component{
     constructor(props){
         super(props);
+        this.turnPage = this.turnPage.bind(this);
+    }
+
+    turnPage(pageIndex){
+        let self = this;
+        this.props.updateParentState({currentIndex: pageIndex}, ()=>{
+            self.props.reload();
+        });
     }
 
     render(){
         const isCurIndexOverPrev = this.props.currentIndex - 5 > 0;
         const isCurIndexOverNext = this.props.totalPageSize - this.props.currentIndex > 5;
         var pages = [];
-        for (var i = this.props.currentIndex - 5 > 0 ? this.props.currentIndex - 5 : 1 ; i <= this.props.totalPageSize; i++){
-            pages.push(<span data-pageindex={i}>{i}</span>);
+        for (let i = this.props.currentIndex - 5 > 0 ? this.props.currentIndex - 5 : 1 ; i <= this.props.totalPageSize; i++){
+            pages.push(<span data-pageindex={i} className={this.props.currentIndex == i ? 'gray' : ''} 
+                onClick={()=>{this.turnPage(i)}}>{i}</span>);
         }
-        console.log('pages count' + this.props.totalPageSize);
         return (
             <div className='pager'>
-                {isCurIndexOverPrev ? <><span>First</span><span>...</span></> : ''}
+                {isCurIndexOverPrev ? <><span onClick={()=>{this.turnPage(1)}}>First</span><span>...</span></> : ''}
                 {pages}
-                {isCurIndexOverNext ? <><span>...</span><span>Last</span></> : ''}
+                {isCurIndexOverNext ? <><span>...</span><span onClick={()=>this.turnPage(this.props.totalPageSize)}>Last</span></> : ''}
             </div>
         );
     }

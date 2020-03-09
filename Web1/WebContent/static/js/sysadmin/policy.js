@@ -17,23 +17,37 @@ class App extends React.Component{
 			showEdit: false,
 			isAdd: true,
 			id: '',
-			policyname:''
+			policyname:'',
+			currentIndex: 1,
+			searchTxt:''
 		}
-		this.showHideedit = this.showHideedit.bind(this);
+		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
 	}
 
-	loadData(pageIndex, queryText){
-		const self = this;
-		axios.get('../Policy',{ params:{pageIndex : pageIndex, pageSize:10, queryText: queryText}})
+	loadData(){
+		let self = this;
+		axios.get('../Policy',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
-			// console.log(response);
-			var json = eval(response);
-			self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
+				var json = eval(response);
+				self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
+				if(json.data.data.length == 0 && this.state.currentIndex != 1){
+					self.setState({currentIndex : this.state.currentIndex - 1});
+					this.loadData();
+				}
 			});
 	}
+	deleteRow(id){
+		if (confirm('Really to delete')){
+			axios.post('../Policy/delete',
+				{id: id})
+			.then((response)=>{
+				this.loadData();
+			});
+		}
+	}
 	componentDidMount(){
-		this.loadData(1,'');
+		this.loadData();
 	}
 	renderTableData() {
 		return this.state.tbody.map((item, index) => {
@@ -43,22 +57,23 @@ class App extends React.Component{
 				 <td>{policyname}</td>
 				 <td><span className='edit' 
 					 onClick={()=>{this.setState({showEdit : true, isAdd: false, policyname: policyname, id:id});}} 
-					 data-id={id}>Edit</span>|<span className='del' data-id={id}>Delete</span></td>
+					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 			  </tr>
 		   )
 		})
 	 }
-	 showHideedit(obj){
-		 this.setState(obj);
+	 updateState(obj, func){
+		 this.setState(obj, func);
 	 }
 	render(){
 		return(
 			<React.Fragment>
-				<SearchBar handleSearch={this.loadData} handleParent={this.showHideedit} showEdit={this.state.showEdit}/>
+				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
 				{!this.state.showEdit ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()}/> : ''}
-				<Pager currentIndex='1' totalPageSize={this.state.pageCount} />
+				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
+					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
-					updateP={this.showHideedit} isAdd={this.state.isAdd} 
+					updateP={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} policyname={this.state.policyname} /> : ''}
 			</React.Fragment>
 		);

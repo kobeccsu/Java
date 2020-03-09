@@ -3,9 +3,6 @@ import React from 'react'
 class SearchBar extends React.Component{
     constructor(e){
         super(e);
-        this.state = {
-            searchTxt : ''
-        };
     }
 
     render(){
@@ -13,14 +10,15 @@ class SearchBar extends React.Component{
             <div className="searchbar">
                 <div>
                     <label>search name</label>
-                    <input type="text" value={this.state.searchTxt} onChange={(e)=> {this.setState({searchTxt:e.target.value})}} id="search_content" name="search_policyname" placeholder="input some info" />
+                    <input type="text" value={this.props.searchTxt} onChange={(e)=> {this.setState({searchTxt:e.target.value})}} 
+                        placeholder="input some info" />
                     <input type="button" value="search" 
                         onClick={()=>{
-                            this.props.handleSearch(1, this.state.searchTxt)
+                            this.props.handleSearch(1, this.props.searchTxt)
                         }} id="search" />
                     <input type="button" value="add policy" onClick={ 
                         ()=>{    
-                            this.props.handleParent({showEdit: true, isAdd: true});
+                            this.props.updateState({showEdit: true, policyname:'', isAdd: true});
                         } } />
                 </div>
 		    </div>
