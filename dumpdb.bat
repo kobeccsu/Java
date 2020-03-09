@@ -1,0 +1,1 @@
+mysqldump mall -u root -p > mall_db.sql
