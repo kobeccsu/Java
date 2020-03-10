@@ -2,7 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./WebContent/static/js/sysadmin/policy.js",
+  entry: {policy:"./WebContent/static/js/sysadmin/policy.js",
+	  role:"./WebContent/static/js/sysadmin/role.js"},
   mode: "development",
   module: {
     rules: [
@@ -22,7 +23,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "WebContent/static/dist/js/sysadmin/"),
     publicPath: "/WebContent/static/dist/js/sysadmin/",
-    filename: "policy.js"
+    filename: '[name].js'
   },
 //  devServer: {
 //    contentBase: path.join(__dirname, "WebContent/static/"),

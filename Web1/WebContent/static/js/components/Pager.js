@@ -18,7 +18,7 @@ class Pager extends React.Component{
         const isCurIndexOverNext = this.props.totalPageSize - this.props.currentIndex > 5;
         var pages = [];
         for (let i = this.props.currentIndex - 5 > 0 ? this.props.currentIndex - 5 : 1 ; i <= this.props.totalPageSize; i++){
-            pages.push(<span data-pageindex={i} className={this.props.currentIndex == i ? 'gray' : ''} 
+            pages.push(<span key={i} data-pageindex={i} className={this.props.currentIndex == i ? 'gray' : ''} 
                 onClick={()=>{this.turnPage(i)}}>{i}</span>);
         }
         return (

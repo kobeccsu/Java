@@ -10,11 +10,11 @@ import com.leizhou.dal.DB;
 import com.leizhou.dto.RoleBean;
 
 public class DBRole {
-	public boolean addPolicy(String name) {
+	public boolean addRole(String name) {
 		return new DB().execute("insert into role (rolename, uid) values ('" + name + "', uuid());");
 	}
 	
-	public LinkedList<RoleBean> getPolicyList(int pageIndex, int pageSize, String queryText) throws ClassNotFoundException, SQLException{
+	public LinkedList<RoleBean> getRoleList(int pageIndex, int pageSize, String queryText) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
@@ -26,7 +26,7 @@ public class DBRole {
 			RoleBean po = new RoleBean();
 			po.setId(result.getInt("id"));
 			po.setUid(result.getString("uid"));
-			po.setRolename(result.getString("uid"));
+			po.setRolename(result.getString("rolename"));
 			list.add(po);
 		}
 		con.close();
@@ -38,13 +38,13 @@ public class DBRole {
 	}
 	
 	public boolean updateRole(RoleBean po) {
-		return new DB().execute("update role set rolename = '"+po.getRolename()+"' where id= " + po.getId());
+		return new DB().execute("update role set rolename = '" + po.getRolename() + "' where id= " + po.getId());
 	}
 	
 	public int getTotalCount(String rolename) throws SQLException {
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet resultSet = stmt.executeQuery("select count(*) as totalcount from role where policyname like '" + rolename + "%' ");
+		ResultSet resultSet = stmt.executeQuery("select count(*) as totalcount from role where rolename like '" + rolename + "%' ");
 		resultSet.next();
 		int count = resultSet.getInt("totalcount");
 		resultSet.close();

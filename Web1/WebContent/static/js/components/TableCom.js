@@ -6,7 +6,7 @@ class TableCom extends React.Component{
 	}
 	generateTh(){
 		return this.props.headers.map((item,index) =>{
-				return <th>{item}</th>
+				return <th key={index}>{item}</th>
 			});
 	}
     render(){
