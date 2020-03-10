@@ -53,7 +53,7 @@ CREATE TABLE `role` (
   `uid` char(36) DEFAULT NULL,
   `rolename` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,6 +62,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'47274da5-6296-11ea-ada3-80e82c9e4843','sdfsdf'),(2,'2bfbf458-6297-11ea-ada3-80e82c9e4843','rtrthrth'),(3,'58e43cc4-6297-11ea-ada3-80e82c9e4843','g4tg45t'),(4,'5ab73b08-6297-11ea-ada3-80e82c9e4843','5htrgg'),(5,'5d0cd988-6297-11ea-ada3-80e82c9e4843','h5hgert5t'),(6,'5ed6376b-6297-11ea-ada3-80e82c9e4843','etyntryntymtym'),(7,'614987bb-6297-11ea-ada3-80e82c9e4843','vderteruu'),(8,'634a3982-6297-11ea-ada3-80e82c9e4843','asdfacsdvsdv'),(9,'65410c48-6297-11ea-ada3-80e82c9e4843','asdfsfadf'),(10,'6730c400-6297-11ea-ada3-80e82c9e4843','adheryery'),(11,'68ba027a-6297-11ea-ada3-80e82c9e4843','asdfasdfasd'),(12,'fcda1018-629a-11ea-ada3-80e82c9e4843','dfgdgdf'),(13,'0307e48e-629b-11ea-ada3-80e82c9e4843','dfgdfh');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,4 +154,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-09 16:17:04
+-- Dump completed on 2020-03-10 17:38:17
