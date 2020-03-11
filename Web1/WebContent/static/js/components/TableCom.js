@@ -13,7 +13,7 @@ class TableCom extends React.Component{
         return (
             <div className="table">
 				<table>
-					<thead>
+					<thead className="thead-light">
 						<tr>
 							{this.generateTh()}
 						</tr>

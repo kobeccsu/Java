@@ -68,7 +68,7 @@ class App extends React.Component{
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} tbody={this.renderTableData()}/> : ''}
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation', 'Policies']} tbody={this.renderTableData()}/> : ''}
 				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
