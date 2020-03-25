@@ -19,7 +19,8 @@ class App extends React.Component{
 			editname:'',
 			currentIndex: 1,
 			searchTxt:'',
-			showAttachPolicy: false
+			showAttachPolicy: false,
+			policyData:[]
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
@@ -31,6 +32,18 @@ class App extends React.Component{
 			.then(response => {
 				var json = eval(response);
 				self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
+				if(json.data.data.length == 0 && this.state.currentIndex != 1){
+					self.setState({currentIndex : this.state.currentIndex - 1});
+					this.loadData();
+				}
+			});
+	}
+	loadPolicyData(){
+		let self = this;
+		axios.get('../Policy',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+			.then(response => {
+				var json = eval(response);
+				self.setState({tbody: json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
 				if(json.data.data.length == 0 && this.state.currentIndex != 1){
 					self.setState({currentIndex : this.state.currentIndex - 1});
 					this.loadData();
@@ -62,6 +75,17 @@ class App extends React.Component{
 		   )
 		})
 	 }
+	 renderPolicyTableData() {
+		return this.state.policyData.map((item, index) => {
+		   const { id, policyname } = item //destructuring
+		   return (
+			  <tr key={id}>
+				 <td>{policyname}</td>
+				 <td><input type="checkbox" class="form-check-input"/></td>
+			  </tr>
+		   )
+		})
+	 }
 	 updateState(obj, func){
 		 this.setState(obj, func);
 	 }
@@ -75,7 +99,7 @@ class App extends React.Component{
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
-				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()}/> : ''}
+				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Select']} load={this.loadPolicyData} tbody={this.renderPolicyTableData()}/> : ''}
 			</React.Fragment>
 		);
 	}

@@ -1,9 +1,12 @@
 package com.leizhou.dto;
 
+import java.util.ArrayList;
+
 public class RoleBean {
 	private int id;
 	private String uid;
 	private String rolename;
+	private ArrayList<Policy> policies;
 	
 	public int getId() {
 		return id;
@@ -22,5 +25,11 @@ public class RoleBean {
 	}
 	public void setRolename(String rolename) {
 		this.rolename = rolename;
+	}
+	public ArrayList<Policy> getPolicies() {
+		return policies;
+	}
+	public void setPolicies(ArrayList<Policy> policies) {
+		this.policies = policies;
 	}
 }
