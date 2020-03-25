@@ -18,7 +18,8 @@ class App extends React.Component{
 			id: '',
 			editname:'',
 			currentIndex: 1,
-			searchTxt:''
+			searchTxt:'',
+			showAttachPolicy: false
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
@@ -72,8 +73,9 @@ class App extends React.Component{
 				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
-					updateP={this.updateState} isAdd={this.state.isAdd} 
+					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
+				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()}/> : ''}
 			</React.Fragment>
 		);
 	}

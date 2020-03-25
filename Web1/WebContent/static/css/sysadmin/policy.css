@@ -1,4 +1,4 @@
-.edit,.del,.pager span{
+.edit,.del,.pager span, .attach-policy{
     color:blue;
     cursor:pointer;
 }
