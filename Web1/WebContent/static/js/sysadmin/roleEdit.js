@@ -33,7 +33,7 @@ export default class AddEdit extends React.Component{
                         onChange={(e)=>{ this.props.updateState({editname: e.target.value}) }} /></span>
 				</div>
 				<div>
-					<div><span className="attach-policy" onClick={()=>{this.props.updateState({showAttachPolicy:true}, this.props.load())}}>Attach policies</span></div>
+					<div><span className="attach-policy" onClick={()=>{this.props.updateState({showAttachPolicy:true}, ()=>{this.props.reloader()} )}}>Attach policies</span></div>
 					<div className="hasPolicy"></div>
 				</div>
 				<div>

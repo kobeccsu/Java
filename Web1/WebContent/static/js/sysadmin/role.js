@@ -20,10 +20,13 @@ class App extends React.Component{
 			currentIndex: 1,
 			searchTxt:'',
 			showAttachPolicy: false,
-			policyData:[]
+			policyData:[],
+			selected: [1]
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
+		this.loadPolicyData = this.loadPolicyData.bind(this);
+		this.toggleRowSelect = this.toggleRowSelect.bind(this);
 	}
 
 	loadData(){
@@ -38,15 +41,17 @@ class App extends React.Component{
 				}
 			});
 	}
+
+
 	loadPolicyData(){
 		let self = this;
 		axios.get('../Policy',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
-				self.setState({tbody: json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
+				self.setState({policyData: json.data.data, pageCount: json.data.totalCount});
 				if(json.data.data.length == 0 && this.state.currentIndex != 1){
 					self.setState({currentIndex : this.state.currentIndex - 1});
-					this.loadData();
+					this.loadPolicyData();
 				}
 			});
 	}
@@ -75,13 +80,27 @@ class App extends React.Component{
 		   )
 		})
 	 }
+	 toggleRowSelect(id){
+		if(this.state.selected.includes(id)){
+			this.setState(state=>{
+				const list = state.selected.filter((item, i) => item!=id);
+				return {selected:list};
+			});
+		}else{
+			this.setState(state=>{
+				const list = [...state.selected, id];
+				return {selected: list};
+			});
+		}
+	 }
 	 renderPolicyTableData() {
 		return this.state.policyData.map((item, index) => {
 		   const { id, policyname } = item //destructuring
 		   return (
-			  <tr key={id}>
+			  <tr key={id} onClick={()=>this.toggleRowSelect(id)}>
 				 <td>{policyname}</td>
-				 <td><input type="checkbox" class="form-check-input"/></td>
+				 <td><input type="checkbox" checked={this.state.selected.includes(id)} 
+				 onChange={()=>this.toggleRowSelect(id)} className="form-check-input" value={id}/></td>
 			  </tr>
 		   )
 		})
@@ -96,10 +115,10 @@ class App extends React.Component{
 				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation', 'Policies']} tbody={this.renderTableData()}/> : ''}
 				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
-				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
+				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
-				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Select']} load={this.loadPolicyData} tbody={this.renderPolicyTableData()}/> : ''}
+				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Select']} tbody={this.renderPolicyTableData()}/> : ''}
 			</React.Fragment>
 		);
 	}
