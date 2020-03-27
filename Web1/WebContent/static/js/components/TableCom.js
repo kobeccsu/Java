@@ -1,13 +1,43 @@
 import React from 'react'
+import Pager from '../components/Pager'
+import axios from 'axios';
+import  '../../css/sysadmin/policy.css'
 
 class TableCom extends React.Component{
     constructor(props){
-        super(props);
+		super(props);
+		this.state = {
+			currentIndex:1,
+			pageCount:0,
+			searchTxt:''
+		}
+		this.loaddata = this.loaddata.bind(this);
+		this.updateState = this.updateState.bind(this);
 	}
+
 	generateTh(){
 		return this.props.headers.map((item,index) =>{
 				return <th key={index}>{item}</th>
 			});
+	}
+
+	loaddata(){
+		let self = this;
+		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+			.then(response => {
+				var json = eval(response);
+				self.setState({policyData: json.data.data, pageCount: json.data.totalCount});
+				if(json.data.data.length == 0 && this.state.currentIndex != 1){
+					self.setState({currentIndex : this.state.currentIndex - 1});
+					self.loaddata();
+				}
+			});
+	}
+	updateState(obj, cb){
+		this.setState(obj, cb);
+	}
+	componentDidMount(){
+		this.loaddata();
 	}
     render(){
         return (
@@ -22,6 +52,10 @@ class TableCom extends React.Component{
 						{this.props.tbody}
 					</tbody>
 				</table>
+				<hr/>
+				<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 
+					updateParentState={this.updateState} 
+					totalPageSize={this.state.pageCount} />
 			</div>
         );
     }

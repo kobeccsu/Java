@@ -21,7 +21,7 @@ class App extends React.Component{
 			searchTxt:'',
 			showAttachPolicy: false,
 			policyData:[],
-			selected: [1]
+			selected: [1],
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
@@ -118,7 +118,9 @@ class App extends React.Component{
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
-				{this.state.showAttachPolicy ? <TableCom headers={['PolicyName','Select']} tbody={this.renderPolicyTableData()}/> : ''}
+				{this.state.showAttachPolicy ? 
+					<TableCom headers={['PolicyName','Select']} getDataUrl="../Policy" afterDataChange={this.renderPolicyTableData} tbody={this.renderPolicyTableData()}/>
+					: ''}
 			</React.Fragment>
 		);
 	}

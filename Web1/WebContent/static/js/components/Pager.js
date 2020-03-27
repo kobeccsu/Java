@@ -8,7 +8,7 @@ class Pager extends React.Component{
 
     turnPage(pageIndex){
         let self = this;
-        this.props.updateParentState({currentIndex: pageIndex}, ()=>{
+        self.props.updateParentState({currentIndex: pageIndex}, ()=>{
             self.props.reload();
         });
     }
