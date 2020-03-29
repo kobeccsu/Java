@@ -27,6 +27,7 @@ class App extends React.Component{
 		this.loadData = this.loadData.bind(this);
 		this.loadPolicyData = this.loadPolicyData.bind(this);
 		this.toggleRowSelect = this.toggleRowSelect.bind(this);
+		this.TableRef = React.createRef();
 	}
 
 	loadData(){
@@ -68,17 +69,17 @@ class App extends React.Component{
 		this.loadData();
 	}
 	renderTableData() {
-		return this.state.tbody.map((item, index) => {
-		   const { id, uid, rolename } = item //destructuring
-		   return (
-			  <tr key={id}>
-				 <td>{rolename}</td>
-				 <td><span className='edit' 
-					 onClick={()=>{this.setState({showEdit : true, isAdd: false, editname: rolename, id: id});}} 
-					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
-			  </tr>
-		   )
-		})
+		// return this.state.tbody.map((item, index) => {
+		//    const { id, uid, rolename } = item //destructuring
+		//    return (
+		// 	  <tr key={id}>
+		// 		 <td>{rolename}</td>
+		// 		 <td><span className='edit' 
+		// 			 onClick={()=>{this.setState({showEdit : true, isAdd: false, editname: rolename, id: id});}} 
+		// 			 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
+		// 	  </tr>
+		//    )
+		// })
 	 }
 	 toggleRowSelect(id){
 		if(this.state.selected.includes(id)){
@@ -94,8 +95,8 @@ class App extends React.Component{
 		}
 	 }
 	 renderPolicyTableData() {
-		return this.state.policyData.map((item, index) => {
-		   const { id, policyname } = item //destructuring
+		return this.TableRef.state.tabledata.map((item, index) => {
+		   const { policyname,uuid, id,  } = item //destructuring
 		   return (
 			  <tr key={id} onClick={()=>this.toggleRowSelect(id)}>
 				 <td>{policyname}</td>
@@ -112,14 +113,15 @@ class App extends React.Component{
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation', 'Policies']} tbody={this.renderTableData()}/> : ''}
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation', 'Policies']} tbody={this.renderTableData}/> : ''}
 				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
 				{this.state.showAttachPolicy ? 
-					<TableCom headers={['PolicyName','Select']} getDataUrl="../Policy" afterDataChange={this.renderPolicyTableData} tbody={this.renderPolicyTableData()}/>
+					<TableCom headers={['PolicyName','Select']} ref={this.TableRef} getDataUrl="../Policy" 
+						afterDataChange={()=>this.renderPolicyTableData()} />
 					: ''}
 			</React.Fragment>
 		);

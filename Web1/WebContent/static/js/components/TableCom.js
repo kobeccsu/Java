@@ -9,7 +9,8 @@ class TableCom extends React.Component{
 		this.state = {
 			currentIndex:1,
 			pageCount:0,
-			searchTxt:''
+			searchTxt:'',
+			tabledata:[]
 		}
 		this.loaddata = this.loaddata.bind(this);
 		this.updateState = this.updateState.bind(this);
@@ -26,11 +27,14 @@ class TableCom extends React.Component{
 		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
-				self.setState({policyData: json.data.data, pageCount: json.data.totalCount});
+				self.setState({tabledata: json.data.data, pageCount: json.data.totalCount}, ()=>{
+					this.props.afterDataChange();
+				});
 				if(json.data.data.length == 0 && this.state.currentIndex != 1){
 					self.setState({currentIndex : this.state.currentIndex - 1});
 					self.loaddata();
 				}
+				
 			});
 	}
 	updateState(obj, cb){
@@ -49,7 +53,7 @@ class TableCom extends React.Component{
 						</tr>
 					</thead>
 					<tbody id="tableBody">
-						{this.props.tbody}
+						{this.state.tabledata}
 					</tbody>
 				</table>
 				<hr/>
