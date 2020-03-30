@@ -33,9 +33,21 @@ export default class AddEdit extends React.Component{
                         onChange={(e)=>{ this.props.updateState({editname: e.target.value}) }} /></span>
 				</div>
 				<div>
-					<div><span className="attach-policy" 
+					<div><span className="btn btn-outline-primary"
 					onClick={()=>{this.props.updateState({showAttachPolicy:true}, ()=>{this.props.reloader()} )}}>Attach policies</span></div>
-					<div className="hasPolicy"></div>
+					<div className="hasPolicy">
+						<div class="card">
+											
+							<div class="card-body">
+								<button type="button" class="close" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+								<p>This is some text within a card body.</p>
+								
+							</div>
+						</div>
+					
+					</div>
 				</div>
 				<div>
 					<input type="button" value={this.props.isAdd ? 'Create' : 'Update'} onClick={this.addUpdateData} />

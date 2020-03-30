@@ -20,13 +20,13 @@ class App extends React.Component{
 			currentIndex: 1,
 			searchTxt:'',
 			showAttachPolicy: false,
-			policyData:[],
-			selected: [1],
+			policyData:[]
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
 		this.loadPolicyData = this.loadPolicyData.bind(this);
-		this.toggleRowSelect = this.toggleRowSelect.bind(this);
+		// this.toggleRowSelect = this.toggleRowSelect.bind(this);
+		this.renderPolicyTableData = this.renderPolicyTableData.bind(this);
 		this.TableRef = React.createRef();
 	}
 
@@ -68,7 +68,7 @@ class App extends React.Component{
 	componentDidMount(){
 		this.loadData();
 	}
-	renderTableData() {
+	// renderTableData() {
 		// return this.state.tbody.map((item, index) => {
 		//    const { id, uid, rolename } = item //destructuring
 		//    return (
@@ -80,31 +80,40 @@ class App extends React.Component{
 		// 	  </tr>
 		//    )
 		// })
-	 }
-	 toggleRowSelect(id){
-		if(this.state.selected.includes(id)){
-			this.setState(state=>{
-				const list = state.selected.filter((item, i) => item!=id);
-				return {selected:list};
-			});
-		}else{
-			this.setState(state=>{
-				const list = [...state.selected, id];
-				return {selected: list};
-			});
-		}
-	 }
+	//  }
+	//  toggleRowSelect(id){
+	// 	if(this.state.selected.includes(id)){
+	// 		this.setState(state=>{
+	// 			const list = state.selected.filter((item, i) => item!=id);
+	// 			return {selected:list};
+	// 		});
+	// 	}else{
+	// 		this.setState(state=>{
+	// 			const list = [...state.selected, id];
+	// 			return {selected: list};
+	// 		});
+	// 	}
+	//  }
 	 renderPolicyTableData() {
-		return this.TableRef.state.tabledata.map((item, index) => {
-		   const { policyname,uuid, id,  } = item //destructuring
-		   return (
-			  <tr key={id} onClick={()=>this.toggleRowSelect(id)}>
-				 <td>{policyname}</td>
-				 <td><input type="checkbox" checked={this.state.selected.includes(id)} 
-				 onChange={()=>this.toggleRowSelect(id)} className="form-check-input" value={id}/></td>
-			  </tr>
-		   )
-		})
+		const _self=this;
+		if(_self.TableRef.current){
+			
+			const trs =	this.TableRef.current.state.tabledata.map((item, index) => {
+				const { policyname, uuid, id,  } = item; //destructuring
+				return (
+					<tr key={id} onClick={()=>this.TableRef.current.toggleRowSelect(id)}>
+						<td>{policyname}</td>
+						<td><input type="checkbox" checked={this.TableRef.current.state.selected.includes(item.id)} 
+						onChange={()=>this.TableRef.current.toggleRowSelect(id)} 
+						className="form-check-input" value={id}/></td>
+					</tr>
+				);
+			})
+			return (
+			<tbody>
+			{trs}
+			</tbody>) ;
+		}
 	 }
 	 updateState(obj, func){
 		 this.setState(obj, func);
@@ -120,8 +129,9 @@ class App extends React.Component{
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
 				{this.state.showAttachPolicy ? 
-					<TableCom headers={['PolicyName','Select']} ref={this.TableRef} getDataUrl="../Policy" 
-						afterDataChange={()=>this.renderPolicyTableData()} />
+					<TableCom headers={['PolicyName','Select']} ref={this.TableRef}  
+					updateState={this.updateState} getDataUrl="../Policy" 
+						afterDataChange={this.renderPolicyTableData} />
 					: ''}
 			</React.Fragment>
 		);
