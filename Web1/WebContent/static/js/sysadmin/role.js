@@ -6,6 +6,10 @@ import Pager from '../components/Pager'
 import AddEdit from '../sysadmin/roleEdit'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
+import {createStore} from 'redux'
+import reducer from '../reducers/selectedItem'
+
+const store = createStore(reducer);
 
 class App extends React.Component{
 	constructor(props){
@@ -101,10 +105,10 @@ class App extends React.Component{
 			const trs =	this.TableRef.current.state.tabledata.map((item, index) => {
 				const { policyname, uuid, id,  } = item; //destructuring
 				return (
-					<tr key={id} onClick={()=>this.TableRef.current.toggleRowSelect(id)}>
+					<tr key={id} onClick={() => store.dispatch({type:'TOGGLE_SELECTED', id:id})}>
 						<td>{policyname}</td>
-						<td><input type="checkbox" checked={this.TableRef.current.state.selected.includes(item.id)} 
-						onChange={()=>this.TableRef.current.toggleRowSelect(id)} 
+						<td><input type="checkbox" checked={store.getState().selected.includes(item.id)} 
+						onChange={()=>store.dispatch({type:'TOGGLE_SELECTED', id:id})} 
 						className="form-check-input" value={id}/></td>
 					</tr>
 				);

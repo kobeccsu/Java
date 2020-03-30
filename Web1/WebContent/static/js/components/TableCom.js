@@ -12,7 +12,7 @@ class TableCom extends React.Component{
 			searchTxt:'',
 			tabledata:[],
 			dom:null,
-			selected:[]
+			//selected:[]
 		}
 		this.loaddata = this.loaddata.bind(this);
 		this.updateState = this.updateState.bind(this);
