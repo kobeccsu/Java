@@ -36,10 +36,10 @@ export default class AddEdit extends React.Component{
 					<div><span className="btn btn-outline-primary"
 					onClick={()=>{this.props.updateState({showAttachPolicy:true}, ()=>{this.props.reloader()} )}}>Attach policies</span></div>
 					<div className="hasPolicy">
-						<div class="card">
+						<div className="card">
 											
-							<div class="card-body">
-								<button type="button" class="close" aria-label="Close">
+							<div className="card-body">
+								<button type="button" className="close" aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
 								<p>This is some text within a card body.</p>

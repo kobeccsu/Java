@@ -1,5 +1,6 @@
 const initialState = {
-    selected: []
+    selected: [],
+    tabledata:[]
 }
 
 const toggleSelect = (state = initialState, action) => {
@@ -7,10 +8,10 @@ const toggleSelect = (state = initialState, action) => {
         case 'TOGGLE_SELECTED':
             if(state.selected.includes(action.id)){
                 const list = state.selected.filter((item, i) => item!=action.id);
-                return {selected:list} 
+                return Object.assign ({}, state, {selected: list});
             } else {
                 const list = [...state.selected, action.id];
-                return {selected:list} 
+                return Object.assign ({}, state, {selected: list});
             }
             
         default:

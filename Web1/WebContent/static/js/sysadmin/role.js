@@ -8,8 +8,28 @@ import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
 import {createStore} from 'redux'
 import reducer from '../reducers/selectedItem'
+import {connect, Provider} from 'react-redux'
 
 const store = createStore(reducer);
+
+  
+  let currentValue
+  function handleChange() {
+	let previousValue = currentValue
+	currentValue = store.getState()
+  
+	if (previousValue !== currentValue) {
+	  console.log(
+		'Some deep nested property changed from',
+		previousValue,
+		'to',
+		currentValue
+	  )
+	}
+  }
+  
+ store.subscribe(handleChange)
+
 
 class App extends React.Component{
 	constructor(props){
@@ -72,52 +92,24 @@ class App extends React.Component{
 	componentDidMount(){
 		this.loadData();
 	}
-	// renderTableData() {
-		// return this.state.tbody.map((item, index) => {
-		//    const { id, uid, rolename } = item //destructuring
-		//    return (
-		// 	  <tr key={id}>
-		// 		 <td>{rolename}</td>
-		// 		 <td><span className='edit' 
-		// 			 onClick={()=>{this.setState({showEdit : true, isAdd: false, editname: rolename, id: id});}} 
-		// 			 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
-		// 	  </tr>
-		//    )
-		// })
-	//  }
-	//  toggleRowSelect(id){
-	// 	if(this.state.selected.includes(id)){
-	// 		this.setState(state=>{
-	// 			const list = state.selected.filter((item, i) => item!=id);
-	// 			return {selected:list};
-	// 		});
-	// 	}else{
-	// 		this.setState(state=>{
-	// 			const list = [...state.selected, id];
-	// 			return {selected: list};
-	// 		});
-	// 	}
-	//  }
-	 renderPolicyTableData() {
-		const _self=this;
-		if(_self.TableRef.current){
-			
-			const trs =	this.TableRef.current.state.tabledata.map((item, index) => {
-				const { policyname, uuid, id,  } = item; //destructuring
-				return (
-					<tr key={id} onClick={() => store.dispatch({type:'TOGGLE_SELECTED', id:id})}>
-						<td>{policyname}</td>
-						<td><input type="checkbox" checked={store.getState().selected.includes(item.id)} 
-						onChange={()=>store.dispatch({type:'TOGGLE_SELECTED', id:id})} 
-						className="form-check-input" value={id}/></td>
-					</tr>
-				);
-			})
+
+	 renderPolicyTableData(tabledata, $$child) {
+		 if (tabledata == null) return;
+		const trs =	tabledata.map((item, index) => {
+			const { policyname, uuid, id,  } = item; //destructuring
 			return (
-			<tbody>
-			{trs}
-			</tbody>) ;
-		}
+				<tr key={id} onClick={() => $$child.toggleRowSelect(id)}>
+					<td>{policyname}</td>
+					<td><input type="checkbox" checked={$$child.state.selected.includes(item.id)} 
+					onChange={()=>$$child.toggleRowSelect(id)} 
+					className="form-check-input" value={id}/></td>
+				</tr>
+			);
+		})
+		return (
+		<tbody>
+		{trs}
+		</tbody>);
 	 }
 	 updateState(obj, func){
 		 this.setState(obj, func);
@@ -133,7 +125,7 @@ class App extends React.Component{
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} /> : ''}
 				{this.state.showAttachPolicy ? 
-					<TableCom headers={['PolicyName','Select']} ref={this.TableRef}  
+					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
 						afterDataChange={this.renderPolicyTableData} />
 					: ''}
@@ -142,4 +134,11 @@ class App extends React.Component{
 	}
 }
 
-ReactDOM.render(<App />, document.getElementById('topbar'));
+ReactDOM.render(
+<Provider store={store}>
+<App /></Provider>, document.getElementById('topbar'));
+
+	
+  
+  
+  

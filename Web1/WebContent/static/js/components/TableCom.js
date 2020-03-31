@@ -12,7 +12,7 @@ class TableCom extends React.Component{
 			searchTxt:'',
 			tabledata:[],
 			dom:null,
-			//selected:[]
+			selected:[]
 		}
 		this.loaddata = this.loaddata.bind(this);
 		this.updateState = this.updateState.bind(this);
@@ -32,7 +32,7 @@ class TableCom extends React.Component{
 				
 				return {selected:list};
 			}, ()=>{
-				const dom = this.props.afterDataChange();
+				const dom = this.props.afterDataChange(this.state.tabledata, this);
 				this.setState({ dom: dom}) ;
 			});
 		}else{
@@ -41,7 +41,7 @@ class TableCom extends React.Component{
 				
 				return {selected: list};
 			},()=>{
-				const dom = this.props.afterDataChange();
+				const dom = this.props.afterDataChange(this.state.tabledata, this);
 				this.setState({ dom: dom}) ;
 			});
 		}
@@ -56,7 +56,7 @@ class TableCom extends React.Component{
 					const list=json.data.data;
 					return {tabledata: list, pageCount: json.data.totalCount}
 						}, ()=>{
-							this.setState({dom: this.props.afterDataChange()});
+							this.setState({dom: this.props.afterDataChange(this.state.tabledata, this)});
 					// this.props.updateState(
 					// 	state=>{
 					// 		const list = json.data.data;
