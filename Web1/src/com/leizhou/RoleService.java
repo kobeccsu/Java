@@ -77,7 +77,8 @@ public class RoleService extends HttpServlet {
 		
 		if (action.equalsIgnoreCase("add")){
 			String roleName = jsonObject.getString("rolename");
-			isSuccess = new DBRole().addRole(roleName);
+			Integer[] = jsonObject.get
+			isSuccess = new DBRole().addRole(roleName, Integer);
 		} else if(action.equalsIgnoreCase("delete")){
 			int id = jsonObject.getInt("id");
 			isSuccess = new DBRole().deleteRole(id);

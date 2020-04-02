@@ -15,7 +15,7 @@ export default class AddEdit extends React.Component{
 			return;
 		}
 		axios.post('../RoleService/' + (this.props.isAdd ? 'add' : 'update'),
-			{id: this.props.id, 'rolename': this.props.editname})
+			{id: this.props.id, 'rolename': this.props.editname, 'policies': this.props.policies})
 		.then((response)=>{
 			this.props.reloader();
 		});
@@ -36,17 +36,7 @@ export default class AddEdit extends React.Component{
 					<div><span className="btn btn-outline-primary"
 					onClick={()=>{this.props.updateState({showAttachPolicy:true}, ()=>{this.props.reloader()} )}}>Attach policies</span></div>
 					<div className="hasPolicy">
-						<div className="card">
-											
-							<div className="card-body">
-								<button type="button" className="close" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-								<p>This is some text within a card body.</p>
-								
-							</div>
-						</div>
-					
+
 					</div>
 				</div>
 				<div>

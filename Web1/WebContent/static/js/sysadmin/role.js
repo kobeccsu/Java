@@ -98,10 +98,10 @@ class App extends React.Component{
 		const trs =	tabledata.map((item, index) => {
 			const { policyname, uuid, id,  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => $$child.toggleRowSelect(id)}>
+				<tr key={id} onClick={() => $$child.toggleRowSelect(id, policyname)}>
 					<td>{policyname}</td>
-					<td><input type="checkbox" checked={$$child.state.selected.includes(item.id)} 
-					onChange={()=>$$child.toggleRowSelect(id)} 
+					<td><input type="checkbox" checked={$$child.state.selected.filter(m=> m.id == item.id).length > 0} 
+					onChange={()=>$$child.toggleRowSelect(id, policyname)} 
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
@@ -123,12 +123,13 @@ class App extends React.Component{
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
-					id={this.state.id} editname={this.state.editname} /> : ''}
+					id={this.state.id} editname={this.state.editname} policies={this.state.selected.map(m=>{return m.id})} /> : ''}
 				{this.state.showAttachPolicy ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
 						afterDataChange={this.renderPolicyTableData} />
 					: ''}
+				
 			</React.Fragment>
 		);
 	}

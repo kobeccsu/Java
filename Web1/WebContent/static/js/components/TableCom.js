@@ -2,6 +2,7 @@ import React from 'react'
 import Pager from '../components/Pager'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
+import SelectedCard from './SelectedCard';
 
 class TableCom extends React.Component{
     constructor(props){
@@ -25,10 +26,10 @@ class TableCom extends React.Component{
 			});
 	}
 
-	toggleRowSelect(id){
-		if(this.state.selected.includes(id)){
+	toggleRowSelect(id, name){
+		if(this.state.selected.filter((item)=>item.id == id).length > 0){
 			this.setState(state=>{
-				const list = state.selected.filter((item, i) => item!=id);
+				const list = state.selected.filter((item, i) => item.id != id);
 				
 				return {selected:list};
 			}, ()=>{
@@ -37,7 +38,7 @@ class TableCom extends React.Component{
 			});
 		}else{
 			this.setState(state=>{
-				const list = [...state.selected, id];
+				const list = [...state.selected, {id:id, name:name}];
 				
 				return {selected: list};
 			},()=>{
@@ -57,11 +58,6 @@ class TableCom extends React.Component{
 					return {tabledata: list, pageCount: json.data.totalCount}
 						}, ()=>{
 							this.setState({dom: this.props.afterDataChange(this.state.tabledata, this)});
-					// this.props.updateState(
-					// 	state=>{
-					// 		const list = json.data.data;
-					// 		return {policyData: list};
-					// 	})
 				});
 				if(json.data.data.length == 0 && this.state.currentIndex != 1){
 					self.setState({currentIndex : this.state.currentIndex - 1});
@@ -85,14 +81,14 @@ class TableCom extends React.Component{
 							{this.generateTh()}
 						</tr>
 					</thead>
-					
-						{this.state.dom}
-					
+					{this.state.dom}
 				</table>
 				<hr/>
 				<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 
 					updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
+				<hr/>
+				<SelectedCard remove={this.toggleRowSelect} list={this.state.selected}/>
 			</div>
         );
     }

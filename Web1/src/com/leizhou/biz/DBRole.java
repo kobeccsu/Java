@@ -1,16 +1,45 @@
 package com.leizhou.biz;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.leizhou.dal.DB;
 import com.leizhou.dto.RoleBean;
 
 public class DBRole {
-	public boolean addRole(String name) {
+	public boolean addRole(String name, Integer[] policies) throws ClassNotFoundException, SQLException {
+		
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = new DB().getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement stmt = con.prepareStatement("insert into role (rolename, uid) values (?, uuid());", Statement.RETURN_GENERATED_KEYS);
+		stmt.setString(1, name);
+		stmt.execute();
+		
+		long newId = 0;
+		try {
+			ResultSet afterInsert = stmt.getGeneratedKeys();
+			while (afterInsert.next()) {
+				newId = afterInsert.getLong(1);
+			}
+		} catch (Exception e) {
+		}
+		
+		PreparedStatement insertRelation = con.prepareStatement("insert into role_policy_ref(role_Id, policy_id) values (?, ?);");
+		for (Integer integer : policies) {
+			insertRelation.clearParameters();
+			insertRelation.addBatch();
+			insertRelation.setLong(1, newId);
+			insertRelation.setLong(2, integer);
+		}
+		insertRelation.executeBatch();
+		
+		con.commit();
 		return new DB().execute("insert into role (rolename, uid) values ('" + name + "', uuid());");
 	}
 	
