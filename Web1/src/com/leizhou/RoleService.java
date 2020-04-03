@@ -3,6 +3,7 @@ package com.leizhou;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.servlet.ServletException;
@@ -11,9 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.leizhou.biz.DBRole;
 
 /**
@@ -77,8 +80,20 @@ public class RoleService extends HttpServlet {
 		
 		if (action.equalsIgnoreCase("add")){
 			String roleName = jsonObject.getString("rolename");
-			Integer[] = jsonObject.get
-			isSuccess = new DBRole().addRole(roleName, Integer);
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			JSONArray array1 = jsonObject.getJSONArray("policies");
+			if (array1 != null) { 
+			   for (int i=0;i<array1.length();i++){ 
+				   list.add(array1.getInt(i));
+			   } 
+			} 
+			try {
+				isSuccess = new DBRole().addRole(roleName, list);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} else if(action.equalsIgnoreCase("delete")){
 			int id = jsonObject.getInt("id");
 			isSuccess = new DBRole().deleteRole(id);

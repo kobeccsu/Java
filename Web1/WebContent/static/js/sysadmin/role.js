@@ -123,7 +123,7 @@ class App extends React.Component{
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
-					id={this.state.id} editname={this.state.editname} policies={this.state.selected.map(m=>{return m.id})} /> : ''}
+					id={this.state.id} editname={this.state.editname} /> : ''}
 				{this.state.showAttachPolicy ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
@@ -137,7 +137,8 @@ class App extends React.Component{
 
 ReactDOM.render(
 <Provider store={store}>
-<App /></Provider>, document.getElementById('topbar'));
+	<App />
+</Provider>, document.getElementById('topbar'));
 
 	
   

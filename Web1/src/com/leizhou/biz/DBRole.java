@@ -12,7 +12,7 @@ import com.leizhou.dal.DB;
 import com.leizhou.dto.RoleBean;
 
 public class DBRole {
-	public boolean addRole(String name, Integer[] policies) throws ClassNotFoundException, SQLException {
+	public boolean addRole(String name, ArrayList<Integer> policies) throws ClassNotFoundException, SQLException {
 		
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
@@ -28,6 +28,7 @@ public class DBRole {
 				newId = afterInsert.getLong(1);
 			}
 		} catch (Exception e) {
+			System.err.println(e);
 		}
 		
 		PreparedStatement insertRelation = con.prepareStatement("insert into role_policy_ref(role_Id, policy_id) values (?, ?);");
@@ -39,7 +40,14 @@ public class DBRole {
 		}
 		insertRelation.executeBatch();
 		
-		con.commit();
+		try {
+			con.commit();
+		} catch (Exception e) {
+			con.rollback();
+		}finally {
+			con.close();
+		}
+		
 		return new DB().execute("insert into role (rolename, uid) values ('" + name + "', uuid());");
 	}
 	
