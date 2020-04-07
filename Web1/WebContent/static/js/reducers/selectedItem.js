@@ -6,11 +6,11 @@ const initialState = {
 const toggleSelect = (state = initialState, action) => {
     switch (action.type) {
         case 'TOGGLE_SELECTED':
-            if(state.selected.includes(action.id)){
-                const list = state.selected.filter((item, i) => item!=action.id);
+            if(state.selected.filter((item)=>item.id == action.id).length > 0){
+                const list = state.selected.filter((item, i) => item.id != action.id);
                 return Object.assign ({}, state, {selected: list});
             } else {
-                const list = [...state.selected, action.id];
+                const list = [...state.selected, {id:action.id, name: action.name}];
                 return Object.assign ({}, state, {selected: list});
             }
             

@@ -1,4 +1,5 @@
-export const toggleSelect = id => ({
-    type: 'TOGGLE_SELECT',
-    id: id
+export const toggleSelect = (id, name) => ({
+    type: 'TOGGLE_SELECTED',
+    id: id,
+    name: name
 })

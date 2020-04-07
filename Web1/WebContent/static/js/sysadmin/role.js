@@ -6,30 +6,16 @@ import Pager from '../components/Pager'
 import AddEdit from '../sysadmin/roleEdit'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
-import {createStore} from 'redux'
+import '../../css/bootstrap.min.css'
+import {createStore,applyMiddleware } from 'redux'
 import reducer from '../reducers/selectedItem'
-import {connect, Provider} from 'react-redux'
+import { Provider,thunkMiddleware} from 'react-redux'
+import {toggleSelect} from '../actions/toggleSelect'
 
-const store = createStore(reducer);
 
-  
-  let currentValue
-  function handleChange() {
-	let previousValue = currentValue
-	currentValue = store.getState()
-  
-	if (previousValue !== currentValue) {
-	  console.log(
-		'Some deep nested property changed from',
-		previousValue,
-		'to',
-		currentValue
-	  )
-	}
-  }
-  
- store.subscribe(handleChange)
-
+const store = createStore(reducer,applyMiddleware(
+    thunkMiddleware
+  ));
 
 class App extends React.Component{
 	constructor(props){
@@ -94,18 +80,19 @@ class App extends React.Component{
 	}
 
 	 renderPolicyTableData(tabledata, $$child) {
-		 if (tabledata == null) return;
+		if (tabledata == null) return;
 		const trs =	tabledata.map((item, index) => {
 			const { policyname, uuid, id,  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => $$child.toggleRowSelect(id, policyname)}>
+				<tr key={id} onClick={() => {store.dispatch(toggleSelect(id, policyname));$$child.setState({}) }}>
 					<td>{policyname}</td>
-					<td><input type="checkbox" checked={$$child.state.selected.filter(m=> m.id == item.id).length > 0} 
-					onChange={()=>$$child.toggleRowSelect(id, policyname)} 
+					<td><input type="checkbox" checked={store.getState().selected.filter(m=> m.id == item.id).length > 0} 
+					onChange={() =>{ store.dispatch(toggleSelect(id, policyname));$$child.setState({})} }
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
 		})
+
 		return (
 		<tbody>
 		{trs}
