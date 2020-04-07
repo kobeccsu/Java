@@ -9,12 +9,12 @@ import  '../../css/sysadmin/policy.css'
 import '../../css/bootstrap.min.css'
 import {createStore,applyMiddleware } from 'redux'
 import reducer from '../reducers/selectedItem'
-import { Provider,thunkMiddleware} from 'react-redux'
+import { Provider} from 'react-redux'
 import {toggleSelect} from '../actions/toggleSelect'
-
+import thunk from 'redux-thunk'
 
 const store = createStore(reducer,applyMiddleware(
-    thunkMiddleware
+    thunk
   ));
 
 class App extends React.Component{
@@ -84,10 +84,10 @@ class App extends React.Component{
 		const trs =	tabledata.map((item, index) => {
 			const { policyname, uuid, id,  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => {store.dispatch(toggleSelect(id, policyname));$$child.setState({}) }}>
+				<tr key={id} onClick={() => {store.dispatch(toggleSelect(id, policyname));$$child.setState({dom: $$child.props.afterDataChange($$child.state.tabledata, $$child)})} }>
 					<td>{policyname}</td>
 					<td><input type="checkbox" checked={store.getState().selected.filter(m=> m.id == item.id).length > 0} 
-					onChange={() =>{ store.dispatch(toggleSelect(id, policyname));$$child.setState({})} }
+					onChange={() =>{ store.dispatch(toggleSelect(id, policyname));$$child.setState({dom: $$child.props.afterDataChange($$child.state.tabledata, $$child)})} }
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
