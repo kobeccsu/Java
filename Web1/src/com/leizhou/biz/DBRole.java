@@ -12,6 +12,7 @@ import com.leizhou.dal.DB;
 import com.leizhou.dto.RoleBean;
 
 public class DBRole {
+	
 	public boolean addRole(String name, ArrayList<Integer> policies) throws ClassNotFoundException, SQLException {
 		
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -34,9 +35,9 @@ public class DBRole {
 		PreparedStatement insertRelation = con.prepareStatement("insert into role_policy_ref(role_Id, policy_id) values (?, ?);");
 		for (Integer integer : policies) {
 			insertRelation.clearParameters();
-			insertRelation.addBatch();
 			insertRelation.setLong(1, newId);
 			insertRelation.setLong(2, integer);
+			insertRelation.addBatch();
 		}
 		insertRelation.executeBatch();
 		

@@ -84,7 +84,7 @@ public class RoleService extends HttpServlet {
 			JSONArray array1 = jsonObject.getJSONArray("policies");
 			if (array1 != null) { 
 			   for (int i=0;i<array1.length();i++){ 
-				   list.add(array1.getInt(i));
+				   list.add(array1.getJSONObject(i).getInt("id"));
 			   } 
 			} 
 			try {

@@ -110,7 +110,7 @@ class App extends React.Component{
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
-					id={this.state.id} editname={this.state.editname} /> : ''}
+					id={this.state.id} editname={this.state.editname} policies={store.getState().selected} /> : ''}
 				{this.state.showAttachPolicy ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 

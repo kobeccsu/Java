@@ -6,9 +6,9 @@ export default class SelectedCard extends React.Component{
     }
 
     render(){
-        const cards = this.props.list.map((item)=>{
+        const cards = this.props.list.map((item, index)=>{
             return (
-            <div className="card">				
+            <div className="card" key={index}>				
                 <div className="card-body">
                     <button type="button" className="close" aria-label="Close" onClick={()=>{this.props.remove(item.id)}}>
                         <span aria-hidden="true">&times;</span>
