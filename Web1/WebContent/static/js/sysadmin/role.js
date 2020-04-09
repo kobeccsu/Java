@@ -11,6 +11,7 @@ import {createStore,applyMiddleware } from 'redux'
 import reducer from '../reducers/selectedItem'
 import { Provider} from 'react-redux'
 import {toggleSelect} from '../actions/toggleSelect'
+import {setSelect} from '../actions/setSelect'
 import thunk from 'redux-thunk'
 
 const store = createStore(reducer,applyMiddleware(
@@ -52,7 +53,17 @@ class App extends React.Component{
 				}
 			});
 	}
-
+	showPolicies(id){
+		axios.get('../Policy', {roleid:id})
+			.then(response=>{
+				let list = [];
+				response.data.data.map((item)=>{
+					const {policyname, id} = item;
+					list = [...list, {name: policyname, id: id}];
+				});
+				store.dispatch(setSelect(list));
+			})
+	}
 
 	loadPolicyData(){
 		let self = this;
@@ -79,7 +90,27 @@ class App extends React.Component{
 		this.loadData();
 	}
 
-	 renderPolicyTableData(tabledata, $$child) {
+	renderRoleTableData(tabledata, $$child) {
+		if (tabledata == null) return;
+		const trs =	tabledata.map((item, index) => {
+			const { rolename,  id, ownPoliciesCount } = item; //destructuring
+			return (
+				<tr key={id} >
+					<td>{rolename}</td>
+					<td>{ownPoliciesCount > 0?<span className='edit' onClick={()=>this.showPolicies(id)}>View Policies|</span> : ''}<span className='edit' 
+					 onClick={() => { this.setState({showEdit : true, isAdd: false, policyname: policyname, id:id});}} 
+					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
+				</tr>
+			);
+		})
+
+		return (
+		<tbody>
+		{trs}
+		</tbody>);
+	}
+
+	renderPolicyTableData(tabledata, $$child) {
 		if (tabledata == null) return;
 		const trs =	tabledata.map((item, index) => {
 			const { policyname, uuid, id,  } = item; //destructuring
@@ -97,17 +128,18 @@ class App extends React.Component{
 		<tbody>
 		{trs}
 		</tbody>);
-	 }
-	 updateState(obj, func){
+	}
+
+	updateState(obj, func){
 		 this.setState(obj, func);
-	 }
+	}
 	render(){
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation', 'Policies']} tbody={this.renderTableData}/> : ''}
-				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
-					totalPageSize={this.state.pageCount} />
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} 
+				updateState={this.updateState} getDataUrl="../RoleService" 
+				afterDataChange={this.renderRoleTableData} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} policies={store.getState().selected} /> : ''}
@@ -122,10 +154,9 @@ class App extends React.Component{
 	}
 }
 
-ReactDOM.render(
-<Provider store={store}>
-	<App />
-</Provider>, document.getElementById('topbar'));
+ReactDOM.render(<Provider store={store}>
+		<App />
+	</Provider>, document.getElementById('topbar'));
 
 	
   

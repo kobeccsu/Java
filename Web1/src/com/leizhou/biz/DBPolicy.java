@@ -34,6 +34,22 @@ public class DBPolicy {
 		return list;
 	}
 	
+	public LinkedList<Policy> getPolicyList(int roleId) throws ClassNotFoundException, SQLException{
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = new DB().getConnection();
+		Statement stmt = con.createStatement();
+		ResultSet result = stmt.executeQuery("select rr.id, policyname from role_policy_ref r join policy rr on r.policy_id = rr.id where r.role_id = " );
+		LinkedList<Policy> list = new LinkedList<Policy>();
+		while (result.next()) {
+			Policy po = new Policy();
+			po.setId(result.getInt("id"));
+			po.setPolicyname(result.getString("policyname"));
+			list.add(po);
+		}
+		con.close();
+		return list;
+	}
+	
 	public boolean deletePolicy(int id) {
 		return new DB().execute("delete from policy where id = " + id);
 	}

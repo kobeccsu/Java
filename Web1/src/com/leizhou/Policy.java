@@ -38,9 +38,10 @@ public class Policy extends HttpServlet {
 		int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
 		int pageSize = Integer.parseInt(request.getParameter("pageSize"));
 		String queryText = request.getParameter("queryText");
+		int roleId = Integer.parseInt(request.getParameter("roleid"));
 		
 		try {
-			LinkedList<com.leizhou.dto.Policy> list = db.getPolicyList(pageIndex,pageSize, queryText);
+			LinkedList<com.leizhou.dto.Policy> list = roleId > 0 ? db.getPolicyList(roleId) : db.getPolicyList(pageIndex,pageSize, queryText);
 			Gson json = new Gson();
 			int totalCount  = db.getTotalCount(queryText);
 			response.setContentType("application/json"); 

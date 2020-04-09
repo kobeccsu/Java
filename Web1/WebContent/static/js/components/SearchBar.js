@@ -8,7 +8,7 @@ class SearchBar extends React.Component{
     render(){
         return(
             <div className="searchbar container">
-                <div>
+                <div style={{display:'flex'}}>
                     <label className="col-sm-2 col-form-label">search name</label>
                     <input type="text" className="form-control" value={this.props.searchTxt} onChange={(e)=> {this.props.updateState({searchTxt:e.target.value})}} 
                         placeholder="input some info" />

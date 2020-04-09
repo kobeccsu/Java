@@ -56,15 +56,16 @@ public class DBRole {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet result = stmt.executeQuery("select * from role "
-				+ (queryText.contentEquals("") ? "" : " where rolename like '" + queryText + "%'") +
-				" limit " + pageSize + " offset " + (pageIndex - 1) * pageSize);
+		ResultSet result = stmt.executeQuery("select l.id, rolename, count(policyname) policycount from role l left join role_policy_ref r on l.id = r.role_id left join policy rr on r.policy_id = rr.id  "
+				+ (queryText.contentEquals("") ? "" : " where rolename like '" + queryText + "%'") 
+				+ " group by l.id,rolename " 
+				+ " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize);
 		LinkedList<RoleBean> list = new LinkedList<RoleBean>();
 		while (result.next()) {
 			RoleBean po = new RoleBean();
 			po.setId(result.getInt("id"));
-			po.setUid(result.getString("uid"));
 			po.setRolename(result.getString("rolename"));
+			po.setOwnPoliciesCount(result.getInt("policycount"));
 			list.add(po);
 		}
 		con.close();

@@ -13,7 +13,8 @@ const toggleSelect = (state = initialState, action) => {
                 const list = [...state.selected, {id:action.id, name: action.name}];
                 return Object.assign ({}, state, {selected: list});
             }
-            
+            case 'SETLIST':
+                return Object.assign ({}, state, {selected: action.idnamelist});
         default:
             return state
     }

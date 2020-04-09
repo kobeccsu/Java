@@ -3,3 +3,4 @@ export const toggleSelect = (id, name) => ({
     id: id,
     name: name
 })
+
