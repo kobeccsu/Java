@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,10 +36,11 @@ public class Policy extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBPolicy db = new DBPolicy();
-		int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
-		int pageSize = Integer.parseInt(request.getParameter("pageSize"));
-		String queryText = request.getParameter("queryText");
-		int roleId = Integer.parseInt(request.getParameter("roleid"));
+		Map<String, String[]> reqList = request.getParameterMap();
+		int pageIndex = Integer.parseInt(reqList.containsKey("pageIndex") ?  request.getParameter("pageIndex") : "0");
+		int pageSize = Integer.parseInt(reqList.containsKey("pageSize") ? request.getParameter("pageSize") : "10");
+		String queryText = reqList.containsKey("queryText") ? request.getParameter("queryText") : "";
+		int roleId = Integer.parseInt(reqList.containsKey("roleId") ? request.getParameter("roleId") : "0");
 		
 		try {
 			LinkedList<com.leizhou.dto.Policy> list = roleId > 0 ? db.getPolicyList(roleId) : db.getPolicyList(pageIndex,pageSize, queryText);

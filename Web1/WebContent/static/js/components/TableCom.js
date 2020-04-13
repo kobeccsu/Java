@@ -87,8 +87,8 @@ class TableCom extends React.Component{
 				<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 
 					updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
-				<hr/>
-				<CardContainer />
+				
+				<CardContainer hide_button={this.props.hideButton} />
 			</div>
         );
     }

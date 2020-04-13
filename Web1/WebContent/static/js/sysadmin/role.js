@@ -39,6 +39,7 @@ class App extends React.Component{
 		// this.toggleRowSelect = this.toggleRowSelect.bind(this);
 		this.renderPolicyTableData = this.renderPolicyTableData.bind(this);
 		this.TableRef = React.createRef();
+		this.showPolicies = this.showPolicies.bind(this);
 	}
 
 	loadData(){
@@ -54,7 +55,7 @@ class App extends React.Component{
 			});
 	}
 	showPolicies(id){
-		axios.get('../Policy', {roleid:id})
+		axios.get('../Policy', {params:{roleId:id}})
 			.then(response=>{
 				let list = [];
 				response.data.data.map((item)=>{
@@ -91,13 +92,14 @@ class App extends React.Component{
 	}
 
 	renderRoleTableData(tabledata, $$child) {
+		var self = this;
 		if (tabledata == null) return;
 		const trs =	tabledata.map((item, index) => {
 			const { rolename,  id, ownPoliciesCount } = item; //destructuring
 			return (
 				<tr key={id} >
 					<td>{rolename}</td>
-					<td>{ownPoliciesCount > 0?<span className='edit' onClick={()=>this.showPolicies(id)}>View Policies|</span> : ''}<span className='edit' 
+					<td>{ownPoliciesCount > 0?<span className='edit' onClick={()=>self.showPolicies(id)}>View Policies|</span> : ''}<span className='edit' 
 					 onClick={() => { this.setState({showEdit : true, isAdd: false, policyname: policyname, id:id});}} 
 					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 				</tr>
@@ -137,8 +139,8 @@ class App extends React.Component{
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} 
-				updateState={this.updateState} getDataUrl="../RoleService" 
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={true}
+				updateState={this.updateState} getDataUrl="../RoleService" showPolicies={this.showPolicies}
 				afterDataChange={this.renderRoleTableData} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 

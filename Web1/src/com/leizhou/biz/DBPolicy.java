@@ -38,7 +38,7 @@ public class DBPolicy {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet result = stmt.executeQuery("select rr.id, policyname from role_policy_ref r join policy rr on r.policy_id = rr.id where r.role_id = " );
+		ResultSet result = stmt.executeQuery("select rr.id, policyname from role_policy_ref r join policy rr on r.policy_id = rr.id where r.role_id = " + roleId );
 		LinkedList<Policy> list = new LinkedList<Policy>();
 		while (result.next()) {
 			Policy po = new Policy();

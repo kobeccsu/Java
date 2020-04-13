@@ -10,17 +10,18 @@ export default class SelectedCard extends React.Component{
             return (
             <div className="card" key={index}>				
                 <div className="card-body">
-                    <button type="button" className="close" aria-label="Close" onClick={()=>{this.props.remove(item.id)}}>
+                    <button type="button" className={this.props.hide_button ? 'invisible' : 'visible close'} aria-label="Close" onClick={()=>{this.props.remove(item.id)}}>
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <p>{item.name}</p>
                 </div>
             </div>)
         });
+        const hasItem = this.props.list.length > 0;
         return (
-        <div className="card container">				
-            {cards}
-        </div>
+            <div className="card container" style={{display: hasItem ? 'block' : 'none'}} >		
+                {cards}
+            </div>
         )
     }
 }
