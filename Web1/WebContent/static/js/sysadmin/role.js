@@ -99,8 +99,8 @@ class App extends React.Component{
 			return (
 				<tr key={id} >
 					<td>{rolename}</td>
-					<td>{ownPoliciesCount > 0?<span className='edit' onClick={()=>self.showPolicies(id)}>View Policies|</span> : ''}<span className='edit' 
-					 onClick={() => { this.setState({showEdit : true, isAdd: false, policyname: policyname, id:id});}} 
+					<td>{ownPoliciesCount > 0 ? <span><span className='edit' onClick={()=>self.showPolicies(id)}>View Policies</span><span>|</span></span> : ''}<span className='edit' 
+					 onClick={() => { this.updateState({showEdit : true, isAdd: false, editname: rolename, id:id, showAttachPolicy: true}, ()=>{ self.showPolicies(id); $$child.loaddata() });}} 
 					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 				</tr>
 			);
@@ -139,7 +139,7 @@ class App extends React.Component{
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={true}
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={!this.state.showEdit}
 				updateState={this.updateState} getDataUrl="../RoleService" showPolicies={this.showPolicies}
 				afterDataChange={this.renderRoleTableData} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
@@ -150,7 +150,6 @@ class App extends React.Component{
 					updateState={this.updateState} getDataUrl="../Policy" 
 						afterDataChange={this.renderPolicyTableData} />
 					: ''}
-				
 			</React.Fragment>
 		);
 	}
