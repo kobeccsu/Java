@@ -11,8 +11,8 @@ class TableCom extends React.Component{
 			currentIndex:1,
 			pageCount:0,
 			searchTxt:'',
-			tabledata:[],
-			dom:null,
+			//tabledata:[],
+			//dom:null,
 			//selected:[]
 		}
 		this.loaddata = this.loaddata.bind(this);
@@ -22,8 +22,12 @@ class TableCom extends React.Component{
 
 	generateTh(){
 		return this.props.headers.map((item,index) =>{
-				return <th key={index}>{item}</th>
-			});
+			return <th key={index}>{item}</th>
+		});
+	}
+
+	updateTable(table){
+		this.props.updateTable(table);
 	}
 
 	// toggleRowSelect(id, name){
@@ -53,12 +57,10 @@ class TableCom extends React.Component{
 		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
-				self.setState(state=>{
-					const list=json.data.data;
-					return {tabledata: list, pageCount: json.data.totalCount}
-						}, ()=>{
-							this.setState({dom: this.props.afterDataChange(this.state.tabledata, this)});
-				});
+				const list = json.data.data;
+				self.setState({ pageCount: json.data.totalCount});		
+				this.props.updateTable(list);
+
 				if(json.data.data.length == 0 && this.state.currentIndex != 1){
 					self.setState({currentIndex : this.state.currentIndex - 1});
 					self.loaddata();
@@ -81,7 +83,7 @@ class TableCom extends React.Component{
 							{this.generateTh()}
 						</tr>
 					</thead>
-					{this.state.dom}
+					{this.props.tbody}
 				</table>
 				<hr/>
 				<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 

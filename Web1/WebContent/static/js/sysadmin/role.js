@@ -31,15 +31,19 @@ class App extends React.Component{
 			currentIndex: 1,
 			searchTxt:'',
 			showAttachPolicy: false,
-			policyData:[]
+			policyData:[],
+			roleTableData: [],
+			policiesTableData: []
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
 		this.loadPolicyData = this.loadPolicyData.bind(this);
-		// this.toggleRowSelect = this.toggleRowSelect.bind(this);
+		this.toggleRowSelect = this.toggleRowSelect.bind(this);
 		this.renderPolicyTableData = this.renderPolicyTableData.bind(this);
 		this.TableRef = React.createRef();
 		this.showPolicies = this.showPolicies.bind(this);
+		this.updateRoleTable = this.updateRoleTable.bind(this);
+		this.updatePolicyTable = this.updatePolicyTable.bind(this);
 	}
 
 	loadData(){
@@ -55,16 +59,27 @@ class App extends React.Component{
 			});
 	}
 	showPolicies(id){
-		axios.get('../Policy', {params:{roleId:id}})
+		axios.get('../Policy', { params : { roleId : id} })
 			.then(response=>{
 				let list = [];
 				response.data.data.map((item)=>{
-					const {policyname, id} = item;
+					const { policyname, id } = item;
 					list = [...list, {name: policyname, id: id}];
 				});
 				store.dispatch(setSelect(list));
 			})
 	}
+
+	toggleRowSelect(id){
+		const originalChecked = this.state.policiesTableData.filter((item)=>item.id == id)[0].selected;
+		let list = this.state.policiesTableData;
+		list.map(m=>{
+			if(m.id==id){
+				m.selected = !originalChecked;
+			}
+		})
+		this.setState({policiesTableData:list});
+	 }
 
 	loadPolicyData(){
 		let self = this;
@@ -91,16 +106,15 @@ class App extends React.Component{
 		this.loadData();
 	}
 
-	renderRoleTableData(tabledata, $$child) {
+	renderRoleTableData() {
 		var self = this;
-		if (tabledata == null) return;
-		const trs =	tabledata.map((item, index) => {
+		const trs =	this.state.roleTableData.map((item, index) => {
 			const { rolename,  id, ownPoliciesCount } = item; //destructuring
 			return (
 				<tr key={id} >
 					<td>{rolename}</td>
 					<td>{ownPoliciesCount > 0 ? <span><span className='edit' onClick={()=>self.showPolicies(id)}>View Policies</span><span>|</span></span> : ''}<span className='edit' 
-					 onClick={() => { this.updateState({showEdit : true, isAdd: false, editname: rolename, id:id, showAttachPolicy: true}, ()=>{ self.showPolicies(id); $$child.loaddata() });}} 
+					 onClick={() => { self.showPolicies(id) ; this.updateState({showEdit : true, isAdd: false, editname: rolename, id:id, showAttachPolicy: true});}} 
 					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 				</tr>
 			);
@@ -112,15 +126,14 @@ class App extends React.Component{
 		</tbody>);
 	}
 
-	renderPolicyTableData(tabledata, $$child) {
-		if (tabledata == null) return;
-		const trs =	tabledata.map((item, index) => {
-			const { policyname, uuid, id,  } = item; //destructuring
+	renderPolicyTableData() {
+		const trs =	this.state.policiesTableData.map((item, index) => {
+			const { policyname, uuid, id, selected  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => {store.dispatch(toggleSelect(id, policyname));$$child.setState({dom: $$child.props.afterDataChange($$child.state.tabledata, $$child)})} }>
+				<tr key={id} onClick={() => {this.toggleRowSelect(id)} }>
 					<td>{policyname}</td>
-					<td><input type="checkbox" checked={store.getState().selected.filter(m=> m.id == item.id).length > 0} 
-					onChange={() =>{ store.dispatch(toggleSelect(id, policyname));$$child.setState({dom: $$child.props.afterDataChange($$child.state.tabledata, $$child)})} }
+					<td><input type="checkbox" checked={selected} 
+					onChange={() =>{ this.toggleRowSelect(id )} }
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
@@ -132,23 +145,38 @@ class App extends React.Component{
 		</tbody>);
 	}
 
+
 	updateState(obj, func){
 		 this.setState(obj, func);
 	}
+
+	updateRoleTable(data){
+		this.setState({roleTableData: data})
+	}
+
+	updatePolicyTable(data){
+		const listWithSelected = data.map(obj => {
+			return { ...obj, selected: false }
+		})
+		this.setState({policiesTableData: listWithSelected});
+	}
+
 	render(){
+		const roleTable = this.renderRoleTableData();
+		const policiesTable = this.renderPolicyTableData();
 		return(
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
 				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={!this.state.showEdit}
-				updateState={this.updateState} getDataUrl="../RoleService" showPolicies={this.showPolicies}
-				afterDataChange={this.renderRoleTableData} /> : ''}
+				updateState={this.updateState} getDataUrl="../RoleService"
+				 tbody={roleTable} updateTable={this.updateRoleTable} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} policies={store.getState().selected} /> : ''}
 				{this.state.showAttachPolicy ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
-						afterDataChange={this.renderPolicyTableData} />
+						tbody={policiesTable} updateTable={this.updatePolicyTable} />
 					: ''}
 			</React.Fragment>
 		);
