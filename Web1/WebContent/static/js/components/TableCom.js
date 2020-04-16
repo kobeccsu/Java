@@ -2,7 +2,7 @@ import React from 'react'
 import Pager from '../components/Pager'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
-import CardContainer from '../container/cardContainer'
+
 
 class TableCom extends React.Component{
     constructor(props){
@@ -90,7 +90,7 @@ class TableCom extends React.Component{
 					updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
 				
-				<CardContainer hide_button={this.props.hideButton} />
+				
 			</div>
         );
     }

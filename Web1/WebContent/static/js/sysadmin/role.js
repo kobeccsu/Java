@@ -13,6 +13,8 @@ import { Provider} from 'react-redux'
 import {toggleSelect} from '../actions/toggleSelect'
 import {setSelect} from '../actions/setSelect'
 import thunk from 'redux-thunk'
+import SelectedCard from '../components/SelectedCard'
+
 
 const store = createStore(reducer,applyMiddleware(
     thunk
@@ -33,7 +35,9 @@ class App extends React.Component{
 			showAttachPolicy: false,
 			policyData:[],
 			roleTableData: [],
-			policiesTableData: []
+			policiesTableData: [],
+			selected: [],
+			showCard:false
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
@@ -44,6 +48,9 @@ class App extends React.Component{
 		this.showPolicies = this.showPolicies.bind(this);
 		this.updateRoleTable = this.updateRoleTable.bind(this);
 		this.updatePolicyTable = this.updatePolicyTable.bind(this);
+		this.updateEditState = this.updateEditState.bind(this);
+		this.showAddView = this.showAddView.bind(this);
+		this.updateEditname =this.updateEditname.bind(this)
 	}
 
 	loadData(){
@@ -58,27 +65,31 @@ class App extends React.Component{
 				}
 			});
 	}
+
 	showPolicies(id){
 		axios.get('../Policy', { params : { roleId : id} })
 			.then(response=>{
 				let list = [];
 				response.data.data.map((item)=>{
 					const { policyname, id } = item;
-					list = [...list, {name: policyname, id: id}];
+					list = [...list, { id: id, name: policyname}];
 				});
-				store.dispatch(setSelect(list));
+				this.setState({selected: list});
 			})
 	}
 
-	toggleRowSelect(id){
-		const originalChecked = this.state.policiesTableData.filter((item)=>item.id == id)[0].selected;
-		let list = this.state.policiesTableData;
-		list.map(m=>{
-			if(m.id==id){
-				m.selected = !originalChecked;
-			}
-		})
-		this.setState({policiesTableData:list});
+	toggleRowSelect(id, name){
+		if (this.state.selected.filter((item) => item.id == id).length > 0){
+			this.setState(state=>{
+				const list = state.selected.filter((item) => item.id != id);
+				return {selected: list};
+			});
+		} else {
+			this.setState(state=>{
+				const list = [...state.selected, {id:id, name:name}];
+				return {selected: list};
+			});
+		}
 	 }
 
 	loadPolicyData(){
@@ -113,8 +124,8 @@ class App extends React.Component{
 			return (
 				<tr key={id} >
 					<td>{rolename}</td>
-					<td>{ownPoliciesCount > 0 ? <span><span className='edit' onClick={()=>self.showPolicies(id)}>View Policies</span><span>|</span></span> : ''}<span className='edit' 
-					 onClick={() => { self.showPolicies(id) ; this.updateState({showEdit : true, isAdd: false, editname: rolename, id:id, showAttachPolicy: true});}} 
+					<td>{ownPoliciesCount > 0 ? <span><span className='edit' onClick={()=>this.setState({showCard: !this.state.showCard}, () => {self.showPolicies(id)})}>Toggle View Policies</span><span>|</span></span> : ''}<span className='edit' 
+					 onClick={() => {  this.setState({showEdit : true, showCard: true, isAdd: false, editname: rolename, id:id, showAttachPolicy: true}, ()=>{self.showPolicies(id) })}} 
 					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 				</tr>
 			);
@@ -127,13 +138,17 @@ class App extends React.Component{
 	}
 
 	renderPolicyTableData() {
-		const trs =	this.state.policiesTableData.map((item, index) => {
+		let conbineSelected = this.state.policiesTableData.map(item => {
+			return {...item, selected : this.state.selected.filter(m => m.id == item.id).length > 0}
+		})
+
+		const trs =	conbineSelected.map((item, index) => {
 			const { policyname, uuid, id, selected  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => {this.toggleRowSelect(id)} }>
+				<tr key={id} onClick={() => {this.toggleRowSelect(id, policyname)} }>
 					<td>{policyname}</td>
 					<td><input type="checkbox" checked={selected} 
-					onChange={() =>{ this.toggleRowSelect(id )} }
+					onChange={() =>{ this.toggleRowSelect(id, policyname )} }
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
@@ -150,6 +165,10 @@ class App extends React.Component{
 		 this.setState(obj, func);
 	}
 
+	updateEditState(obj, func){
+		this.setState({showEdit: false, showCard: false, isAdd: true});
+	}
+
 	updateRoleTable(data){
 		this.setState({roleTableData: data})
 	}
@@ -161,29 +180,40 @@ class App extends React.Component{
 		this.setState({policiesTableData: listWithSelected});
 	}
 
+	updateEditname(name){
+		this.setState({editname: name});
+	}
+
+	showAddView() {
+		this.setState({showEdit: true, showCard: true, editname:'', selected:[], isAdd: true})
+	}
 	render(){
 		const roleTable = this.renderRoleTableData();
 		const policiesTable = this.renderPolicyTableData();
+
+		
 		return(
 			<React.Fragment>
-				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
+				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} showAddView={this.showAddView} showEdit={this.state.showEdit}/>
 				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={!this.state.showEdit}
 				updateState={this.updateState} getDataUrl="../RoleService"
 				 tbody={roleTable} updateTable={this.updateRoleTable} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
-					updateState={this.updateState} isAdd={this.state.isAdd} 
-					id={this.state.id} editname={this.state.editname} policies={store.getState().selected} /> : ''}
-				{this.state.showAttachPolicy ? 
+					updateState={this.updateEditState} updateEditname={this.updateEditname} isAdd={this.state.isAdd} 
+					id={this.state.id} editname={this.state.editname} /> : ''}
+				{this.state.showEdit ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
 						tbody={policiesTable} updateTable={this.updatePolicyTable} />
 					: ''}
+				{ this.state.showCard ? <SelectedCard list={this.state.selected} remove={this.toggleRowSelect} /> : ''}
 			</React.Fragment>
 		);
 	}
 }
 
-ReactDOM.render(<Provider store={store}>
+ReactDOM.render(
+	<Provider store={store}>
 		<App />
 	</Provider>, document.getElementById('topbar'));
 

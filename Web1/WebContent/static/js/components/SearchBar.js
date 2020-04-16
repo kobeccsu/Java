@@ -16,10 +16,7 @@ class SearchBar extends React.Component{
                         onClick={()=>{
                             this.props.handleSearch(1, this.props.searchTxt)
                         }} id="search" />
-                    <input type="button" value="To Add" className="btn btn-info" onClick={ 
-                        ()=>{    
-                            this.props.updateState({showEdit: true, editname:'', isAdd: true});
-                        } } />
+                    <input type="button" value="To Add" className="btn btn-info" onClick={this.props.showAddView} />
                 </div>
 		    </div>
         );

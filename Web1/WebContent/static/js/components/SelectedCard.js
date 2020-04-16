@@ -6,7 +6,8 @@ export default class SelectedCard extends React.Component{
     }
 
     render(){
-        const cards = this.props.list.map((item, index)=>{
+        const hasItem = this.props.list !== undefined && this.props.list.length > 0;
+        const cards = hasItem ? this.props.list.map((item, index)=>{
             return (
             <div className="card" key={index}>				
                 <div className="card-body">
@@ -16,8 +17,8 @@ export default class SelectedCard extends React.Component{
                     <p>{item.name}</p>
                 </div>
             </div>)
-        });
-        const hasItem = this.props.list.length > 0;
+        }) : [];
+        
         return (
             <div className="card container" style={{display: hasItem ? 'block' : 'none'}} >		
                 {cards}

@@ -26,11 +26,11 @@ export default class AddEdit extends React.Component{
 		return (
 			<div className="addPolicy">
 				<hr/>
-                <button className="btn btn-link" value="back to list" onClick={()=>{this.props.updateState({showEdit: false, isAdd: true});}} >back to list</button>
+                <button className="btn btn-link" value="back to list" onClick={this.props.updateState} >back to list</button>
 				<div>
 					<span>Role</span>
                     <span><input type="text" name="policy" value={name} 
-                        onChange={(e)=>{ this.props.updateState({editname: e.target.value}) }} /></span>
+                        onChange={(e)=>{ this.props.updateEditname( e.target.value ) }} /></span>
 				</div>
 				<div>
 					<div><span className="btn btn-outline-primary"
