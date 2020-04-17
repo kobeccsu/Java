@@ -10,7 +10,7 @@ class TableCom extends React.Component{
 		this.state = {
 			currentIndex:1,
 			pageCount:0,
-			searchTxt:'',
+			// searchTxt:'',
 			//tabledata:[],
 			//dom:null,
 			//selected:[]
@@ -54,7 +54,7 @@ class TableCom extends React.Component{
 
 	loaddata(){
 		let self = this;
-		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.props.searchTxt}})
 			.then(response => {
 				var json = eval(response);
 				const list = json.data.data;

@@ -80,13 +80,8 @@ public class RoleService extends HttpServlet {
 		
 		if (action.equalsIgnoreCase("add")){
 			String roleName = jsonObject.getString("rolename");
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			JSONArray array1 = jsonObject.getJSONArray("policies");
-			if (array1 != null) { 
-			   for (int i=0;i<array1.length();i++){ 
-				   list.add(array1.getJSONObject(i).getInt("id"));
-			   } 
-			} 
+			
+			ArrayList<Integer> list = parsePolicies(jsonObject); 
 			try {
 				isSuccess = new DBRole().addRole(roleName, list);
 			} catch (ClassNotFoundException e) {
@@ -96,15 +91,39 @@ public class RoleService extends HttpServlet {
 			}
 		} else if(action.equalsIgnoreCase("delete")){
 			int id = jsonObject.getInt("id");
-			isSuccess = new DBRole().deleteRole(id);
+			try {
+				isSuccess = new DBRole().deleteRole(id);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} else if(action.equalsIgnoreCase("update")){
 			com.leizhou.dto.RoleBean role = new com.leizhou.dto.RoleBean();
 			role.setId(jsonObject.getInt("id"));
 			role.setRolename(jsonObject.getString("rolename"));
-			isSuccess = new DBRole().updateRole(role);
+			ArrayList<Integer> list = parsePolicies(jsonObject); 
+			try {
+				isSuccess = new DBRole().updateRole(role, list);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		response.getWriter().write("{\"issuccess\":" + isSuccess + "}");
+	}
+
+	private ArrayList<Integer> parsePolicies(JSONObject jsonObject) {
+		JSONArray array1 = jsonObject.getJSONArray("policies");
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		if (array1 != null) { 
+		   for (int i=0;i<array1.length();i++){ 
+			   list.add(array1.getJSONObject(i).getInt("id"));
+		   } 
+		}
+		return list;
 	}
 
 }

@@ -15,11 +15,6 @@ import {setSelect} from '../actions/setSelect'
 import thunk from 'redux-thunk'
 import SelectedCard from '../components/SelectedCard'
 
-
-const store = createStore(reducer,applyMiddleware(
-    thunk
-  ));
-
 class App extends React.Component{
 	constructor(props){
 		super(props);
@@ -40,7 +35,7 @@ class App extends React.Component{
 			showCard:false
 		}
 		this.updateState = this.updateState.bind(this);
-		this.loadData = this.loadData.bind(this);
+		// this.loadData = this.loadData.bind(this);
 		this.loadPolicyData = this.loadPolicyData.bind(this);
 		this.toggleRowSelect = this.toggleRowSelect.bind(this);
 		this.renderPolicyTableData = this.renderPolicyTableData.bind(this);
@@ -53,18 +48,18 @@ class App extends React.Component{
 		this.updateEditname =this.updateEditname.bind(this)
 	}
 
-	loadData(){
-		let self = this;
-		axios.get('../RoleService',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
-			.then(response => {
-				var json = eval(response);
-				self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
-				if(json.data.data.length == 0 && this.state.currentIndex != 1){
-					self.setState({currentIndex : this.state.currentIndex - 1});
-					this.loadData();
-				}
-			});
-	}
+	// loadData(){
+	// 	let self = this;
+	// 	axios.get('../RoleService',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+	// 		.then(response => {
+	// 			var json = eval(response);
+	// 			self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
+	// 			if(json.data.data.length == 0 && this.state.currentIndex != 1){
+	// 				self.setState({currentIndex : this.state.currentIndex - 1});
+	// 				this.loadData();
+	// 			}
+	// 		});
+	// }
 
 	showPolicies(id){
 		axios.get('../Policy', { params : { roleId : id} })
@@ -114,7 +109,7 @@ class App extends React.Component{
 		}
 	}
 	componentDidMount(){
-		this.loadData();
+		// this.loadData();
 	}
 
 	renderRoleTableData() {
@@ -196,11 +191,11 @@ class App extends React.Component{
 			<React.Fragment>
 				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} showAddView={this.showAddView} showEdit={this.state.showEdit}/>
 				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} hideButton={!this.state.showEdit}
-				updateState={this.updateState} getDataUrl="../RoleService"
+				updateState={this.updateState} getDataUrl="../RoleService" searchTxt={this.state.searchTxt}
 				 tbody={roleTable} updateTable={this.updateRoleTable} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateEditState} updateEditname={this.updateEditname} isAdd={this.state.isAdd} 
-					id={this.state.id} editname={this.state.editname} /> : ''}
+					id={this.state.id} editname={this.state.editname} policies={this.state.selected} /> : ''}
 				{this.state.showEdit ? 
 					<TableCom headers={['PolicyName','Select']} 
 					updateState={this.updateState} getDataUrl="../Policy" 
@@ -213,9 +208,9 @@ class App extends React.Component{
 }
 
 ReactDOM.render(
-	<Provider store={store}>
+
 		<App />
-	</Provider>, document.getElementById('topbar'));
+, document.getElementById('topbar'));
 
 	
   

@@ -45,11 +45,12 @@ public class DBRole {
 			con.commit();
 		} catch (Exception e) {
 			con.rollback();
-		}finally {
+			return false;
+		} finally {
 			con.close();
 		}
 		
-		return new DB().execute("insert into role (rolename, uid) values ('" + name + "', uuid());");
+		return true;
 	}
 	
 	public LinkedList<RoleBean> getRoleList(int pageIndex, int pageSize, String queryText) throws ClassNotFoundException, SQLException{
@@ -72,12 +73,61 @@ public class DBRole {
 		return list;
 	}
 	
-	public boolean deleteRole(int id) {
-		return new DB().execute("delete from role where id = " + id);
+	public boolean deleteRole(int id) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = new DB().getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement stmt = con.prepareStatement("delete from role where id = ? ");
+		stmt.setLong(1, id);
+		stmt.execute();
+		
+		PreparedStatement deleteSqlStatement = con.prepareStatement("delete from role_policy_ref where role_id = ?");
+		deleteSqlStatement.setLong(1, id);
+		deleteSqlStatement.execute();
+		
+		try {
+			con.commit();
+		}catch (Exception e) {
+			con.rollback();
+			return false;
+		}
+		finally {
+			con.close();
+		}
+		return true;
 	}
 	
-	public boolean updateRole(RoleBean po) {
-		return new DB().execute("update role set rolename = '" + po.getRolename() + "' where id= " + po.getId());
+	public boolean updateRole(RoleBean po, ArrayList<Integer> policies) throws SQLException,ClassNotFoundException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = new DB().getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement stmt = con.prepareStatement("update role set rolename = ? where id= ?", 
+				Statement.RETURN_GENERATED_KEYS);
+		stmt.setString(1, po.getRolename());
+		stmt.setLong(2, po.getId());
+		stmt.execute();
+		
+		PreparedStatement deleteSqlStatement = con.prepareStatement("delete from role_policy_ref where role_id = ?");
+		deleteSqlStatement.setLong(1, po.getId());
+		deleteSqlStatement.execute();
+		
+		PreparedStatement insertRelation = con.prepareStatement("insert into role_policy_ref(role_Id, policy_id) values (?, ?)");
+		for (Integer integer : policies) {
+			insertRelation.clearParameters();
+			insertRelation.setLong(1, po.getId());
+			insertRelation.setLong(2, integer);
+			insertRelation.addBatch();
+		}
+		insertRelation.executeBatch();
+		
+		try {
+			con.commit();
+		} catch (Exception e) {
+			con.rollback();
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public int getTotalCount(String rolename) throws SQLException {
