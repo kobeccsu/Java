@@ -106,7 +106,7 @@ class App extends React.Component{
 					<td>{username}</td>
 					<td>{ownRolesCount > 0 ? <span><span className='edit' onClick={()=>this.setState({showCard: !this.state.showCard, hideCardList:true}, () => {self.showPolicies(id)})}>{ (this.state.showCard ? 'Hide' : 'Show') + ' View Policies'}</span><span>|</span></span> : ''}<span className='edit' 
 					 onClick={() => {  this.setState({showEdit : true, showCard: true, hideCardList:false, isAdd: false, editname: username, id:id, showAttachPolicy: true}, ()=>{self.showPolicies(id) })}} 
-					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
+					 data-id={id}>Edit</span></td>
 				</tr>
 			);
 		})
