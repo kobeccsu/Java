@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import com.leizhou.dal.DB;
 import com.leizhou.dto.RoleBean;
+import com.leizhou.dto.UserBean;
 
 public class DBRole {
 	
@@ -67,6 +68,22 @@ public class DBRole {
 			po.setId(result.getInt("id"));
 			po.setRolename(result.getString("rolename"));
 			po.setOwnPoliciesCount(result.getInt("policycount"));
+			list.add(po);
+		}
+		con.close();
+		return list;
+	}
+	
+	public LinkedList<RoleBean> getRoleList(int userId) throws ClassNotFoundException, SQLException{
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = new DB().getConnection();
+		Statement stmt = con.createStatement();
+		ResultSet result = stmt.executeQuery("select rr.id, rolename from role_user_ref r join role rr on r.role_id = rr.id where r.user_id = " + userId );
+		LinkedList<RoleBean> list = new LinkedList<RoleBean>();
+		while (result.next()) {
+			RoleBean po = new RoleBean();
+			po.setId(result.getInt("id"));
+			po.setRolename(result.getString("rolename"));
 			list.add(po);
 		}
 		con.close();

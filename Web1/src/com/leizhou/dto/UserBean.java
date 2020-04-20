@@ -5,6 +5,7 @@ public class UserBean {
 	private String username;
 	private String password;
 	private String salt;
+	private int ownRolesCount;
 	
 	public int getId() {
 		return id;
@@ -29,6 +30,12 @@ public class UserBean {
 	}
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+	public int getOwnRolesCount() {
+		return ownRolesCount;
+	}
+	public void setOwnRolesCount(int ownRolesCount) {
+		this.ownRolesCount = ownRolesCount;
 	}
 	
 }

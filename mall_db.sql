@@ -53,7 +53,7 @@ CREATE TABLE `role` (
   `uid` char(36) DEFAULT NULL,
   `rolename` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'47274da5-6296-11ea-ada3-80e82c9e4843','sdfsdf'),(2,'2bfbf458-6297-11ea-ada3-80e82c9e4843','rtrthrth'),(3,'58e43cc4-6297-11ea-ada3-80e82c9e4843','g4tg45t'),(4,'5ab73b08-6297-11ea-ada3-80e82c9e4843','5htrgg'),(5,'5d0cd988-6297-11ea-ada3-80e82c9e4843','h5hgert5t'),(6,'5ed6376b-6297-11ea-ada3-80e82c9e4843','etyntryntymtym'),(7,'614987bb-6297-11ea-ada3-80e82c9e4843','vderteruu'),(8,'634a3982-6297-11ea-ada3-80e82c9e4843','asdfacsdvsdv'),(9,'65410c48-6297-11ea-ada3-80e82c9e4843','asdfsfadf'),(10,'6730c400-6297-11ea-ada3-80e82c9e4843','adheryery'),(11,'68ba027a-6297-11ea-ada3-80e82c9e4843','asdfasdfasd'),(12,'fcda1018-629a-11ea-ada3-80e82c9e4843','dfgdgdf'),(13,'0307e48e-629b-11ea-ada3-80e82c9e4843','dfgdfh');
+INSERT INTO `role` VALUES (1,'47274da5-6296-11ea-ada3-80e82c9e4843','zhoulei'),(2,'2bfbf458-6297-11ea-ada3-80e82c9e4843','rtrthrth'),(3,'58e43cc4-6297-11ea-ada3-80e82c9e4843','g4tg45t'),(4,'5ab73b08-6297-11ea-ada3-80e82c9e4843','5htrgg'),(5,'5d0cd988-6297-11ea-ada3-80e82c9e4843','h5hgert5t'),(6,'5ed6376b-6297-11ea-ada3-80e82c9e4843','etyntryntymtym'),(7,'614987bb-6297-11ea-ada3-80e82c9e4843','vderteruu'),(8,'634a3982-6297-11ea-ada3-80e82c9e4843','asdfacsdvsdv'),(9,'65410c48-6297-11ea-ada3-80e82c9e4843','asdfsfadf'),(10,'6730c400-6297-11ea-ada3-80e82c9e4843','adheryery'),(11,'68ba027a-6297-11ea-ada3-80e82c9e4843','asdfasdfasd'),(12,'fcda1018-629a-11ea-ada3-80e82c9e4843','dfgdgdf'),(13,'0307e48e-629b-11ea-ada3-80e82c9e4843','dfgdfh'),(15,'3f76b1b8-6e6d-11ea-ada3-80e82c9e4843','fff'),(17,'71097538-7a26-11ea-b5ce-80e82c9e4843','RoleHasPolicy'),(18,'805f6e27-8059-11ea-b5ce-80e82c9e4843','Awesome'),(19,'8062eea4-8059-11ea-b5ce-80e82c9e4843','Awesome'),(20,'96fd3b8d-82b3-11ea-b5ce-80e82c9e4843','Niubility');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +80,7 @@ CREATE TABLE `role_policy_ref` (
   `role_uid` char(36) DEFAULT NULL,
   `policy_uid` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +89,7 @@ CREATE TABLE `role_policy_ref` (
 
 LOCK TABLES `role_policy_ref` WRITE;
 /*!40000 ALTER TABLE `role_policy_ref` DISABLE KEYS */;
+INSERT INTO `role_policy_ref` VALUES (32,18,1,NULL,NULL),(33,18,2,NULL,NULL),(34,18,3,NULL,NULL),(35,18,7,NULL,NULL),(36,18,19,NULL,NULL),(44,20,3,NULL,NULL),(45,20,6,NULL,NULL),(46,20,12,NULL,NULL),(47,20,8,NULL,NULL),(48,20,28,NULL,NULL),(49,20,1,NULL,NULL),(60,1,18,NULL,NULL),(61,1,2,NULL,NULL),(62,1,1,NULL,NULL),(63,1,3,NULL,NULL),(64,1,7,NULL,NULL);
 /*!40000 ALTER TABLE `role_policy_ref` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,7 +107,7 @@ CREATE TABLE `role_user_ref` (
   `role_uid` char(36) DEFAULT NULL,
   `user_uid` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,6 +116,7 @@ CREATE TABLE `role_user_ref` (
 
 LOCK TABLES `role_user_ref` WRITE;
 /*!40000 ALTER TABLE `role_user_ref` DISABLE KEYS */;
+INSERT INTO `role_user_ref` VALUES (8,4,1,NULL,NULL),(9,2,1,NULL,NULL),(10,1,1,NULL,NULL),(11,20,1,NULL,NULL),(12,17,1,NULL,NULL),(13,19,1,NULL,NULL);
 /*!40000 ALTER TABLE `role_user_ref` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,7 +134,7 @@ CREATE TABLE `users` (
   `salt` varchar(100) DEFAULT NULL,
   `uid` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +143,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'zhoulei','PNRqDNNzXvv+LbMIFRrwseGB/DMT6ORks6GPPO3/9h8=','o5nC7fpUMID7zVwNvD2Mk5op5QyO6E','14a4da8c-38d3-11ea-921b-80e82c9e4843');
+INSERT INTO `users` VALUES (1,'zhoulei','PNRqDNNzXvv+LbMIFRrwseGB/DMT6ORks6GPPO3/9h8=','o5nC7fpUMID7zVwNvD2Mk5op5QyO6E','14a4da8c-38d3-11ea-921b-80e82c9e4843'),(2,'normal','WeZlrZdXwFa11ZJ4VPgyf92PC03gY3Mhp+MDz9IHdmA=','43A1YlUwW7ZJMb9gYwQzPPr6Hgahar',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -154,4 +156,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-10 17:38:17
+-- Dump completed on 2020-04-20 17:25:34

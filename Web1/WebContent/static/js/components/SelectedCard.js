@@ -11,7 +11,7 @@ export default class SelectedCard extends React.Component{
             return (
             <div className="card" key={index}>				
                 <div className="card-body">
-                    <button type="button" className={this.props.hide_button ? 'invisible' : 'visible close'} aria-label="Close" onClick={()=>{this.props.remove(item.id)}}>
+                    <button type="button" className={this.props.hideButton ? 'invisible' : 'visible close'} aria-label="Close" onClick={()=>{this.props.remove(item.id)}}>
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <p>{item.name}</p>

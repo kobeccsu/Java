@@ -2,7 +2,7 @@ import React from 'react'
 import Pager from '../components/Pager'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
-
+import SearchBar from '../components/SearchBar'
 
 class TableCom extends React.Component{
     constructor(props){
@@ -10,13 +10,15 @@ class TableCom extends React.Component{
 		this.state = {
 			currentIndex:1,
 			pageCount:0,
-			// searchTxt:'',
+			searchTxt:'',
 			//tabledata:[],
 			//dom:null,
 			//selected:[]
 		}
 		this.loaddata = this.loaddata.bind(this);
 		this.updateState = this.updateState.bind(this);
+		this.updateSearch = this.updateSearch.bind(this);
+		this.onSearch = this.onSearch.bind(this);
 		// this.toggleRowSelect = this.toggleRowSelect.bind(this);
 	}
 
@@ -54,7 +56,7 @@ class TableCom extends React.Component{
 
 	loaddata(){
 		let self = this;
-		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.props.searchTxt}})
+		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: this.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
 				const list = json.data.data;
@@ -74,24 +76,37 @@ class TableCom extends React.Component{
 	componentDidMount(){
 		this.loaddata();
 	}
+
+	updateSearch(searchTxt){
+		this.setState({searchTxt: searchTxt});
+	}
+
+	onSearch(){
+		this.setState({ pageIndex: 1}, ()=>{
+			this.loaddata();
+		});
+		
+	}
     render(){
         return (
-            <div className="table">
-				<table>
-					<thead className="thead-light">
-						<tr>
-							{this.generateTh()}
-						</tr>
-					</thead>
-					{this.props.tbody}
-				</table>
-				<hr/>
-				<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 
-					updateParentState={this.updateState} 
-					totalPageSize={this.state.pageCount} />
-				
-				
-			</div>
+			<React.Fragment>
+				{ this.props.showSearch ? <SearchBar updateSearch={this.updateSearch} searchTxt={this.state.searchTxt} handleSearch={this.onSearch} 
+					showAddView={this.props.showAddView} showEdit={this.state.showEdit}/> : ''}
+				<div className="table">
+					<table>
+						<thead className="thead-light">
+							<tr>
+								{this.generateTh()}
+							</tr>
+						</thead>
+						{this.props.tbody}
+					</table>
+					<hr/>
+					<Pager currentIndex={this.state.currentIndex} reload={this.loaddata} 
+						updateParentState={this.updateState} 
+						totalPageSize={this.state.pageCount} />
+				</div>
+			</React.Fragment>
         );
     }
 }

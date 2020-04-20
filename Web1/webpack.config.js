@@ -3,7 +3,8 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {policy:"./WebContent/static/js/sysadmin/policy.js",
-	  role:"./WebContent/static/js/sysadmin/role.js"},
+    role:"./WebContent/static/js/sysadmin/role.js",
+    adminUser:'./WebContent/static/js/sysadmin/adminUser.js'},
   mode: "development",
   module: {
     rules: [

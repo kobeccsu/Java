@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,25 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+import com.leizhou.biz.DBPolicy;
 import com.leizhou.biz.DBRole;
+import com.leizhou.biz.DBUsers;
 import com.leizhou.util.Utility;
 
 /**
- * Servlet implementation class RoleService
+ * Servlet implementation class UserService
  */
-@WebServlet("/RoleService/*")
-public class RoleService extends HttpServlet {
+@WebServlet("/UserService/*")
+public class UserService extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RoleService() {
+    public UserService() {
         super();
     }
 
@@ -39,22 +38,13 @@ public class RoleService extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		DBRole db = new DBRole();
-		Map<String, String[]> reqList = request.getParameterMap();
-		int pageIndex = Integer.parseInt(reqList.containsKey("pageIndex") ?  request.getParameter("pageIndex") : "0");
-		int pageSize = Integer.parseInt(reqList.containsKey("pageSize") ? request.getParameter("pageSize") : "10");
-		String queryText = reqList.containsKey("queryText") ? request.getParameter("queryText") : "";
-		int userId = Integer.parseInt(reqList.containsKey("userId") ? request.getParameter("userId") : "0");
-
-		String requestPath = request.getPathInfo();
-		String action = "";
-		if (requestPath != null) {
-			int subString = requestPath.lastIndexOf("/") + 1;
-			action =  requestPath.substring(subString, requestPath.length());
-		}
+		DBUsers db = new DBUsers();
+		int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
+		int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+		String queryText = request.getParameter("queryText");
+		
 		try {
-			LinkedList<com.leizhou.dto.RoleBean> list = action.equalsIgnoreCase("getall") ? db.getRoleList(userId) : db.getRoleList(pageIndex,pageSize, queryText); 
+			LinkedList<com.leizhou.dto.UserBean> list = db.getUserList(pageIndex, pageSize, queryText);
 			Gson json = new Gson();
 			int totalCount  = db.getTotalCount(queryText);
 			response.setContentType("application/json"); 
@@ -89,33 +79,15 @@ public class RoleService extends HttpServlet {
 		
 		boolean isSuccess = false;
 		
-		if (action.equalsIgnoreCase("add")){
-			String roleName = jsonObject.getString("rolename");
-			
-			ArrayList<Integer> list = Utility.parseJsonToInt(jsonObject, "policies", "id"); 
-			try {
-				isSuccess = new DBRole().addRole(roleName, list);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} else if(action.equalsIgnoreCase("delete")){
+		if(action.equalsIgnoreCase("delete")){
 			int id = jsonObject.getInt("id");
-			try {
-				isSuccess = new DBRole().deleteRole(id);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			isSuccess = new DBPolicy().deletePolicy(id);
 		} else if(action.equalsIgnoreCase("update")){
-			com.leizhou.dto.RoleBean role = new com.leizhou.dto.RoleBean();
-			role.setId(jsonObject.getInt("id"));
-			role.setRolename(jsonObject.getString("rolename"));
-			ArrayList<Integer> list = Utility.parseJsonToInt(jsonObject, "policies", "id");  
+			com.leizhou.dto.UserBean userBean = new com.leizhou.dto.UserBean();
+			userBean.setId(jsonObject.getInt("id"));
+			ArrayList<Integer> list = Utility.parseJsonToInt(jsonObject, "roles", "id");
 			try {
-				isSuccess = new DBRole().updateRole(role, list);
+				isSuccess = new DBUsers().updateUserRoleRef(userBean, list);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
@@ -125,4 +97,5 @@ public class RoleService extends HttpServlet {
 		
 		response.getWriter().write("{\"issuccess\":" + isSuccess + "}");
 	}
+
 }
