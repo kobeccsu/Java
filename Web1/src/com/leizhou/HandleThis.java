@@ -47,6 +47,7 @@ public class HandleThis extends HttpServlet {
 		if (isValidUser) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", userBean.getUsername());
+			session.setAttribute("roles", userBean.getRoles());
 			getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
 		}

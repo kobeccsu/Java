@@ -7,10 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import com.leizhou.dal.*;
-import com.leizhou.dto.Policy;
-import com.leizhou.dto.RoleBean;
 import com.leizhou.dto.UserBean;
 
 public class DBUsers {
@@ -21,7 +18,10 @@ public class DBUsers {
 	}
 	
 	public UserBean getUser(String username) {
-		String sql = String.format("select * from users where uname = '%s'", 
+		String sql = String.format("select l.id, l.uname, password, salt, group_concat(rolename SEPARATOR ',') roles "
+				+ "from users l left join role_user_ref r on l.id = r.user_id left join role e on r.role_id = e.id "
+				+ "where uname = '%s' "
+				+ "group by l.id,uname,password, salt", 
 				username);
 		UserBean userBean = new UserBean();
 		ResultSet result = null;
@@ -35,6 +35,7 @@ public class DBUsers {
 			userBean.setUsername(result.getString("uname"));
 			userBean.setPassword(result.getString("password"));
 			userBean.setSalt(result.getString("salt"));
+			userBean.setRoles(result.getString("roles"));
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -62,8 +63,6 @@ public class DBUsers {
 		con.close();
 		return list;
 	}
-	
-	
 	
 	public int getTotalCount(String username) throws SQLException {
 		Connection con = new DB().getConnection();
