@@ -41,6 +41,22 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>com.leizhou.www</groupId>
+        	<artifactId>Utility</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
+       	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>8.0.18</version>
+		</dependency>
 	</dependencies>
 
 	<build>
