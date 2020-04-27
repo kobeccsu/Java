@@ -12,6 +12,6 @@
 			
 		</div>
 	</div>
-	<script src="../static/dist/js/sysadmin/adminUser.js"></script>
+	<script src="/static/dist/js/sysadmin/adminUser.js"></script>
 </body>
 </html>
