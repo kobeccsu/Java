@@ -47,7 +47,7 @@ class App extends React.Component{
 	}
 
 	showPolicies(id){
-		axios.get('../Policy', { params : { roleId : id} })
+		axios.get('../Policy/getPolicies', { params : { roleId : id} })
 			.then(response=>{
 				let list = [];
 				response.data.data.map((item)=>{

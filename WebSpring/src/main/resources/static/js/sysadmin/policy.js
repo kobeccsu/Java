@@ -23,6 +23,7 @@ class App extends React.Component{
 		}
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
+		this.showAddView = this.showAddView.bind(this);
 	}
 
 	loadData(){
@@ -65,11 +66,15 @@ class App extends React.Component{
 	 updateState(obj, func){
 		 this.setState(obj, func);
 	 }
+
+	 showAddView(){
+		this.setState({showEdit: true, showCard: true, editname:'', isAdd: true})
+	 }
 	render(){
 		return(
 			<React.Fragment>
-				<SearchBar searchTxt={this.props.searchTxt} handleSearch={this.loadData} updateState={this.updateState} showEdit={this.state.showEdit}/>
-				{!this.state.showEdit ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()}/> : ''}
+				{!this.state.showEdit ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()} 
+				showSearch={true} showAddView={this.showAddView}/> : ''}
 				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
 					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
