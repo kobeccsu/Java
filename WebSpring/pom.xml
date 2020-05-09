@@ -49,7 +49,6 @@
         <dependency>
         	<groupId>com.leizhou.www</groupId>
         	<artifactId>Utility</artifactId>
-        	<version>0.0.1-SNAPSHOT</version>
         </dependency>
        	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
@@ -81,4 +80,13 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.leizhou.www</groupId>
+				<artifactId>Utility</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
