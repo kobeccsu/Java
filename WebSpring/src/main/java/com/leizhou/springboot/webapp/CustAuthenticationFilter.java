@@ -1,6 +1,5 @@
-package com.leizhou.security;
+package com.leizhou.springboot.webapp;
 
-import java.io.Console;
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -26,7 +25,7 @@ public class CustAuthenticationFilter implements Filter{
 		HttpServletResponse res = (HttpServletResponse) response;
 		String currentPath =  req.getRequestURI();
 		
-		if (currentPath.matches(".*sysadmin[/].*[.]jsp") ) {
+		if (currentPath.matches(".*sysadmin[/]") ) {
 			Object roles = req.getSession().getAttribute("roles");
 			String[] roleArr = null;
 			if(roles!= null) {
