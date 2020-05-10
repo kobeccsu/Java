@@ -48,6 +48,7 @@ public class RoleManageController {
 	}
 	
 	@PostMapping("/RoleService/add")
+	@ResponseBody
 	public String addRole(@RequestBody String json) throws ClassNotFoundException, SQLException {
 		JSONObject jsonObject = new JSONObject(json.toString());
 		String roleName = jsonObject.getString("rolename");

@@ -23,7 +23,7 @@ public class LoginController{
         return "index";
     }
 	
-	@PostMapping({"/", "login"})
+	@PostMapping("/login")
 	public String login(@RequestParam Map<String, Object> payload, HttpSession sessionParent) {
 		boolean isValidUser = false;
 		System.out.println(payload.get("username").toString());

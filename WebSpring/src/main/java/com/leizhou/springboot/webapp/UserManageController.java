@@ -1,16 +1,21 @@
 package com.leizhou.springboot.webapp;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.leizhou.biz.DBUsers;
+import com.leizhou.util.Utility;
 
 @Controller
 public class UserManageController {
@@ -42,5 +47,17 @@ public class UserManageController {
 			e.printStackTrace();
 		}
 		return "{\"msg\" : \"error\"}";
+	}
+	
+	@PostMapping(value ="/UserService/update")
+	@ResponseBody
+	public String updateUser(@RequestBody String json) throws ClassNotFoundException, SQLException {
+		JSONObject jsonObject = new JSONObject(json.toString());
+		com.leizhou.dto.UserBean userBean = new com.leizhou.dto.UserBean();
+		userBean.setId(jsonObject.getInt("id"));
+		ArrayList<Integer> list = Utility.parseJsonToInt(jsonObject, "roles", "id");
+		
+		boolean	isSuccess = new DBUsers().updateUserRoleRef(userBean, list);
+		return "{\"issuccess\":" + isSuccess + "}";
 	}
 }
