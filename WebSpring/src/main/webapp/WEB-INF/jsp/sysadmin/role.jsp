@@ -3,10 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Role Management</title>
+	<meta charset="UTF-8">
+	<title>Role Management</title>
+	<link rel="shortcut icon" href="#" />
 </head>
 <body>
+	<jsp:include page="menu-layout.jsp"/>
 	<div id="topbar" class="container">
 
 	</div>

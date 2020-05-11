@@ -20,33 +20,26 @@ public class CustAuthenticationFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("Hello");
+		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-//		String currentPath =  req.getRequestURI();
+		Object roles = req.getSession().getAttribute("roles");
+		String[] roleArr = null;
+		if (roles != null) {
+			roleArr = roles.toString().split(",");
+		}
 		
-//		if (currentPath.matches(".*sysadmin[/]") ) {
-			Object roles = req.getSession().getAttribute("roles");
-			String[] roleArr = null;
-			if(roles!= null) {
-				roleArr = roles.toString().split(",");
-			}
-			
-			boolean isAdmin = false;
-			if (roleArr != null && roleArr.length > 0) {
-				for (int i = 0; i < roleArr.length; i++) {
-					if (roleArr[i].equalsIgnoreCase("admin")) {
-						isAdmin = true;
-					}
+		boolean isAdmin = false;
+		if (roleArr != null && roleArr.length > 0) {
+			for (int i = 0; i < roleArr.length; i++) {
+				if (roleArr[i].equalsIgnoreCase("admin")) {
+					isAdmin = true;
 				}
 			}
-			if (!isAdmin) {
-				res.sendRedirect("/login");
-			}
-//		}
-		// pass the request along the filter chain
+		}
+		if (!isAdmin) {
+			res.sendRedirect("/login");
+		}
 		chain.doFilter(request, response);
-		
 	}
-
 }

@@ -6,13 +6,13 @@ import Pager from '../components/Pager'
 import AddEdit from '../sysadmin/policyEdit'
 import axios from 'axios';
 import  '../../css/sysadmin/policy.css'
-
+import '../../css/bootstrap.min.css'
 
 class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			tbody:[],
+			policiesTableData:[],
 			pageCount : 0,
 			showEdit: false,
 			isAdd: true,
@@ -24,6 +24,7 @@ class App extends React.Component{
 		this.updateState = this.updateState.bind(this);
 		this.loadData = this.loadData.bind(this);
 		this.showAddView = this.showAddView.bind(this);
+		this.updatePolicyTable = this.updatePolicyTable.bind(this);
 	}
 
 	loadData(){
@@ -51,7 +52,7 @@ class App extends React.Component{
 		this.loadData();
 	}
 	renderTableData() {
-		return this.state.tbody.map((item, index) => {
+		const trs = this.state.policiesTableData.map((item, index) => {
 		   const { id, policyname } = item //destructuring
 		   return (
 			  <tr key={id}>
@@ -62,21 +63,28 @@ class App extends React.Component{
 			  </tr>
 		   )
 		})
+
+		return (
+			<tbody>
+			{trs}
+			</tbody>);
 	 }
 	 updateState(obj, func){
 		 this.setState(obj, func);
 	 }
-
+	 updatePolicyTable(data){
+		this.setState({policiesTableData: data});
+	 }
 	 showAddView(){
 		this.setState({showEdit: true, showCard: true, editname:'', isAdd: true})
 	 }
 	render(){
+		const policiesTable = this.renderTableData();
 		return(
 			<React.Fragment>
-				{!this.state.showEdit ? <TableCom headers={['PolicyName','Operation']} tbody={this.renderTableData()} 
+				{!this.state.showEdit ? <TableCom headers={['PolicyName','Operation']} getDataUrl="../Policy" 
+				tbody={policiesTable }  updateTable={this.updatePolicyTable}
 				showSearch={true} showAddView={this.showAddView}/> : ''}
-				<Pager currentIndex={this.state.currentIndex} reload={this.loadData} updateParentState={this.updateState} 
-					totalPageSize={this.state.pageCount} />
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
 					updateP={this.updateState} isAdd={this.state.isAdd} 
 					id={this.state.id} policyname={this.state.policyname} /> : ''}

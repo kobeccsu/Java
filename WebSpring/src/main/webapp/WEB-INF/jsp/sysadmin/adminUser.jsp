@@ -6,8 +6,10 @@
 	<meta charset="UTF-8">
 	<title>User management</title>
 	</head>
+	<link rel="shortcut icon" href="#" />
 <body>
 	<div>
+		<jsp:include page="menu-layout.jsp"/>
 		<div id="app" class="container">
 			
 		</div>
