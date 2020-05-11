@@ -11,9 +11,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
 @WebFilter(filterName = "AuthFilter", urlPatterns = "/sysadmin/*")
 public class CustAuthenticationFilter implements Filter{
 
