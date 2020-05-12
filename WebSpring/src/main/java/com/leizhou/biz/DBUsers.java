@@ -12,17 +12,15 @@ import com.leizhou.dto.UserBean;
 
 public class DBUsers {
 	public boolean register(UserBean user) {
-		String sql = "insert into users(uname, password, salt) values('" + user.getUsername() + "', '"+ user.getPassword() 
-			+ "','" + user.getSalt() + "')";
+		String sql = "insert into users(uname, password, salt) values('" + user.getUsername() + "', '"
+				+ user.getPassword() + "','" + user.getSalt() + "')";
 		return new DB().execute(sql);
 	}
-	
+
 	public UserBean getUser(String username) {
 		String sql = String.format("select l.id, l.uname, password, salt, group_concat(rolename SEPARATOR ',') roles "
 				+ "from users l left join role_user_ref r on l.id = r.user_id left join role e on r.role_id = e.id "
-				+ "where uname = '%s' "
-				+ "group by l.id,uname,password, salt", 
-				username);
+				+ "where uname = '%s' " + "group by l.id,uname,password, salt", username);
 		UserBean userBean = new UserBean();
 		ResultSet result = null;
 		try {
@@ -30,7 +28,8 @@ public class DBUsers {
 			Connection con = new DB().getConnection();
 			Statement stmt = con.createStatement();
 			result = stmt.executeQuery(sql);
-			if (result.next() == false) return null;
+			if (result.next() == false)
+				return null;
 			userBean.setId(result.getInt("id"));
 			userBean.setUsername(result.getString("uname"));
 			userBean.setPassword(result.getString("password"));
@@ -40,18 +39,19 @@ public class DBUsers {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
 		return userBean;
 	}
-	
-	public LinkedList<UserBean> getUserList(int pageIndex, int pageSize, String queryText) throws ClassNotFoundException, SQLException{
+
+	public LinkedList<UserBean> getUserList(int pageIndex, int pageSize, String queryText)
+			throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet result = stmt.executeQuery("select l.id, uname, count(rolename) rolecount from users l left join role_user_ref r on l.id = r.user_id left join role rr on r.role_id = rr.id  "
-				+ (queryText.contentEquals("") ? "" : " where uname like '" + queryText + "%'") 
-				+ " group by l.id,uname " 
-				+ " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize);
+		ResultSet result = stmt.executeQuery(
+				"select l.id, uname, count(rolename) rolecount from users l left join role_user_ref r on l.id = r.user_id left join role rr on r.role_id = rr.id  "
+						+ (queryText.contentEquals("") ? "" : " where uname like '" + queryText + "%'")
+						+ " group by l.id,uname " + " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize);
 		LinkedList<UserBean> list = new LinkedList<UserBean>();
 		while (result.next()) {
 			UserBean po = new UserBean();
@@ -63,27 +63,30 @@ public class DBUsers {
 		con.close();
 		return list;
 	}
-	
+
 	public int getTotalCount(String username) throws SQLException {
 		Connection con = new DB().getConnection();
 		Statement stmt = con.createStatement();
-		ResultSet resultSet = stmt.executeQuery("select count(*) as totalcount from users where uname like '" + username + "%' ");
+		ResultSet resultSet = stmt
+				.executeQuery("select count(*) as totalcount from users where uname like '" + username + "%' ");
 		resultSet.next();
 		int count = resultSet.getInt("totalcount");
 		resultSet.close();
 		return count;
 	}
-	
-	public boolean updateUserRoleRef(UserBean po, ArrayList<Integer> roles) throws SQLException,ClassNotFoundException {
+
+	public boolean updateUserRoleRef(UserBean po, ArrayList<Integer> roles)
+			throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = new DB().getConnection();
 		con.setAutoCommit(false);
-		
+
 		PreparedStatement deleteSqlStatement = con.prepareStatement("delete from role_user_ref where user_id = ?");
 		deleteSqlStatement.setLong(1, po.getId());
 		deleteSqlStatement.execute();
-		
-		PreparedStatement insertRelation = con.prepareStatement("insert into role_user_ref(user_Id, role_Id) values (?, ?)");
+
+		PreparedStatement insertRelation = con
+				.prepareStatement("insert into role_user_ref(user_Id, role_Id) values (?, ?)");
 		for (Integer integer : roles) {
 			insertRelation.clearParameters();
 			insertRelation.setLong(1, po.getId());
@@ -91,14 +94,14 @@ public class DBUsers {
 			insertRelation.addBatch();
 		}
 		insertRelation.executeBatch();
-		
+
 		try {
 			con.commit();
 		} catch (Exception e) {
 			con.rollback();
 			return false;
 		}
-		
+
 		return true;
 	}
 }
