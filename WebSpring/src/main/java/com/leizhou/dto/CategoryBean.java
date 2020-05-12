@@ -1,13 +1,8 @@
 package com.leizhou.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 public class CategoryBean {
-	@Id
 	private int id;
 
-	@Column(name = "is_deleted")
 	private byte isDeleted;
 
 	private String name;

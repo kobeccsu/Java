@@ -1,13 +1,9 @@
 package com.leizhou.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 
 public class ShopBean {
-	@Id
 	private int id;
 
-	@Column(name = "is_closed")
 	private byte isClosed;
 
 	private String name;

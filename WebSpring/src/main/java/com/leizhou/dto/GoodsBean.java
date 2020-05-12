@@ -2,80 +2,51 @@ package com.leizhou.dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 public class GoodsBean {
-	@Id
 	private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date addtime;
 
-	@Lob
-	@Column(name = "banner_pic")
 	private byte[] bannerPic;
 
-	@Column(name = "buy_count")
 	private int buyCount;
 
-	@Column(name = "buy_m_count")
 	private int buyMCount;
 
-	@Column(name = "category_id")
 	private int categoryId;
 
-	@Column(name = "category_name")
 	private String categoryName;
 
-	@Lob
-	@Column(name = "detail_pic")
 	private byte[] detailPic;
 
-	@Column(name = "freight_tmlp_name")
 	private String freightTmlpName;
 
-	@Column(name = "freight_tmpl_id")
 	private int freightTmplId;
 
-	@Column(name = "goods_des")
 	private String goodsDes;
 
 	private String goodsname;
 
-	@Column(name = "group_buy_id")
 	private int groupBuyId;
 
-	@Column(name = "is_agent")
 	private byte isAgent;
 
-	@Column(name = "is_hot")
 	private byte isHot;
 
-	@Column(name = "is_index")
 	private byte isIndex;
 
-	@Column(name = "is_market")
 	private byte isMarket;
 
-	@Column(name = "is_new")
 	private byte isNew;
 
-	@Column(name = "is_promotion")
 	private byte isPromotion;
 
 	private float price;
 
-	@Column(name = "promotional_price")
 	private float promotionalPrice;
 
-	@Column(name = "quick_buy_id")
 	private int quickBuyId;
 
-	@Column(name = "shop_id")
 	private int shopId;
 
 	private int stock;

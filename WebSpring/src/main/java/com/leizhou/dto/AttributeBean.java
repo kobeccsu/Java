@@ -1,20 +1,13 @@
 package com.leizhou.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 public class AttributeBean {
 
-	@Id
 	private int id;
 
-	@Column(name = "attr_name")
 	private String attrName;
 
-	@Column(name = "category_id")
 	private int categoryId;
 
-	@Column(name = "shop_id")
 	private int shopId;
 
 	public int getId() {
