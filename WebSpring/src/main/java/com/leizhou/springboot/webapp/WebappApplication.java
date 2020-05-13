@@ -13,9 +13,8 @@ import com.leizhou.mapper.UsersMapper;
 @ServletComponentScan("com.leizhou.filter")
 @MappedTypes(UsersMapper.class)
 @MapperScan("com.leizhou.mapper")
-@ComponentScan(basePackages = { "com.leizhou.controller"} )
+@ComponentScan(basePackages = { "com.leizhou.controller", "com.leizhou.security"} )
 public class WebappApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(WebappApplication.class, args);
 	}

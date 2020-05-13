@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ShopController {
+	
 	public ShopController() {
 		
 	}
 	
 	@GetMapping("/shop/management")
 	public String getIndex() {
-		return "redirect:index.html";
+		return "edit-mall/shop";
 	}
 }
