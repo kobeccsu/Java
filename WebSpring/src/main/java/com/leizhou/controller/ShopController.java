@@ -12,6 +12,6 @@ public class ShopController {
 	
 	@GetMapping("/shop/management")
 	public String getIndex() {
-		return "edit-mall/shop";
+		return "static/index";
 	}
 }
