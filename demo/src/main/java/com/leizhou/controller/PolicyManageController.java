@@ -21,8 +21,7 @@ public class PolicyManageController {
 	
 	@GetMapping({"/sysadmin/policy"})
 	public String roleView() {
-		System.out.println("HAHAHAHAHAH :" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) );
-		return "jsp/sysadmin/policy111222333";
+		return "jsp/sysadmin/policy";
 	}
 	
 	@GetMapping("/Policy")

@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 
 import com.leizhou.mapper.UsersMapper;
 
@@ -15,7 +14,7 @@ import com.leizhou.mapper.UsersMapper;
 @ServletComponentScan("com.leizhou.filter")
 @MappedTypes(UsersMapper.class)
 @MapperScan("com.leizhou.mapper")
-@ComponentScan("com.leizhou.controller")
+@ComponentScan("com.leizhou.security")
 @ComponentScan(basePackages = { "com.leizhou.controller", "com.leizhou.security"} )
 public class WebappApplication {
 	public static void main(String[] args) {
