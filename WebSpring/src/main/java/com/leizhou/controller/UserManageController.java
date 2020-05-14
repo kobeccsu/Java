@@ -22,8 +22,9 @@ public class UserManageController {
 	
 	@GetMapping({"/sysadmin/adminUser"})
 	public String UserView() {
-		return "/sysadmin/adminUser";
+		return "jsp/sysadmin/adminUser";
 	}
+	
 	
 	@GetMapping(value ="/UserService", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

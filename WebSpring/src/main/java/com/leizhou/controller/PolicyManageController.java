@@ -19,7 +19,7 @@ public class PolicyManageController {
 	
 	@GetMapping({"/sysadmin/policy"})
 	public String roleView() {
-		return "sysadmin/policy";
+		return "jsp/sysadmin/policy";
 	}
 	
 	@GetMapping("/Policy")

@@ -20,7 +20,7 @@ public class LoginController{
 	@GetMapping({"/", "/login"})
     public String login(Model model, @RequestParam(value="name", required=false, defaultValue="World") String name) {
         model.addAttribute("name", name);
-        return "index";
+        return "jsp/index";
     }
 	
 	@PostMapping("/login")
@@ -35,12 +35,12 @@ public class LoginController{
 			HttpSession session = sessionParent;
 			session.setAttribute("user", userBean.getUsername());
 			session.setAttribute("roles", userBean.getRoles());
-			return "index";
+			return "jsp/index";
 		}
 			
 		HttpSession session = sessionParent;
 		session.setAttribute("user", null);
 
-		return "index";
+		return "jsp/index";
 	}
 }

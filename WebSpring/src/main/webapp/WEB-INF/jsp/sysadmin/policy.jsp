@@ -21,7 +21,7 @@
 		<jsp:include page="menu-layout.jsp"/>
 		<div id="topbar" class="container"></div>
 
-		<script src="../static/dist/js/sysadmin/policy.js"></script>
+		<script src="/static/dist/js/sysadmin/policy.js"></script>
 	</div>
 </body>
 </html>

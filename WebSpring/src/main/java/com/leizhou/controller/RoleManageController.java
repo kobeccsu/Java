@@ -22,7 +22,7 @@ public class RoleManageController {
 	
 	@GetMapping({"/sysadmin/role"})
 	public String roleView() {
-		return "/sysadmin/role";
+		return "jsp/sysadmin/role";
 	}
 	
 	@RequestMapping("/RoleService")

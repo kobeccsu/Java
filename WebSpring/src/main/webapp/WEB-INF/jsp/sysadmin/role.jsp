@@ -12,6 +12,6 @@
 	<div id="topbar" class="container">
 
 	</div>
-	<script src="../static/dist/js/sysadmin/role.js"></script>
+	<script src="/static/dist/js/sysadmin/role.js"></script>
 </body>
 </html>
