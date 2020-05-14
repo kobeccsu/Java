@@ -44,12 +44,10 @@ public class DB {
 		String dbName = System.getenv("RDS_DB_NAME"); 
 		dbName = dbName != null ? dbName : "mall";
 	    String userName = System.getProperty("RDS_USERNAME");
-	    System.out.println("username" + userName);
 	    userName = userName != null ? userName : "root";
 	    String password = System.getProperty("RDS_PASSWORD");
 	    password = password != null ? password : _password;
 	    String hostname = System.getProperty("RDS_HOSTNAME");
-	    System.out.println("hostname" + hostname);
 	    hostname = hostname != null ? hostname : "127.0.0.1";
 	    String port = System.getProperty("RDS_PORT");
 	    port = port != null ? port : "3306";
