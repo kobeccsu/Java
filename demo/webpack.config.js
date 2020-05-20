@@ -4,10 +4,8 @@ const glob = require('glob');
 
 module.exports = {
   entry: 
-  glob.sync('./src/main/resources/static/js/**/*.js').reduce(function(obj, el){
-    obj[path.parse(el).name] = el;
-    return obj
- },{}),
+  glob.sync('./src/main/resources/static/js/**/*.js'),
+  //glob.sync('./src/main/resources/static/js/**/*.js'),
   mode: "development",
   module: {
     rules: [
@@ -25,8 +23,8 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname),
-    publicPath: "/src/main/resources/static/dist/js/",
+    path: path.resolve(__dirname,'src/main/resources/static/dist/js/'),
+    publicPath: "./src/main/resources/static/dist/js/",
     filename: '[name].js'
   },
 //  devServer: {
