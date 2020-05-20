@@ -1,10 +1,13 @@
 const path = require("path");
 const webpack = require("webpack");
+const glob = require('glob');
 
 module.exports = {
-  entry: {policy:"./src/main/resources/static/js/sysadmin/policy.js",
-    role:"./src/main/resources/static/js/sysadmin/role.js",
-    adminUser:'./src/main/resources/static/js/sysadmin/adminUser.js'},
+  entry: 
+  glob.sync('./src/main/resources/static/js/**/*.js').reduce(function(obj, el){
+    obj[path.parse(el).name] = el;
+    return obj
+ },{}),
   mode: "development",
   module: {
     rules: [
@@ -12,7 +15,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
-        options: { presets: ["@babel/react"] }
+        options: { presets: ["@babel/react"]}
       },
       {
         test: /\.css$/,
@@ -22,8 +25,8 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname, "src/main/resources/static/dist/js/sysadmin/"),
-    publicPath: "/src/main/resources/static/dist/js/sysadmin/",
+    path: path.resolve(__dirname),
+    publicPath: "/src/main/resources/static/dist/js/",
     filename: '[name].js'
   },
 //  devServer: {
