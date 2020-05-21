@@ -2,18 +2,21 @@ const path = require("path");
 const webpack = require("webpack");
 const glob = require('glob');
 
+const entryArray = glob.sync('./src/main/resources/static/js/**/index.js');
+const entryObject = entryArray.reduce((acc, item) => {
+  const name = item.replace('/index.js', '').replace('/js', '/dist/js');
+  acc[name] = item;
+  return acc;
+}, {});
+
 module.exports = {
-  entry: 
-  glob.sync('./src/main/resources/static/js/**/*.js').reduce(function(obj, el){
-    obj[path.parse(el).name] = el;
-    return obj
- },{}),
+  entry: entryObject,
   mode: "development",
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: [/(node_modules|bower_components)/, path.resolve(__dirname,'./src/main/resources/static/dist/js/')],
         loader: "babel-loader",
         options: { presets: ["@babel/react"]}
       },
@@ -25,8 +28,8 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname),
-    publicPath: "/src/main/resources/static/dist/js/",
+    path: process.cwd(),
+    //publicPath: "/src/main/resources/static/dist/js/",
     filename: '[name].js'
   },
 //  devServer: {

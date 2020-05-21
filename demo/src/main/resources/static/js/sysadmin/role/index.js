@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import TableCom from '../components/TableCom'
-import AddEdit from '../sysadmin/adminUserEdit'
+import TableCom from '../../components/TableCom'
+import AddEdit from './roleEdit'
 import axios from 'axios';
-import  '../../css/sysadmin/policy.css'
-import '../../css/bootstrap.min.css'
-import SelectedCard from '../components/SelectedCard'
-import BreadCrumb from '../components/breadcrumb.jsx'
+import  '../../../css/sysadmin/policy.css'
+import '../../../css/bootstrap.min.css'
+import SelectedCard from '../../components/SelectedCard'
+import BreadCrumb from '../../components/breadcrumb.jsx'
 
 class App extends React.Component{
 	constructor(props){
@@ -29,7 +29,7 @@ class App extends React.Component{
 			showCard:false,
 			levelPath: [
 				{text:'Admin', url: '#'},
-				{text:'User Management', url: '#'}
+				{text:'Role', url: '#'}
 			]
 		}
 		this.updateState = this.updateState.bind(this);
@@ -47,12 +47,12 @@ class App extends React.Component{
 	}
 
 	showPolicies(id){
-		axios.get('../RoleService/getall', { params : { userId : id} })
+		axios.get('../Policy/getPolicies', { params : { roleId : id} })
 			.then(response=>{
 				let list = [];
 				response.data.data.map((item)=>{
-					const { rolename, id } = item;
-					list = [...list, { id: id, name: rolename}];
+					const { policyname, id } = item;
+					list = [...list, { id: id, name: policyname}];
 				});
 				this.setState({selected: list});
 			})
@@ -74,7 +74,7 @@ class App extends React.Component{
 
 	loadPolicyData(){
 		let self = this;
-		axios.get('../RoleService',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+		axios.get('../Policy',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
 				self.setState({policyData: json.data.data, pageCount: json.data.totalCount});
@@ -100,13 +100,13 @@ class App extends React.Component{
 	renderRoleTableData() {
 		var self = this;
 		const trs =	this.state.roleTableData.map((item, index) => {
-			const { username,  id, ownRolesCount } = item; //destructuring
+			const { rolename,  id, ownPoliciesCount } = item; //destructuring
 			return (
 				<tr key={id} >
-					<td>{username}</td>
-					<td>{ownRolesCount > 0 ? <span><span className='edit' onClick={()=>this.setState({showCard: !this.state.showCard, hideCardList:true}, () => {self.showPolicies(id)})}>{ (this.state.showCard ? 'Hide' : 'Show') + ' View Policies'}</span><span>|</span></span> : ''}<span className='edit' 
-					 onClick={() => {  this.setState({showEdit : true, showCard: true, hideCardList:false, isAdd: false, editname: username, id:id, showAttachPolicy: true}, ()=>{self.showPolicies(id) })}} 
-					 data-id={id}>Edit</span></td>
+					<td>{rolename}</td>
+					<td>{ownPoliciesCount > 0 ? <span><span className='edit' onClick={()=>this.setState({showCard: !this.state.showCard, hideCardList:true}, () => {self.showPolicies(id)})}>{ (this.state.showCard ? 'Hide' : 'Show') + ' View Policies'}</span><span>|</span></span> : ''}<span className='edit' 
+					 onClick={() => {  this.setState({showEdit : true, showCard: true,  hideCardList:false, isAdd: false, editname: rolename, id:id, showAttachPolicy: true}, ()=>{self.showPolicies(id) })}} 
+					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 				</tr>
 			);
 		})
@@ -123,12 +123,12 @@ class App extends React.Component{
 		})
 
 		const trs =	conbineSelected.map((item, index) => {
-			const { rolename, id, selected  } = item; //destructuring
+			const { policyname, uuid, id, selected  } = item; //destructuring
 			return (
-				<tr key={id} onClick={() => {this.toggleRowSelect(id, rolename)} }>
-					<td>{rolename}</td>
+				<tr key={id} onClick={() => {this.toggleRowSelect(id, policyname)} }>
+					<td>{policyname}</td>
 					<td><input type="checkbox" checked={selected} 
-					onChange={() =>{ this.toggleRowSelect(id, rolename )} }
+					onChange={() =>{ this.toggleRowSelect(id, policyname )} }
 					className="form-check-input" value={id}/></td>
 				</tr>
 			);
@@ -169,19 +169,20 @@ class App extends React.Component{
 	render(){
 		const roleTable = this.renderRoleTableData();
 		const policiesTable = this.renderPolicyTableData();
+
 		
 		return(
 			<React.Fragment>
 				<BreadCrumb level={this.state.levelPath} />
-				{!this.state.showEdit ? <TableCom headers={['UserName','Operation']} showAddView={this.showAddView} hideButton={!this.state.showEdit}
-				updateState={this.updateState} getDataUrl="../UserService" searchTxt={this.state.searchTxt}
+				{!this.state.showEdit ? <TableCom headers={['RoleName','Operation']} showAddView={this.showAddView} hideButton={!this.state.showEdit}
+				updateState={this.updateState} getDataUrl="../RoleService" searchTxt={this.state.searchTxt}
 				 tbody={roleTable} updateTable={this.updateRoleTable} showSearch={true} /> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadPolicyData} 
 					updateState={this.updateEditState} updateEditname={this.updateEditname} isAdd={this.state.isAdd} 
 					id={this.state.id} editname={this.state.editname} policies={this.state.selected} /> : ''}
 				{this.state.showEdit ? 
-					<TableCom headers={['RoleName','Select']} 
-					updateState={this.updateState} getDataUrl="../RoleService" 
+					<TableCom headers={['PolicyName','Select']} 
+					updateState={this.updateState} getDataUrl="../Policy" 
 						tbody={policiesTable} updateTable={this.updatePolicyTable} showSearch={false} />
 					: ''}
 				{ this.state.showCard ? <SelectedCard hideButton={this.state.hideCardList} list={this.state.selected} remove={this.toggleRowSelect} /> : ''}
@@ -190,7 +191,7 @@ class App extends React.Component{
 	}
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('topbar'));
 
 	
   

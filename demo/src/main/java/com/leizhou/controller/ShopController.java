@@ -12,6 +12,6 @@ public class ShopController {
 	
 	@GetMapping("/shop/management")
 	public String getIndex() {
-		return "templates/index";
+		return "templates/edit-mall/shop";
 	}
 }

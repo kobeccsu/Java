@@ -1,7 +1,7 @@
 
 import React from 'react'
 import axios from 'axios';
-import  '../../css/sysadmin/policy.css'
+import  '../../../css/sysadmin/policy.css'
 
 export default class AddEdit extends React.Component{
 	constructor(props){
