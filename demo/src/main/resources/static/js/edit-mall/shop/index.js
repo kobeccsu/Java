@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import TableCom from '../../components/TableCom'
-//import AddEdit from './adminUserEdit'
+import AddEdit from './edit'
 import axios from 'axios';
 import  '../../../css/sysadmin/policy.css'
 import '../../../css/bootstrap.min.css'
@@ -28,7 +28,7 @@ class App extends React.Component{
 
 	loadData(){
 		let self = this;
-		axios.get('../Policy',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
+		axios.get('/shop/list',{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: self.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
 				self.setState({tbody:json.data.data, pageCount: json.data.totalCount, showEdit:false, isAdd: true}) 
@@ -48,7 +48,7 @@ class App extends React.Component{
 		}
 	}
 	componentDidMount(){
-		this.loadData();
+		//this.loadData();
 	}
 	renderTableData() {
 		const trs = this.state.policiesTableData.map((item, index) => {
@@ -81,7 +81,7 @@ class App extends React.Component{
 		const policiesTable = this.renderTableData();
 		return(
 			<React.Fragment>
-				{!this.state.showEdit ? <TableCom headers={['ShopName','Operation']} getDataUrl="../Policy" 
+				{!this.state.showEdit ? <TableCom headers={['ShopName','Operation']} getDataUrl="/shop/list" 
 				tbody={policiesTable }  updateTable={this.updatePolicyTable}
 				showSearch={true} showAddView={this.showAddView}/> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 

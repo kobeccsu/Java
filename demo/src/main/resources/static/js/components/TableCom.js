@@ -59,7 +59,7 @@ class TableCom extends React.Component{
 		axios.get(this.props.getDataUrl,{ params:{pageIndex : self.state.currentIndex, pageSize:10, queryText: this.state.searchTxt}})
 			.then(response => {
 				var json = eval(response);
-				const list = json.data.data;
+				const list = json.data.data != null ? json.data.data : json.data;
 				self.setState({ pageCount: json.data.totalCount});		
 				this.props.updateTable(list);
 
