@@ -42,7 +42,7 @@ class App extends React.Component{
 	}
 	deleteRow(id){
 		if (confirm('Really to delete')){
-			axios.post('../Policy/delete',
+			axios.post('/shop/delete',
 				{id: id})
 			.then((response)=>{
 				this.loadData();

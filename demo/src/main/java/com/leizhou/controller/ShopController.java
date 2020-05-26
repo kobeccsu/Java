@@ -65,5 +65,15 @@ public class ShopController {
 		
 		return "{\"issuccess\":" + isSuccess + "}";
 	}
+	
+	@PostMapping("/shop/delete")
+	@ResponseBody
+	public String deletePolicy(@RequestBody String json) {
+		JSONObject jsonObject = new JSONObject(json.toString());
+		int id = jsonObject.getInt("id");
+		
+		boolean isSuccess = shopMapper.delete(id);
+		return "{\"issuccess\":" + isSuccess + "}";
+	}
 }
 
