@@ -16,7 +16,9 @@ class App extends React.Component{
 			showEdit: false,
 			isAdd: true,
 			id: '',
-			policyname:'',
+			shopname:'',
+			theme: '',
+			is_closed: false,
 			currentIndex: 1,
 			searchTxt:''
 		}
@@ -52,12 +54,14 @@ class App extends React.Component{
 	}
 	renderTableData() {
 		const trs = this.state.policiesTableData.map((item, index) => {
-		   const { id, policyname } = item //destructuring
+		   const { id, name, theme, isClosed } = item //destructuring
 		   return (
 			  <tr key={id}>
-				 <td>{policyname}</td>
+				 <td>{name}</td>
+				 <td>{theme}</td>
+				 <td>{isClosed}</td>
 				 <td><span className='edit' 
-					 onClick={()=>{this.setState({showEdit : true, isAdd: false, policyname: policyname, id:id});}} 
+					 onClick={()=>{this.setState({showEdit : true, isAdd: false, is_closed: isClosed, shopname: name, theme:theme, id: id});}} 
 					 data-id={id}>Edit</span>|<span className='del' data-id={id} onClick={()=>this.deleteRow(id)}>Delete</span></td>
 			  </tr>
 		   )
@@ -81,12 +85,12 @@ class App extends React.Component{
 		const policiesTable = this.renderTableData();
 		return(
 			<React.Fragment>
-				{!this.state.showEdit ? <TableCom headers={['ShopName','Operation']} getDataUrl="/shop/list" 
+				{!this.state.showEdit ? <TableCom headers={['ShopName', 'Theme', 'IsClosed', 'Operation']} getDataUrl="/shop/list" 
 				tbody={policiesTable }  updateTable={this.updatePolicyTable}
 				showSearch={true} showAddView={this.showAddView}/> : ''}
 				{this.state.showEdit ? <AddEdit reloader={this.loadData} 
 					updateP={this.updateState} isAdd={this.state.isAdd} 
-					id={this.state.id} policyname={this.state.policyname} /> : ''}
+					id={this.state.id} shopname={this.state.shopname}  theme={this.state.theme} is_closed={this.state.is_closed} /> : ''}
 			</React.Fragment>
 		);
 	}

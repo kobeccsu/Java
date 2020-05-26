@@ -4,7 +4,7 @@ package com.leizhou.dto;
 public class ShopBean {
 	private int id;
 
-	private byte isClosed;
+	private byte is_closed;
 
 	private String name;
 
@@ -19,11 +19,11 @@ public class ShopBean {
 	}
 
 	public byte getIsClosed() {
-		return this.isClosed;
+		return this.is_closed;
 	}
 
 	public void setIsClosed(byte isClosed) {
-		this.isClosed = isClosed;
+		this.is_closed = isClosed;
 	}
 
 	public String getName() {

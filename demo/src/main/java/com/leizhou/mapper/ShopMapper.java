@@ -3,8 +3,10 @@ package com.leizhou.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.leizhou.dto.ShopBean;
 
@@ -19,5 +21,11 @@ public interface ShopMapper {
 				"</script>"
 			)
 	List<ShopBean> getList(int pageIndex, int pageSize, String queryTxt);
+
+	@Insert("insert into shop(name, theme, is_closed) values (#{name}, #{theme}, #{is_closed})")
+	void add(ShopBean shop);
+
+	@Update("update shop set name = #{name}, theme = #{theme}, is_closed = #{is_closed} where id = #{id}")
+	void update(ShopBean bean);
 	
 }
