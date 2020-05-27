@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
 import TableCom from '../../components/TableCom'
 import AddEdit from './edit'
 import axios from 'axios';
@@ -50,7 +49,6 @@ class App extends React.Component{
 		}
 	}
 	componentDidMount(){
-		//this.loadData();
 	}
 	renderTableData() {
 		const trs = this.state.policiesTableData.map((item, index) => {
@@ -79,7 +77,7 @@ class App extends React.Component{
 		this.setState({policiesTableData: data});
 	 }
 	 showAddView(){
-		this.setState({showEdit: true, showCard: true, editname:'', isAdd: true})
+		this.setState({showEdit: true, showCard: true, shopname:'', theme:'', is_closed:false, isAdd: true})
 	 }
 	render(){
 		const policiesTable = this.renderTableData();

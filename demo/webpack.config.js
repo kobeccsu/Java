@@ -30,7 +30,9 @@ module.exports = {
   output: {
     path: process.cwd(),
     //publicPath: "/src/main/resources/static/dist/js/",
-    filename: '[name].js'
+    filename: '[name].js',
+    hotUpdateChunkFilename: 'src/main/resources/static/dist/js/hot-update.js',
+    hotUpdateMainFilename: 'src/main/resources/static/dist/js/hot-update.json'
   },
 //  devServer: {
 //    contentBase: path.join(__dirname, "WebContent/static/"),
