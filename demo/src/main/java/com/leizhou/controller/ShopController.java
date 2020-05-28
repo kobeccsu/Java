@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.leizhou.biz.DBPolicy;
 import com.leizhou.dto.ShopBean;
 import com.leizhou.mapper.ShopMapper;
 
