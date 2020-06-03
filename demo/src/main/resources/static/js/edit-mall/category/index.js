@@ -22,8 +22,8 @@ class App extends React.Component{
 		return item.map(function(item, index){
 			return (
 				<div className="node" key={item.name + index}>
-				<TreeNode name={item.name} />
-				{ item.children.length > 0 ? _self.iterateChild(item.children) : ''}
+					<TreeNode name={item.name} />
+					{ item.children.length > 0 ? _self.iterateChild(item.children) : ''}
 				</div>
 			)
 		});
