@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: mall
 -- ------------------------------------------------------
@@ -80,7 +80,7 @@ CREATE TABLE `category` (
   `pid` int(11) DEFAULT NULL,
   `is_deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +89,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'cedd86b6-a642-11ea-a551-345a26b20b20','root1',0,0),(2,'e689c482-a642-11ea-a551-345a26b20b20','root2',0,0),(3,'f5a3de26-a642-11ea-a551-345a26b20b20','child1',1,0),(4,'ff222426-a642-11ea-a551-345a26b20b20','child2',1,0),(5,'09e4c102-a643-11ea-a551-345a26b20b20','grandchild1',4,0);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,7 +186,7 @@ CREATE TABLE `policy` (
 
 LOCK TABLES `policy` WRITE;
 /*!40000 ALTER TABLE `policy` DISABLE KEYS */;
-INSERT INTO `policy` VALUES (1,'REAL','cfe7071d-61b1-11ea-ada3-80e82c9e4843'),(2,'g4g45g45g','d52c9d79-61b1-11ea-ada3-80e82c9e4843'),(3,'gfsfer','dab1c2e7-61b1-11ea-ada3-80e82c9e4843'),(5,'brgbrtbr','e5478654-61b1-11ea-ada3-80e82c9e4843'),(6,'btenyerfg','e7a70772-61b1-11ea-ada3-80e82c9e4843'),(7,'s1111','fcdcae68-61b2-11ea-ada3-80e82c9e4843'),(10,'nyyumyu','38e3ffb7-61b3-11ea-ada3-80e82c9e4843'),(12,'gfnfgnh','3d374462-61b3-11ea-ada3-80e82c9e4843'),(13,'gnhfgngnh','3ec09a16-61b3-11ea-ada3-80e82c9e4843'),(14,'tjmthnghn','4132f44f-61b3-11ea-ada3-80e82c9e4843'),(15,'dfgdhtr','3ff2c260-61d5-11ea-ada3-80e82c9e4843'),(16,'nfgn44','46bf46ec-61d5-11ea-ada3-80e82c9e4843'),(17,'fwrgerer','68e13c34-61d5-11ea-ada3-80e82c9e4843'),(18,'bgrnrtnrtn','6b1ffec7-61d5-11ea-ada3-80e82c9e4843'),(19,'ntrhntrerh','6d2e4eb4-61d5-11ea-ada3-80e82c9e4843'),(20,'ntrnmtymrym','6f3a2eab-61d5-11ea-ada3-80e82c9e4843'),(22,'nerntth','72a02e4f-61d5-11ea-ada3-80e82c9e4843'),(23,'nenrthrth','743ba9ab-61d5-11ea-ada3-80e82c9e4843'),(24,'ernthrhh','75d85c6d-61d5-11ea-ada3-80e82c9e4843'),(28,'afsdfasf','bd8293c1-61d8-11ea-ada3-80e82c9e4843'),(29,'sdfgsdg','c0d19f61-61d8-11ea-ada3-80e82c9e4843'),(30,'bfgbgerg','c3385b89-61d8-11ea-ada3-80e82c9e4843'),(31,'May9th','e337db97-91bc-11ea-a432-80e82c9e4843'),(32,'Niubility','ed378d80-9351-11ea-a432-80e82c9e4843');
+INSERT INTO `policy` VALUES (1,'REAL','cfe7071d-61b1-11ea-ada3-80e82c9e4843'),(3,'gfsfer','dab1c2e7-61b1-11ea-ada3-80e82c9e4843'),(5,'brgbrtbr','e5478654-61b1-11ea-ada3-80e82c9e4843'),(6,'btenyerfg','e7a70772-61b1-11ea-ada3-80e82c9e4843'),(7,'s1111','fcdcae68-61b2-11ea-ada3-80e82c9e4843'),(10,'nyyumyu','38e3ffb7-61b3-11ea-ada3-80e82c9e4843'),(12,'gfnfgnh','3d374462-61b3-11ea-ada3-80e82c9e4843'),(13,'gnhfgngnh','3ec09a16-61b3-11ea-ada3-80e82c9e4843'),(14,'tjmthnghn','4132f44f-61b3-11ea-ada3-80e82c9e4843'),(15,'dfgdhtr','3ff2c260-61d5-11ea-ada3-80e82c9e4843'),(16,'nfgn44','46bf46ec-61d5-11ea-ada3-80e82c9e4843'),(17,'fwrgerer','68e13c34-61d5-11ea-ada3-80e82c9e4843'),(18,'bgrnrtnrtn','6b1ffec7-61d5-11ea-ada3-80e82c9e4843'),(19,'ntrhntrerh','6d2e4eb4-61d5-11ea-ada3-80e82c9e4843'),(20,'ntrnmtymrym','6f3a2eab-61d5-11ea-ada3-80e82c9e4843'),(22,'nerntth','72a02e4f-61d5-11ea-ada3-80e82c9e4843'),(23,'nenrthrth','743ba9ab-61d5-11ea-ada3-80e82c9e4843'),(24,'ernthrhh','75d85c6d-61d5-11ea-ada3-80e82c9e4843'),(28,'afsdfasf','bd8293c1-61d8-11ea-ada3-80e82c9e4843'),(29,'sdfgsdg','c0d19f61-61d8-11ea-ada3-80e82c9e4843'),(30,'bfgbgerg','c3385b89-61d8-11ea-ada3-80e82c9e4843'),(31,'May9th','e337db97-91bc-11ea-a432-80e82c9e4843'),(32,'Niubility','ed378d80-9351-11ea-a432-80e82c9e4843');
 /*!40000 ALTER TABLE `policy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +282,7 @@ CREATE TABLE `shop` (
   `theme` varchar(200) DEFAULT NULL,
   `is_closed` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,6 +291,7 @@ CREATE TABLE `shop` (
 
 LOCK TABLES `shop` WRITE;
 /*!40000 ALTER TABLE `shop` DISABLE KEYS */;
+INSERT INTO `shop` VALUES (1,'Shop2','Theme2',1),(3,'Shop1','Theme1',0);
 /*!40000 ALTER TABLE `shop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,4 +331,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-12 14:53:27
+-- Dump completed on 2020-06-04 17:24:26
