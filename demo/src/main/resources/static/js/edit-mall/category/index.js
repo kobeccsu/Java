@@ -13,20 +13,32 @@ class App extends React.Component{
 		super(props);
 		this.state = {
 			tree: [
-				{ name:'item1', id: 1, pid: 0,
-					children:[ {name:'child1', id:2, pid:1,
-						children:[{name: 'grandchild1', children:[] }
-					] },
-					{ name:'child2', id:3,pid: 1, children:[] }
-					]
-				},{
-					name:'root2', id: 4, pid: 0, children:[]
-				}
+				// { name:'item1', id: 1, pid: 0,
+				// 	children:[ {name:'child1', id:2, pid:1,
+				// 		children:[{name: 'grandchild1', children:[] }
+				// 	] },
+				// 	{ name:'child2', id:3,pid: 1, children:[] }
+				// 	]
+				// },{
+				// 	name:'root2', id: 4, pid: 0, children:[]
+				// }
 			]
 		}
+		this.load = this.load.bind(this);
 		this.iterateChild = this.iterateChild.bind(this);
 		this.appendChildNode = this.appendChildNode.bind(this);
 		this.addChildNode = this.addChildNode.bind(this);
+	}
+
+	componentDidMount(){
+		this.load();
+	}
+
+	load(){
+		axios.get('/category/list').then((result)=>{
+			let data = result.data;
+			this.setState({tree: [data]});
+		});
 	}
 
 	appendChildNode(tree, nodeid){
