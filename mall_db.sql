@@ -80,7 +80,7 @@ CREATE TABLE `category` (
   `pid` int(11) DEFAULT NULL,
   `is_deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,7 +89,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'cedd86b6-a642-11ea-a551-345a26b20b20','root1',6,0),(2,'e689c482-a642-11ea-a551-345a26b20b20','root2',6,0),(3,'f5a3de26-a642-11ea-a551-345a26b20b20','child1',1,0),(4,'ff222426-a642-11ea-a551-345a26b20b20','child2',1,0),(5,'09e4c102-a643-11ea-a551-345a26b20b20','grandchild1',4,0),(6,'c2e8974c-a6d3-11ea-a551-345a26b20b20','superroot',-999,0);
+INSERT INTO `category` VALUES (1,'cedd86b6-a642-11ea-a551-345a26b20b20','Child1',6,1),(2,'e689c482-a642-11ea-a551-345a26b20b20','RRRR',6,0),(3,'f5a3de26-a642-11ea-a551-345a26b20b20','child1',1,1),(4,'ff222426-a642-11ea-a551-345a26b20b20','child2',1,1),(5,'09e4c102-a643-11ea-a551-345a26b20b20','grandchild1',4,1),(6,'c2e8974c-a6d3-11ea-a551-345a26b20b20','superroot',-999,0),(7,'6196c05e-a958-11ea-a551-345a26b20b20','child3',1,1),(8,'9d6a5796-a95b-11ea-a551-345a26b20b20','root1',6,0),(9,'b451dbd2-a95b-11ea-a551-345a26b20b20','root3',6,0),(10,'f59b3b56-a95b-11ea-a551-345a26b20b20','R1',2,0),(11,'fcde7946-a95b-11ea-a551-345a26b20b20','R2',2,0),(12,'04c37904-a95c-11ea-a551-345a26b20b20','RR1',10,0),(13,'0f3e6d9e-a95c-11ea-a551-345a26b20b20','BigType2',6,0);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,4 +331,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-05 17:07:10
+-- Dump completed on 2020-06-08 15:47:51
