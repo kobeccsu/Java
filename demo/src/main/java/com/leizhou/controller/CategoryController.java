@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.leizhou.biz.DBRole;
 import com.leizhou.dto.CategoryBean;
 import com.leizhou.mapper.CategoryMapper;
+import com.leizhou.util.Utility;
 import com.leizhou.viewmodel.Node;
 
 @Controller
@@ -44,7 +49,47 @@ public class CategoryController {
 		return result.toString();
 	}
 
-
+	@PostMapping("/category/add")
+	@ResponseBody
+	public String add(@RequestBody String json) {
+		JSONObject jsonObject = new JSONObject(json.toString());
+		String name = jsonObject.getString("name");
+		Integer pid = jsonObject.getInt("pid");
+		boolean isSuccess = false;
+		
+		CategoryBean bean = new CategoryBean();
+		bean.setPid(pid);
+		bean.setName(name);
+		isSuccess = mapper.add(bean);
+		return "{\"issuccess\":" + isSuccess + "}";
+	}
+	
+	@PostMapping("/category/update")
+	@ResponseBody
+	public String update(@RequestBody String json) {
+		JSONObject jsonObject = new JSONObject(json.toString());
+		String name = jsonObject.getString("name");
+		Integer pid = jsonObject.getInt("pid");
+		Integer id = jsonObject.getInt("id");
+		boolean isSuccess = false;
+		
+		CategoryBean bean = new CategoryBean();
+		bean.setId(id);
+		bean.setPid(pid);
+		bean.setName(name);
+		isSuccess = mapper.update(bean);
+		return "{\"issuccess\":" + isSuccess + "}";
+	}
+	
+	@PostMapping("/category/delete")
+	@ResponseBody
+	public String delete(@RequestBody String json) {
+		JSONObject jsonObject = new JSONObject(json.toString());
+		Integer id = jsonObject.getInt("id");
+		boolean isSuccess = false;
+		isSuccess = mapper.delete(id);
+		return "{\"issuccess\":" + isSuccess + "}";
+	}
 
     private static Node createTree(List<Node> nodes) {
 
@@ -87,7 +132,6 @@ public class CategoryController {
 	/**
      * .   Recursive method is used to traverse down the tree
      **/
- 
     private static List<Node> flatten(Node node,  List<Node> flatList) {
         
         if(node != null){

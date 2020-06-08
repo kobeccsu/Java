@@ -22,12 +22,16 @@ class App extends React.Component{
 				// },{
 				// 	name:'root2', id: 4, pid: 0, children:[]
 				// }
-			]
+			],
+			isAdd: false
 		}
 		this.load = this.load.bind(this);
 		this.iterateChild = this.iterateChild.bind(this);
 		this.appendChildNode = this.appendChildNode.bind(this);
 		this.addChildNode = this.addChildNode.bind(this);
+		this.AddOrUpdate = this.AddOrUpdate.bind(this);
+		this.setEditing = this.setEditing.bind(this);
+		this.deleteFromDB = this.deleteFromDB.bind(this);
 	}
 
 	componentDidMount(){
@@ -38,6 +42,14 @@ class App extends React.Component{
 		axios.get('/category/list').then((result)=>{
 			let data = result.data;
 			this.setState({tree: [data]});
+		});
+	}
+
+	AddOrUpdate(id, pid, name){
+		axios.post('/category/' + (this.state.isAdd ? 'add' : 'update'),
+			{id: id, pid: pid, name: name})
+		.then((response)=>{
+			this.load();
 		});
 	}
 
@@ -57,15 +69,27 @@ class App extends React.Component{
 	addChildNode(id){
 		var newTree =this.state.tree;
 		this.appendChildNode(newTree, id);
-		this.setState({tree: newTree});
+		this.setState({tree: newTree, isAdd: true});
 	}
 
+	setEditing(){
+		this.setState({isAdd: false});
+	}
+
+	deleteFromDB(id){
+		axios.post('/category/delete',
+				{id: id})
+			.then((response)=>{
+				this.load();
+			});
+	}
 	iterateChild(item){
 		let _self = this;
 		return item.map(function(item, index){
 			return (
 				<div className="node" key={item.name + index}>
-					<TreeNode name={item.name} id={item.id} pid={item.pid} readonly={item.readonly == undefined} addNode={_self.addChildNode} />
+					<TreeNode name={item.name} id={item.id} pid={item.pid} readonly={item.readonly == undefined} addNode={_self.addChildNode} 
+						AddOrUpdate={_self.AddOrUpdate} notifyEditing={_self.setEditing} deleteFromDB={_self.deleteFromDB} />
 					{ item.children.length > 0 ? _self.iterateChild(item.children) : ''}
 				</div>
 			)
