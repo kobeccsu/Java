@@ -22,9 +22,14 @@ public class ShopController {
 
 	private ShopMapper shopMapper;
 
-	@GetMapping("/shop/management")
+	@GetMapping("/shop")
 	public String getIndex() {
 		return "templates/edit-mall/shop";
+	}
+	
+	@GetMapping("/shop/edit")
+	public String editPage(@RequestParam(value = "id") int shopId,@RequestParam(value = "name") String name) {
+		return "templates/edit-mall/shop_detail";
 	}
 
 	@GetMapping("/shop/list")

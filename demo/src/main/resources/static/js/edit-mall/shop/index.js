@@ -55,7 +55,7 @@ class App extends React.Component{
 		   const { id, name, theme, isClosed } = item //destructuring
 		   return (
 			  <tr key={id}>
-				 <td>{name}</td>
+				 <td><a href={"/shop/edit?id=" + id + "&name=" + name}>{name}</a></td>
 				 <td>{theme}</td>
 				 <td>{isClosed}</td>
 				 <td><span className='edit' 
