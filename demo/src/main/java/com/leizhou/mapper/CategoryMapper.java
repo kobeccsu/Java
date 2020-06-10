@@ -23,4 +23,7 @@ public interface CategoryMapper {
 
 	@Update("update category set is_deleted = 1 where id = #{id}")
 	boolean delete(int id);
+
+	@Select("select * from category where is_deleted = 0 and pid = #{id}")
+	List<CategoryBean> getChild(int id);
 }

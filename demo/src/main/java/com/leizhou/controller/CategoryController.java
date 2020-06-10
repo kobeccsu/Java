@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
@@ -62,6 +63,13 @@ public class CategoryController {
 		bean.setName(name);
 		isSuccess = mapper.add(bean);
 		return "{\"issuccess\":" + isSuccess + "}";
+	}
+	
+	@GetMapping("/category/getchild")
+	@ResponseBody
+	public List<CategoryBean> getChild(@RequestParam(value="id") int id) {
+		List<CategoryBean> list = mapper.getChild(id);
+		return list;
 	}
 	
 	@PostMapping("/category/update")
