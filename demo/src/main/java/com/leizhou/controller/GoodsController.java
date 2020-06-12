@@ -30,6 +30,7 @@ public class GoodsController {
 		
 		JSONObject jsonObject = new JSONObject(json.toString());
 		GoodsBean bean = new GoodsBean();
+		bean.setShopId(jsonObject.getInt("shopId"));
 		bean.setGoodsname(jsonObject.getString("name"));
 		bean.setBannerPic(banner_file.getBytes());
 		bean.setDetailPic(detail_file.getBytes());
@@ -44,8 +45,9 @@ public class GoodsController {
 		bean.setIsNew((byte) (jsonObject.getBoolean("isNew") ? 1 : 0) );
 		bean.setIsIndex((byte) (jsonObject.getBoolean("isIndex") ? 1 : 0) );
 		bean.setStock(jsonObject.getInt("stock"));
-		bean.setGoodsDes(jsonObject.getString(""));
+		bean.setGoodsDes(jsonObject.getString("goodsDes"));
 		
-		return "{successed : true}";
+		boolean issuccessd = mapper.add(bean);
+		return "{successed : " + issuccessd + "}";
 	}
 }
