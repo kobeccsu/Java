@@ -18,7 +18,7 @@ export default class EditProduct extends React.Component {
             detail_file: null,
             price: 0,
             promotionalPrice: 0,
-            goods_des: '',
+            goodsDes: '',
             isAgent: false,
             isPromotion: false,
             isMarket: false,
@@ -33,6 +33,7 @@ export default class EditProduct extends React.Component {
         this.addGoods = this.addGoods.bind(this);
         this.getParameterByName = this.getParameterByName.bind(this);
     }
+    
     getParameterByName(name, url) {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, '\\$&');
@@ -42,6 +43,7 @@ export default class EditProduct extends React.Component {
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
+
     getChild(id, func) {
         axios.get('/category/getchild?id=' + id).then((response) => {
             return func(response.data);
@@ -174,7 +176,7 @@ export default class EditProduct extends React.Component {
                 </div>
                 <div>
                     <span>goods_des</span>
-                    <span><textarea rows="20" cols="50" onChange={(e)=>this.setState({goodsDes: e.target.value})}>{this.state.goodsDes}</textarea></span>
+                    <span><textarea rows="10" cols="50" onChange={(e)=>this.setState({goodsDes: e.target.value})}>{this.state.goodsDes}</textarea></span>
                 </div>
                 <div>
                     <span>stock</span>
