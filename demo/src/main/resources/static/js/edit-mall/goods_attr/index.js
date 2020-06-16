@@ -58,6 +58,10 @@ class App extends React.Component {
                             updateChild={(id, name) => this.linkedChildDropChange(id, '', '', '', 'thirdCategoryName', name)} />
                     </span>
                 </div>
+                <div>
+                    <span>attribute name</span>
+                    <span><input type="text" name="attr_name" /></span>
+                </div>
             </React.Fragment>
         );
     }

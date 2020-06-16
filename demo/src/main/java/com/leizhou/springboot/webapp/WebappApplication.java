@@ -14,7 +14,6 @@ import com.leizhou.mapper.UsersMapper;
 @ServletComponentScan("com.leizhou.filter")
 @MappedTypes(UsersMapper.class)
 @MapperScan("com.leizhou.mapper")
-@ComponentScan("com.leizhou.security")
 @ComponentScan(basePackages = { "com.leizhou.controller", "com.leizhou.security"} )
 public class WebappApplication {
 	public static void main(String[] args) {
