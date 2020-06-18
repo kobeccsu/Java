@@ -6,6 +6,7 @@ import Popper from 'popper.js'
 import bootstrap from 'bootstrap'
 import DropDownList from '../../components/dropdownlist'
 import axios from 'axios'
+import MaintainTextbox from '../../components/maintainTextbox'
 
 class App extends React.Component {
     constructor(props) {
@@ -60,7 +61,31 @@ class App extends React.Component {
                 </div>
                 <div>
                     <span>attribute name</span>
-                    <span><input type="text" name="attr_name" /></span>
+                    <span><input type="text" name="attr_name" /></span><span><button>add attribute</button></span>
+                </div>
+                <div>
+                    <span>attribute value</span>
+                    <span><input type="text" name="attr_value" /></span>
+                    <span><button>add attribute value</button></span>
+                </div>
+                <hr />
+                <div className="container">
+                    <div className="row">
+                        <div className="col fake-header">
+                            Attribute name
+                        </div>
+                        <div className="col-9 fake-header">
+                            Attribute value
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <MaintainTextbox text="nihao" />
+                        </div>
+                        <div className="col-9">
+                            <span>attr1</span><span>attr2</span>
+                        </div>
+                    </div>
                 </div>
             </React.Fragment>
         );
