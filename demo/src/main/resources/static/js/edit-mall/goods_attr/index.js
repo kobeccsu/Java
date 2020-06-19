@@ -7,6 +7,8 @@ import bootstrap from 'bootstrap'
 import DropDownList from '../../components/dropdownlist'
 import axios from 'axios'
 import MaintainTextbox from '../../components/maintainTextbox'
+import TreeNode from '../../components/TreeNode'
+import {getParameterByName} from '../../common/util'
 
 class App extends React.Component {
     constructor(props) {
@@ -24,6 +26,7 @@ class App extends React.Component {
 
         this.linkedChildDropChange = this.linkedChildDropChange.bind(this);
         this.getChild = this.getChild.bind(this);
+        this.addOrUpdate = this.addOrUpdate.bind(this);
     }
 
     linkedChildDropChange(id, key, k1, val1, updateSelfKey, updateSelfVal) {
@@ -37,6 +40,22 @@ class App extends React.Component {
 
     getChild(id, func) {
         axios.get('/category/getchild?id=' + id).then((response) => {
+            return func(response.data);
+        });
+    }
+
+    addOrUpdate(id, pid, name){
+        if (this.state.categoryId == 0){
+            alert('please select one category');
+            return;
+        }
+
+        axios.post('/attr/add', {
+            attrName: name,
+            shopId: getParameterByName("shopid"),
+            categoryId: this.state.categoryId
+        })
+        .then((response) => {
             return func(response.data);
         });
     }
@@ -80,10 +99,11 @@ class App extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <MaintainTextbox text="nihao" />
+                            <TreeNode name="nihao" readonly={true} id={1} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
                         </div>
                         <div className="col-9">
-                            <span>attr1</span><span>attr2</span>
+                            <div><button>Add Attribute Value</button></div>
+                            <div><span>attr1</span><span>attr2</span></div>
                         </div>
                     </div>
                 </div>

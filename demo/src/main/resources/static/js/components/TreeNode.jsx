@@ -8,7 +8,8 @@ export default class TreeNode extends React.Component{
             name: this.props.name,
             renameLabel: this.props.readonly ? 'rename' : 'cancel',
             id: this.props.id,
-            pid: this.props.pid
+            pid: this.props.pid,
+            showChildBtn: this.props.showChildBtn == undefined ? true : this.props.showChildBtn
         }
         this.onClickRename = this.onClickRename.bind(this);
         this.onClickAppendChild = this.onClickAppendChild.bind(this);
@@ -37,10 +38,10 @@ export default class TreeNode extends React.Component{
     render(){
         return (
             <div className="node alert alert-primary" role="alert">
-                <span>></span>
+                <span>{">"}</span>
                 <input type="text" value={this.state.name} onChange={(e)=>this.setState({name: e.target.value})} readOnly={this.state.readonly} />
                 {!this.state.readonly ? <button className="btn btn-info" onClick={this.AddOrUpdate}>Update</button> : '' }
-                {this.state.readonly ? <button className="btn btn-primary" onClick={this.onClickAppendChild}>add child</button> : ''}
+                {this.state.showChildBtn && this.state.readonly ? <button className="btn btn-primary" onClick={this.onClickAppendChild}>add child</button> : ''}
                 <button className="btn btn-success" onClick={this.onClickRename}>{this.state.renameLabel}</button>
                 {this.state.readonly ?<button className="btn btn-danger" onClick={this.onDelete}>delete</button> : ''}
             </div>

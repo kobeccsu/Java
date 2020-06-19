@@ -1,6 +1,7 @@
 import React from 'react'
 import DropDownList from '../../components/dropdownlist'
 import axios from 'axios';
+import {getParameterByName} from '../../common/util'
 
 export default class EditProduct extends React.Component {
     constructor(props) {
@@ -31,18 +32,9 @@ export default class EditProduct extends React.Component {
         this.linkedChildDropChange = this.linkedChildDropChange.bind(this);
         this.getChild = this.getChild.bind(this);
         this.addGoods = this.addGoods.bind(this);
-        this.getParameterByName = this.getParameterByName.bind(this);
     }
     
-    getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
+
 
     getChild(id, func) {
         axios.get('/category/getchild?id=' + id).then((response) => {
@@ -68,7 +60,7 @@ export default class EditProduct extends React.Component {
         formData.append('banner_file', this.state.banner_file);
         formData.append('detail_file', this.state.detail_file);
         formData.append('json', JSON.stringify({
-            shopId: this.getParameterByName('id'),
+            shopId: getParameterByName('id'),
             name: this.state.name,
             categoryId: this.state.categoryId,
             categoryName: this.state.firstCategoryName + ' ' + this.state.secondCategoryName + ' ' + this.state.thirdCategoryName,
