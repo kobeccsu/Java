@@ -8,7 +8,7 @@ import DropDownList from '../../components/dropdownlist'
 import axios from 'axios'
 import MaintainTextbox from '../../components/maintainTextbox'
 import TreeNode from '../../components/TreeNode'
-import {getParameterByName} from '../../common/util'
+import { getParameterByName } from '../../common/util'
 
 class App extends React.Component {
     constructor(props) {
@@ -22,11 +22,13 @@ class App extends React.Component {
             secondCategoryName: 'SecondCategory',
             thirdCategoryName: 'ThirdCategory',
             categoryId: 0,
+            attrList: []
         }
 
         this.linkedChildDropChange = this.linkedChildDropChange.bind(this);
         this.getChild = this.getChild.bind(this);
         this.addOrUpdate = this.addOrUpdate.bind(this);
+        this.loadAttrs = this.loadAttrs.bind(this);
     }
 
     linkedChildDropChange(id, key, k1, val1, updateSelfKey, updateSelfVal) {
@@ -44,8 +46,8 @@ class App extends React.Component {
         });
     }
 
-    addOrUpdate(id, pid, name){
-        if (this.state.categoryId == 0){
+    addOrUpdate(id, pid, name) {
+        if (this.state.categoryId == 0) {
             alert('please select one category');
             return;
         }
@@ -60,11 +62,36 @@ class App extends React.Component {
         });
     }
 
+    loadAttrs() {
+        axios.get("/attr/list")
+            .then((response) => {
+                this.setState({ attrList: response.data });
+            })
+    }
+
     componentDidMount() {
         this.linkedChildDropChange(6, 'itemsL1');
+        this.loadAttrs();
     }
 
     render() {
+        let listdom = this.state.attrList.map((item, index) => {
+            return (
+                <div className="row" key={index}>
+                    <div className="col">
+                        <TreeNode name={item.attrName} readonly={true} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
+                    </div>
+                    <div className="col-9">
+                        <div><button>Add Attribute Value</button></div>
+                        {item.values.map((item1, index1) => {
+                            return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id} pid={item.id} showChildBtn={false} AddOrUpdate={this.addOrUpdate} /></div>);
+                        })}
+
+                    </div>
+                </div>
+            );
+        });
+
         return (
             <React.Fragment>
                 <div style={{ display: 'flex' }}>
@@ -93,19 +120,8 @@ class App extends React.Component {
                         <div className="col fake-header">
                             Attribute name
                         </div>
-                        <div className="col-9 fake-header">
-                            Attribute value
-                        </div>
                     </div>
-                    <div className="row">
-                        <div className="col">
-                            <TreeNode name="nihao" readonly={true} id={1} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
-                        </div>
-                        <div className="col-9">
-                            <div><button>Add Attribute Value</button></div>
-                            <div><span>attr1</span><span>attr2</span></div>
-                        </div>
-                    </div>
+                    {listdom}
                 </div>
             </React.Fragment>
         );
