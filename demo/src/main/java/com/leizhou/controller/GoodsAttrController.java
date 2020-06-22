@@ -45,6 +45,7 @@ public class GoodsAttrController {
 	}
 	
 	@GetMapping("/attr/list")
+	@ResponseBody
 	public List<AttributeValuesViewModel> getList() {
 		return mapper.getList();
 	}
