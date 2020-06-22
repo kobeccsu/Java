@@ -77,15 +77,17 @@ class App extends React.Component {
     render() {
         let listdom = this.state.attrList.map((item, index) => {
             return (
-                <div className="row" key={index}>
+                <div className="row" style={{"border-bottom": "1px solid black"}} key={index}>
                     <div className="col">
                         <TreeNode name={item.attrName} readonly={true} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
                     </div>
                     <div className="col-9">
                         <div><button>Add Attribute Value</button></div>
-                        {item.values.map((item1, index1) => {
-                            return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id} pid={item.id} showChildBtn={false} AddOrUpdate={this.addOrUpdate} /></div>);
-                        })}
+                        {
+                            item.values.map((item1, index1) => {
+                                return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id} pid={item.id} showChildBtn={false} AddOrUpdate={this.addOrUpdate} /></div>);
+                            })
+                        }
 
                     </div>
                 </div>
