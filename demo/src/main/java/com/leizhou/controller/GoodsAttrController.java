@@ -24,7 +24,7 @@ public class GoodsAttrController {
 	}
 	
 	@GetMapping("/goodsAttr")
-	public String index(@RequestParam(value = "shopid") int shopId) {
+	public String index(@RequestParam(value = "shopId") int shopId) {
 		return "templates/edit-mall/goods_attr";
 	}
 	
@@ -46,7 +46,7 @@ public class GoodsAttrController {
 	
 	@GetMapping("/attr/list")
 	@ResponseBody
-	public List<AttributeValuesViewModel> getList() {
-		return mapper.getList();
+	public List<AttributeValuesViewModel> getList(@RequestParam(value="categoryId") int categoryId) {
+		return mapper.getList(categoryId);
 	}
 }

@@ -29,6 +29,8 @@ class App extends React.Component {
         this.getChild = this.getChild.bind(this);
         this.addOrUpdate = this.addOrUpdate.bind(this);
         this.loadAttrs = this.loadAttrs.bind(this);
+        this.toAddAttribute = this.toAddAttribute.bind(this);
+        this.toAddAttrValue = this.toAddAttrValue.bind(this);
     }
 
     linkedChildDropChange(id, key, k1, val1, updateSelfKey, updateSelfVal) {
@@ -36,7 +38,10 @@ class App extends React.Component {
             this.getChild(id, (items) => this.setState({ [key]: items, [k1]: val1, [updateSelfKey]: updateSelfVal }));
         }
         else {
-            this.setState({ [updateSelfKey]: updateSelfVal, categoryId: id });
+            this.setState({ [updateSelfKey]: updateSelfVal, categoryId: id }, () => {
+                this.loadAttrs();
+            });
+
         }
     }
 
@@ -54,38 +59,53 @@ class App extends React.Component {
 
         axios.post('/attr/add', {
             attrName: name,
-            shopId: getParameterByName("shopid"),
+            shopId: getParameterByName("shopId"),
             categoryId: this.state.categoryId
         })
-        .then((response) => {
-            return func(response.data);
-        });
+            .then((response) => {
+                return loadAttrs();
+            });
     }
 
     loadAttrs() {
-        axios.get("/attr/list")
+        axios.get("/attr/list?categoryId=" + this.state.categoryId)
             .then((response) => {
                 this.setState({ attrList: response.data });
             })
     }
 
+    toAddAttribute() {
+        this.setState(state => {
+            let list = state.attrList.push({ attrName: '', id: 0, readonly: false, values: [] });
+            return { list };
+        })
+    }
+
+    toAddAttrValue(nodeid) {
+        let items = [...this.state.attrList];
+        let item = items.find((i)=>i.id == nodeid);
+        item.values.push({ attrValue: '', id: 0, pid: nodeid, readonly: false });
+        
+        this.setState({ attrList: items });
+    }
+
     componentDidMount() {
         this.linkedChildDropChange(6, 'itemsL1');
-        this.loadAttrs();
     }
 
     render() {
         let listdom = this.state.attrList.map((item, index) => {
             return (
-                <div className="row" style={{"border-bottom": "1px solid black"}} key={index}>
+                <div className="row" style={{ "borderBottom": "1px solid black" }} key={index}>
                     <div className="col">
-                        <TreeNode name={item.attrName} readonly={true} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
+                        <TreeNode name={item.attrName} readonly={item.readonly} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
                     </div>
                     <div className="col-9">
-                        <div><button>Add Attribute Value</button></div>
+                        <div><button onClick={() => this.toAddAttrValue(item.id)}>Add Attribute Value</button></div>
                         {
                             item.values.map((item1, index1) => {
-                                return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id} pid={item.id} showChildBtn={false} AddOrUpdate={this.addOrUpdate} /></div>);
+                                return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id}
+                                    pid={item.id} showChildBtn={false} AddOrUpdate={() => this.toAddAttrValue(item.id)} /></div>);
                             })
                         }
 
@@ -109,12 +129,7 @@ class App extends React.Component {
                 </div>
                 <div>
                     <span>attribute name</span>
-                    <span><input type="text" name="attr_name" /></span><span><button>add attribute</button></span>
-                </div>
-                <div>
-                    <span>attribute value</span>
-                    <span><input type="text" name="attr_value" /></span>
-                    <span><button>add attribute value</button></span>
+                    <span><button onClick={this.toAddAttribute}>add attribute</button></span>
                 </div>
                 <hr />
                 <div className="container">

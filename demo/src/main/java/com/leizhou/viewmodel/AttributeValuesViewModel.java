@@ -5,6 +5,8 @@ import java.util.List;
 import com.leizhou.dto.AttributeValueBean;
 
 public class AttributeValuesViewModel {
+	private Integer id;
+	
 	private String attrName;
 	private List<AttributeValueBean> values;
 	public String getAttrName() {
@@ -18,5 +20,11 @@ public class AttributeValuesViewModel {
 	}
 	public void setValues(List<AttributeValueBean> values) {
 		this.values = values;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
