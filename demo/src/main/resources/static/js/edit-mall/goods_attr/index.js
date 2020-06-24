@@ -22,7 +22,8 @@ class App extends React.Component {
             secondCategoryName: 'SecondCategory',
             thirdCategoryName: 'ThirdCategory',
             categoryId: 0,
-            attrList: []
+            attrList: [],
+            isAdd: false
         }
 
         this.linkedChildDropChange = this.linkedChildDropChange.bind(this);
@@ -31,6 +32,10 @@ class App extends React.Component {
         this.loadAttrs = this.loadAttrs.bind(this);
         this.toAddAttribute = this.toAddAttribute.bind(this);
         this.toAddAttrValue = this.toAddAttrValue.bind(this);
+        this.setEdit = this.setEdit.bind(this);
+        this.addAttrValue = this.addAttrValue.bind(this);
+        this.deleteAttr = this.deleteAttr.bind(this);
+        this.deleteAttrVal = this.deleteAttrVal.bind(this);
     }
 
     linkedChildDropChange(id, key, k1, val1, updateSelfKey, updateSelfVal) {
@@ -57,13 +62,26 @@ class App extends React.Component {
             return;
         }
 
-        axios.post('/attr/add', {
+        axios.post('/attr/' + (this.state.isAdd ? 'add' : 'update'), {
+            id: id,
             attrName: name,
             shopId: getParameterByName("shopId"),
             categoryId: this.state.categoryId
         })
             .then((response) => {
-                return loadAttrs();
+                this.loadAttrs();
+            });
+    }
+
+    addAttrValue(id, pid, name) {
+        axios.post('/attrval/' + (this.state.isAdd ? 'add' : 'update'), {
+            id: id,
+            attrValue: name,
+            shopId: getParameterByName("shopId"),
+            attrId: pid
+        })
+            .then((response) => {
+                this.loadAttrs();
             });
     }
 
@@ -77,16 +95,36 @@ class App extends React.Component {
     toAddAttribute() {
         this.setState(state => {
             let list = state.attrList.push({ attrName: '', id: 0, readonly: false, values: [] });
-            return { list };
+            return { list, isAdd: true };
         })
     }
 
     toAddAttrValue(nodeid) {
         let items = [...this.state.attrList];
-        let item = items.find((i)=>i.id == nodeid);
+        let item = items.find((i) => i.id == nodeid);
         item.values.push({ attrValue: '', id: 0, pid: nodeid, readonly: false });
-        
-        this.setState({ attrList: items });
+
+        this.setState({ attrList: items, isAdd: true });
+    }
+
+    setEdit(isAddorUpdate) {
+        this.setState({ isAdd: isAddorUpdate });
+    }
+
+    deleteAttr(id) {
+        axios.post('/attr/delete',
+            { id: id })
+            .then((response) => {
+                this.loadAttrs();
+            });
+    }
+
+    deleteAttrVal(id) {
+        axios.post('/attrval/delete',
+            { id: id })
+            .then((response) => {
+                this.loadAttrs();
+            });
     }
 
     componentDidMount() {
@@ -98,14 +136,15 @@ class App extends React.Component {
             return (
                 <div className="row" style={{ "borderBottom": "1px solid black" }} key={index}>
                     <div className="col">
-                        <TreeNode name={item.attrName} readonly={item.readonly} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} />
+                        <TreeNode name={item.attrName} readonly={item.readonly} id={item.id} pid={0} showChildBtn={false} AddOrUpdate={this.addOrUpdate} 
+                            notifyEditing={this.setEdit} deleteFromDB={this.deleteAttr} />
                     </div>
                     <div className="col-9">
                         <div><button onClick={() => this.toAddAttrValue(item.id)}>Add Attribute Value</button></div>
                         {
                             item.values.map((item1, index1) => {
-                                return (<div key={index1}><TreeNode name={item1.attrValue} readonly={true} id={item1.id}
-                                    pid={item.id} showChildBtn={false} AddOrUpdate={() => this.toAddAttrValue(item.id)} /></div>);
+                                return (<div key={index1}><TreeNode name={item1.attrValue} readonly={item1.readonly} id={item1.id}
+                                    pid={item.id} showChildBtn={false} AddOrUpdate={this.addAttrValue} notifyEditing={this.setEdit} deleteFromDB={this.deleteAttrVal} /></div>);
                             })
                         }
 

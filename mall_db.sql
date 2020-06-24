@@ -29,7 +29,7 @@ CREATE TABLE `attr_val` (
   `attr_id` int(11) DEFAULT NULL,
   `attr_value` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `attr_val` (
 
 LOCK TABLES `attr_val` WRITE;
 /*!40000 ALTER TABLE `attr_val` DISABLE KEYS */;
-INSERT INTO `attr_val` VALUES (1,2,NULL,2,'耐克'),(2,2,NULL,2,'阿迪'),(3,2,NULL,3,'39'),(4,2,NULL,3,'40'),(5,2,NULL,3,'41');
+INSERT INTO `attr_val` VALUES (1,2,NULL,2,'耐克'),(2,2,NULL,2,'阿迪'),(3,2,NULL,3,'39'),(4,2,NULL,3,'40'),(5,2,NULL,3,'41'),(12,2,0,5,'红'),(13,2,0,5,'黄'),(14,2,0,5,'蓝');
 /*!40000 ALTER TABLE `attr_val` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +55,7 @@ CREATE TABLE `attribute` (
   `category_id` int(11) DEFAULT NULL,
   `attr_name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `attribute` (
 
 LOCK TABLES `attribute` WRITE;
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
-INSERT INTO `attribute` VALUES (2,2,12,'品牌'),(3,2,12,'尺码'),(4,2,12,'颜色');
+INSERT INTO `attribute` VALUES (2,2,12,'品牌'),(3,2,12,'尺码'),(5,2,12,'颜色');
 /*!40000 ALTER TABLE `attribute` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,4 +334,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-23 17:34:04
+-- Dump completed on 2020-06-24 17:21:40
