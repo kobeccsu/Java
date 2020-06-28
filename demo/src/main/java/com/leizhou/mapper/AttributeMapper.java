@@ -21,7 +21,7 @@ public interface AttributeMapper {
 	@Insert("insert into attribute(shop_id, category_id, attr_name) values (#{shopId}, #{categoryId}, #{attrName})")
 	boolean add(AttributeBean bean);
 
-	@Select("SELECT * FROM attribute")
+	@Select("SELECT * FROM attribute where category_id = #{categoryId}")
     @Results(value = {
         @Result(property="id", column = "id"),
         @Result(property="attrName", column = "attr_name"),
