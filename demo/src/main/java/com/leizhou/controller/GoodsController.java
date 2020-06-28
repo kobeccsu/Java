@@ -1,27 +1,37 @@
 package com.leizhou.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.leizhou.dto.GoodsAttrBean;
 import com.leizhou.dto.GoodsBean;
+import com.leizhou.mapper.GoodsAttrMapper;
 import com.leizhou.mapper.GoodsMapper;
 
 @Controller
 public class GoodsController {
 
+	@Autowired
 	GoodsMapper mapper;
 	
-	public GoodsController(GoodsMapper mp) {
-		this.mapper = mp;
-	}
+	@Autowired
+	GoodsAttrMapper goodsAttrMapper;
 	
+	@Transactional (propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000, rollbackFor=Exception.class)
 	@PostMapping(value = "/goods/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseBody
 	public String add(@RequestParam(value = "banner_file") MultipartFile banner_file,
@@ -48,6 +58,22 @@ public class GoodsController {
 		bean.setGoodsDes(jsonObject.getString("goodsDes"));
 		
 		boolean issuccessd = mapper.add(bean);
-		return "{successed : " + issuccessd + "}";
+		
+		List<GoodsAttrBean> goodsAttrlist = new ArrayList<GoodsAttrBean>();
+		JSONArray array = jsonObject.getJSONArray("goodsAttr");
+		
+		for (int i = 0; i < array.length(); i++) {
+			GoodsAttrBean goodsAttrB = new GoodsAttrBean();
+			goodsAttrB.setShop_id(jsonObject.getInt("shopId"));
+			goodsAttrB.setGoods_id(bean.getId());
+			goodsAttrB.setAttr_val_id(array.getInt(i));
+			goodsAttrB.setPrice((float)jsonObject.getDouble("price"));
+			goodsAttrlist.add(goodsAttrB);
+		}
+		
+		boolean isSuccessBatch = array.length() > 0 ? goodsAttrMapper.insertBatch(goodsAttrlist) : false;
+		
+		
+		return "{successed : " + (issuccessd && isSuccessBatch) + "}";
 	}
 }

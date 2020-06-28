@@ -27,14 +27,15 @@ export default class EditProduct extends React.Component {
             isNew: false,
             isIndex: false,
             stock: 0,
+            attrList: [],
+            radioCheckList: []
         }
 
         this.linkedChildDropChange = this.linkedChildDropChange.bind(this);
         this.getChild = this.getChild.bind(this);
         this.addGoods = this.addGoods.bind(this);
+        this.onRadioCheck = this.onRadioCheck.bind(this);
     }
-    
-
 
     getChild(id, func) {
         axios.get('/category/getchild?id=' + id).then((response) => {
@@ -47,7 +48,9 @@ export default class EditProduct extends React.Component {
             this.getChild(id, (items) => this.setState({ [key]: items, [k1]: val1, [updateSelfKey]: updateSelfVal }));
         }
         else {
-            this.setState({ [updateSelfKey]: updateSelfVal, categoryId: id });
+            this.setState({ [updateSelfKey]: updateSelfVal, categoryId: id }, () => {
+                this.loadAttrs();
+            });
         }
     }
 
@@ -74,6 +77,7 @@ export default class EditProduct extends React.Component {
             isIndex: this.state.isIndex,
             stock: this.state.stock,
             goodsDes: this.state.goodsDes,
+            goodsAttr: this.state.radioCheckList
         }));
 
 
@@ -91,7 +95,52 @@ export default class EditProduct extends React.Component {
         });
     }
 
+    onRadioCheck(e){
+        let currAttrVal = e.target.checked ? e.target.value : 0
+        if (currAttrVal !=0){
+            if (this.state.radioCheckList.filter((item) => item == currAttrVal).length > 0){
+                this.setState(state=>{
+                    const list = state.radioCheckList.filter((item) => item != currAttrVal);
+                    return {radioCheckList: list};
+                });
+            }else{
+                this.setState(state=>{
+                    const list = [...state.radioCheckList, currAttrVal];
+                    return {radioCheckList: list};
+                });
+            }
+        }
+    }
+
+    loadAttrs() {
+        axios.get("/attr/list?categoryId=" + this.state.categoryId)
+            .then((response) => {
+                this.setState({ attrList: response.data });
+            })
+    }
+    
     render() {
+        // radio list 
+        let listdom = this.state.attrList.map((item, index) => {
+            return (
+                <div className="row" style={{ "borderBottom": "1px solid black" }} key={index}>
+                    <div className="col">
+                        <p>{item.attrName}</p>
+                    </div>
+                    <div className="col-9">
+                        <div></div>
+                        {
+                            item.values.map((item1, index1) => {
+                                return (<div key={index1}><input type="radio" name={'attr_group_' + item.id} value={item1.id} onChange={this.onRadioCheck} />{item1.attrValue}</div>);
+                            })
+                        }
+
+                    </div>
+                </div>
+            );
+        });
+
+
         return (
             <div className="container">
                 <div>
@@ -108,6 +157,7 @@ export default class EditProduct extends React.Component {
                             updateChild={(id, name) => this.linkedChildDropChange(id, '', '', '', 'thirdCategoryName', name)} />
                     </span>
                 </div>
+                {listdom}
                 <div>
                     <span>banner pic</span>
                     <span><input type="file" name="banner_pic" onChange={(e) => { this.setState({ banner_file: e.target.files[0] }) }} /></span>
@@ -168,7 +218,7 @@ export default class EditProduct extends React.Component {
                 </div>
                 <div>
                     <span>goods_des</span>
-                    <span><textarea rows="10" cols="50" onChange={(e)=>this.setState({goodsDes: e.target.value})}>{this.state.goodsDes}</textarea></span>
+                    <span><textarea rows="10" cols="50" onChange={(e)=>this.setState({goodsDes: e.target.value})} value={this.state.goodsDes} /></span>
                 </div>
                 <div>
                     <span>stock</span>

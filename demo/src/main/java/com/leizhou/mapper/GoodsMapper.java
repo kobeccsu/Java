@@ -2,6 +2,7 @@ package com.leizhou.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 
 import com.leizhou.dto.GoodsBean;
 
@@ -46,6 +47,7 @@ public interface GoodsMapper {
 			"now()," + 
 			"#{stock}" + 
 			") ")
+	@Options(useGeneratedKeys=true, keyProperty="id")
 	boolean add(GoodsBean bean);
 
 }
