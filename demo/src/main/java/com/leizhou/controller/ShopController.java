@@ -63,7 +63,7 @@ public class ShopController {
 		bean.setId(jsonObject.getInt("id"));
 		bean.setName(jsonObject.getString("name"));
 		bean.setTheme(jsonObject.getString("theme"));
-		bean.setIsClosed((byte)(jsonObject.getInt("is_closed")));
+		bean.setIsClosed((byte)((jsonObject.getBoolean("is_closed")) ? 1 : 0));
 		
 		shopMapper.update(bean);
 		
@@ -79,5 +79,6 @@ public class ShopController {
 		boolean isSuccess = shopMapper.delete(id);
 		return "{\"issuccess\":" + isSuccess + "}";
 	}
+	
 }
 

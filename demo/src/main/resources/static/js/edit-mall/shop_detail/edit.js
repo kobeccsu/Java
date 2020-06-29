@@ -156,6 +156,7 @@ export default class EditProduct extends React.Component {
                         <DropDownList menuCaption={this.state.thirdCategoryName} items={this.state.itemsL3}
                             updateChild={(id, name) => this.linkedChildDropChange(id, '', '', '', 'thirdCategoryName', name)} />
                     </span>
+                    <a href={"/goodsAttr?shopId=" + getParameterByName('id') } target="_blank" >to edit attribute</a>
                 </div>
                 {listdom}
                 <div>

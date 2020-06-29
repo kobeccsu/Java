@@ -88,6 +88,7 @@ class App extends React.Component {
     loadAttrs() {
         axios.get("/attr/list?categoryId=" + this.state.categoryId)
             .then((response) => {
+                this.setState({ attrList: [] });
                 this.setState({ attrList: response.data });
             })
     }
