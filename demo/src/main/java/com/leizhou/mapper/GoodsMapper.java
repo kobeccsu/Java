@@ -1,20 +1,14 @@
 package com.leizhou.mapper;
 
 import java.util.List;
-
-import javax.print.DocFlavor.BYTE_ARRAY;
-
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.javassist.bytecode.ByteArray;
 import org.apache.ibatis.type.JdbcType;
-
 import com.leizhou.dto.GoodsBean;
 import com.leizhou.viewmodel.ImageViewModel;
 
@@ -67,9 +61,10 @@ public interface GoodsMapper {
 
 	@ResultType(com.leizhou.viewmodel.ImageViewModel.class)
 	@Results(value= {
+		@Result(property="id", column="id", jdbcType=JdbcType.INTEGER),
 		@Result(property="banner_pic", column="banner_pic", jdbcType=JdbcType.BLOB),
 		@Result(property="detail_pic", column="detail_pic", jdbcType=JdbcType.BLOB)
 	})
-	@Select("select banner_pic, detail_pic from goods where id = #{id}")
-	ImageViewModel getOne(int id);
+	@Select("select id, banner_pic, detail_pic from goods where shop_id = #{shopId}")
+	List<ImageViewModel> getOne(int shopId);
 }

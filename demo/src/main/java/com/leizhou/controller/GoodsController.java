@@ -87,11 +87,9 @@ public class GoodsController {
 
 	@GetMapping("/goods/getbanner")
 	@ResponseBody
-	public String getBase64Img(@RequestParam(value = "id") int id) {
-		ImageViewModel bean = mapper.getOne(id);
-//		return "{\"banner_pic\": \"" + bean.getBannerBase64() + "\", \"detail_pic\": \"" + bean.getDetailBase64()
-//				+ "\"}";
-		return bean.getBannerBase64();
+	public List<ImageViewModel> getBase64Img(@RequestParam(value = "shopId") int shopId) {
+		List<ImageViewModel> bean = mapper.getOne(shopId);
+		return bean;
 	}
 
 }
