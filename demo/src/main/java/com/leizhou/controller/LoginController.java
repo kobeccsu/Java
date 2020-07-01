@@ -17,7 +17,7 @@ import com.leizhou.www.Utility.PasswordUtils;
 
 @Controller
 public class LoginController{
-	@GetMapping({"/", "/login"})
+	@GetMapping("/login")
     public String login(Model model, @RequestParam(value="name", required=false, defaultValue="World") String name) {
         model.addAttribute("name", name);
         return "jsp/index";

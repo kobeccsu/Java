@@ -1,0 +1,6 @@
+.lc-col {
+    box-sizing: border-box;
+    position: relative;
+    float: left;
+    min-height: 1px;
+}
