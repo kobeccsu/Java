@@ -4,3 +4,23 @@
     float: left;
     min-height: 1px;
 }
+
+.cate-submenu {
+    display: none;
+    width: 759px;
+    height: 439px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.cate-hover-wrap {
+    display: none;
+    width: 799px;
+    height: 478px;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 210px;
+    border-left: 1px solid #f7f7f7;
+    box-shadow: 2px 0 5px rgba(0,0,0,.3);
+}
