@@ -21,16 +21,6 @@ class App extends React.Component {
     }
 
     getAllGoods() {
-        // Axios.get("/goods/list?shopId=" + getParameterByName("id"))
-        //     .then(response => {
-        //         this.setState({ goods: [] });
-        //         this.setState({ goods: response.data });
-        //     })
-
-        // Axios.get('/goods/getbanner?shopId=' + getParameterByName("id")).then(res => {
-        //     this.setState({ base64: res.data });
-        // })
-
         const requestOne = Axios.get("/goods/list?shopId=" + getParameterByName("id"));
         const requestTwo = Axios.get('/goods/getbanner?shopId=' + getParameterByName("id"));
 

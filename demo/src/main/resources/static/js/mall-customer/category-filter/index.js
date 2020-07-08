@@ -9,9 +9,38 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            attrList:[]
+            attrList:[],
+            goods:[],
+            ex: getParameterByName("ex")
         }
+    }
 
+    getAllGoods() {
+        const ex = this.state.ex;
+        const categoryId = getParameterByName("categoryId");
+        const requestOne = axios.get("/goods/listByCat?categoryId=" + categoryId + (ex == '' ? '' : '&ex=' + encodeURIComponent( ex) ));
+        const requestTwo = axios.get('/goods/getbannerByCat?categoryId=' +  categoryId + (ex == '' ? '' : '&ex=' + encodeURIComponent(ex)));
+
+        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+            let arr1 = responses[0].data;
+
+            arr1.forEach(function (v) { delete v.bannerPic; delete v.detailPic; });
+
+            const arr2 = responses[1].data;
+            let merged = [];
+
+            for (let i = 0; i < arr1.length; i++) {
+                merged.push({
+                    ...arr1[i],
+                    ...(arr2.find((itmInner) => itmInner.id === arr1[i].id))
+                });
+            }
+
+            this.setState({ goods: merged });
+
+        })).catch(errors => {
+            
+        })
     }
 
     loadAttrs() {
@@ -24,11 +53,21 @@ class App extends React.Component {
 
     componentDidMount(){
         this.loadAttrs();
+        this.getAllGoods();
+    }
+
+    isExistAttr(attributeId){
+        return this.state.ex && this.state.ex.split("^").filter(item=>attributeId == item.split('_')[0]).length > 0
     }
 
     render() {
+        const ex = this.state.ex;
+
+
+
         const attrListDom = this.state.attrList.map((item, index) => {
             return (
+                this.isExistAttr(item.id) ? '' :
                 <div className="J_selectorLine s-line" key={index}>
                         <div className="sl-wrap">
                             <div className="sl-key"><strong>{item.attrName}</strong></div>
@@ -39,7 +78,8 @@ class App extends React.Component {
                                     item.values.map((item1, index1) => {
                                         return (
                                         <li key={index1}>
-                                            <a href="/list.html?cat=1620%2C1624%2C1661&amp;ev=exbrand_%E7%BB%BF%E4%B9%8B%E6%BA%90%5E3707_33710%5E&amp;cid3=1661" rel="nofollow" ><i></i>{item1.attrValue}</a>
+                                            <a href={"cat?categoryId=" + getParameterByName("categoryId") 
+                                            + "&ex=" + encodeURIComponent(item.id + '_' + item1.id + (ex ? '^' + ex : ''))} rel="nofollow" ><i></i>{item1.attrValue}</a>
                                         </li>
                                 )})}
                                     </ul>
@@ -58,10 +98,26 @@ class App extends React.Component {
             )
         })
 
+        const goodsList = this.state.goods.map((item, index) => {
+            return (
+                <div key={index}>
+                    <div>
+                        <img src={"data:image/png;base64," + item.banner_pic} />
+                    </div>
+                    <div className="goods-caption">
+                        <a herf='/goods/detail'>{item.goodsname}</a>
+                    </div>
+                </div>
+            )
+        });
+
         return (
             <React.Fragment>
                 <div className="selector">
                     {attrListDom}
+                </div>
+                <div>
+                    {goodsList}
                 </div>
             </React.Fragment>
         );

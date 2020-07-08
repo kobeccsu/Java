@@ -2,7 +2,6 @@ package com.leizhou.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -82,14 +81,26 @@ public class GoodsController {
 	@GetMapping("/goods/list")
 	@ResponseBody
 	public List<GoodsBean> getList(@RequestParam(value = "shopId") int shopId) {
-		return mapper.getList(shopId);
+		return mapper.getListByShopId(shopId);
 	}
 
+	@GetMapping("/goods/listByCat")
+	@ResponseBody
+	public List<GoodsBean> getListByCat(@RequestParam(value = "categoryId") int categoryId) {
+		return mapper.getListByCategoryId(categoryId);
+	}
+	
 	@GetMapping("/goods/getbanner")
 	@ResponseBody
 	public List<ImageViewModel> getBase64Img(@RequestParam(value = "shopId") int shopId) {
-		List<ImageViewModel> bean = mapper.getOne(shopId);
+		List<ImageViewModel> bean = mapper.getImgByShopId(shopId);
 		return bean;
 	}
-
+	
+	@GetMapping("/goods/getbannerByCat")
+	@ResponseBody
+	public List<ImageViewModel> getImgByCategoryId(@RequestParam(value = "categoryId") int categoryId) {
+		List<ImageViewModel> bean = mapper.getImgByCategoryId(categoryId);
+		return bean;
+	}
 }
