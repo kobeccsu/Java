@@ -86,21 +86,38 @@ public class GoodsController {
 
 	@GetMapping("/goods/listByCat")
 	@ResponseBody
-	public List<GoodsBean> getListByCat(@RequestParam(value = "categoryId") int categoryId) {
-		return mapper.getListByCategoryId(categoryId);
+	public List<GoodsBean> getListByCat(@RequestParam(value = "categoryId") int categoryId,
+			@RequestParam(value = "ex", required = false) String ex) {
+		List<String> arr = null;
+		if (ex != null && !ex.equals("")) {
+			arr = new ArrayList<String>();
+			for (String item : ex.split("[/^]")) {
+				arr.add(item.split("_")[1]);
+			}
+		}
+		return mapper.getListByCategoryId(categoryId, arr);
 	}
-	
+
 	@GetMapping("/goods/getbanner")
 	@ResponseBody
 	public List<ImageViewModel> getBase64Img(@RequestParam(value = "shopId") int shopId) {
 		List<ImageViewModel> bean = mapper.getImgByShopId(shopId);
 		return bean;
 	}
-	
+
 	@GetMapping("/goods/getbannerByCat")
 	@ResponseBody
-	public List<ImageViewModel> getImgByCategoryId(@RequestParam(value = "categoryId") int categoryId) {
-		List<ImageViewModel> bean = mapper.getImgByCategoryId(categoryId);
+	public List<ImageViewModel> getImgByCategoryId(@RequestParam(value = "categoryId") int categoryId,
+			@RequestParam(value = "ex", required = false) String ex) {
+		List<String> arr = null;
+		if (ex != null && !ex.equals("")) {
+			arr = new ArrayList<String>();
+			for (String item : ex.split("[/^]")) {
+				arr.add(item.split("_")[1]);
+			}
+		}
+
+		List<ImageViewModel> bean = mapper.getImgByCategoryId(categoryId, arr);
 		return bean;
 	}
 }

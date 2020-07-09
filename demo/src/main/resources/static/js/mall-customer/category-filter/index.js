@@ -9,17 +9,17 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            attrList:[],
-            goods:[],
-            ex: getParameterByName("ex")
+            attrList: [],
+            goods: [],
+            ex: getParameterByName("ex") == null || getParameterByName("ex") == '' ? '' : getParameterByName("ex")
         }
     }
 
     getAllGoods() {
         const ex = this.state.ex;
         const categoryId = getParameterByName("categoryId");
-        const requestOne = axios.get("/goods/listByCat?categoryId=" + categoryId + (ex == '' ? '' : '&ex=' + encodeURIComponent( ex) ));
-        const requestTwo = axios.get('/goods/getbannerByCat?categoryId=' +  categoryId + (ex == '' ? '' : '&ex=' + encodeURIComponent(ex)));
+        const requestOne = axios.get("/goods/listByCat?categoryId=" + categoryId + (ex == ''  ? '' : '&ex=' + encodeURIComponent(ex)));
+        const requestTwo = axios.get('/goods/getbannerByCat?categoryId=' + categoryId + (ex == '' ? '' : '&ex=' + encodeURIComponent(ex)));
 
         axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
             let arr1 = responses[0].data;
@@ -39,7 +39,7 @@ class App extends React.Component {
             this.setState({ goods: merged });
 
         })).catch(errors => {
-            
+
         })
     }
 
@@ -51,37 +51,36 @@ class App extends React.Component {
             })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.loadAttrs();
         this.getAllGoods();
     }
 
-    isExistAttr(attributeId){
-        return this.state.ex && this.state.ex.split("^").filter(item=>attributeId == item.split('_')[0]).length > 0
+    isExistAttr(attributeId) {
+        return this.state.ex && this.state.ex.split("^").filter(item => attributeId == item.split('_')[0]).length > 0
     }
 
     render() {
         const ex = this.state.ex;
 
-
-
         const attrListDom = this.state.attrList.map((item, index) => {
             return (
                 this.isExistAttr(item.id) ? '' :
-                <div className="J_selectorLine s-line" key={index}>
+                    <div className="J_selectorLine s-line" key={index}>
                         <div className="sl-wrap">
                             <div className="sl-key"><strong>{item.attrName}</strong></div>
                             <div className="sl-value">
                                 <div className="sl-v-list">
                                     <ul className="J_valueList">
-                                {
-                                    item.values.map((item1, index1) => {
-                                        return (
-                                        <li key={index1}>
-                                            <a href={"cat?categoryId=" + getParameterByName("categoryId") 
-                                            + "&ex=" + encodeURIComponent(item.id + '_' + item1.id + (ex ? '^' + ex : ''))} rel="nofollow" ><i></i>{item1.attrValue}</a>
-                                        </li>
-                                )})}
+                                        {
+                                            item.values.map((item1, index1) => {
+                                                return (
+                                                    <li key={index1}>
+                                                        <a href={"cat?categoryId=" + getParameterByName("categoryId")
+                                                            + "&ex=" + encodeURIComponent(item.id + '_' + item1.id + (ex ? '^' + ex : ''))} rel="nofollow" ><i></i>{item1.attrValue}</a>
+                                                    </li>
+                                                )
+                                            })}
                                     </ul>
                                 </div>
                                 <div className="sl-btns">
@@ -90,7 +89,7 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="sl-ext">
-                                <a className="sl-e-more J_extMore" href="#" style={{visibility: 'hidden'}}>更多<i></i></a>
+                                <a className="sl-e-more J_extMore" href="#" style={{ visibility: 'hidden' }}>更多<i></i></a>
                                 <a className="sl-e-multiple J_extMultiple" href="#">多选<i></i></a>
                             </div>
                         </div>

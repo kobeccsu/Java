@@ -76,8 +76,32 @@ public interface GoodsMapper {
 //		where g.category_id = 12 and gatt.attr_val_id = 1
 //    )
 //)
-	@Select("select * from goods where category_id = #{categoryId}")
-	List<GoodsBean> getListByCategoryId(int categoryId);
+	//"select * from goods where category_id = #{categoryId}"
+	
+	
+	
+	@Select({
+		"<script>",
+	    "select * from goods where category_id = #{categoryId}",
+	    "<if test='attrList != null'>",
+	    	" and id in ( ",
+	        "<foreach item='item' index='index' collection='attrList' open='' separator='' close=''>" +
+	        		"<if test='index != 0'>"+
+	        		" and g.id in ( " +
+	        		"</if>" +
+	        		"select g.id "+
+	        		"from goods g inner join goods_attr gatt on g.id = gatt.goods_id " + 
+	        		"inner join attr_val attval on attval.id = gatt.attr_val_id " +
+	        		"where g.category_id = #{categoryId} and gatt.attr_val_id = #{item}" +
+	        "</foreach>",
+	        "<foreach item='item1' index='index' collection='attrList' open='' separator='' close=''>" +
+	        		"<if test='index != 0'>"+
+	        		" ) " +
+	        		"</if>" +
+	        "</foreach>" +
+	        ")</if>",
+	"</script>"})
+	List<GoodsBean> getListByCategoryId(int categoryId, List<String> attrList);
 
 	@ResultType(com.leizhou.viewmodel.ImageViewModel.class)
 	@Results(value= {
@@ -88,6 +112,26 @@ public interface GoodsMapper {
 	@Select("select id, banner_pic, detail_pic from goods where shop_id = #{shopId}")
 	List<ImageViewModel> getImgByShopId(int shopId);
 	
-	@Select("select id, banner_pic, detail_pic from goods where category_id = #{categoryId}")
-	List<ImageViewModel> getImgByCategoryId(int categoryId);
+	@Select("<script>" +
+			"select id, banner_pic, detail_pic from goods where category_id = #{categoryId}" +
+			"<if test='attrList != null'>" +
+	    	" and id in ( " +
+	        "<foreach item='item' index='index' collection='attrList' open='' separator='' close=''>" +
+	        		"<if test='index != 0'>" +
+	        		" and g.id in ( " +
+	        		"</if>" +
+	        		"select g.id " +
+	        		"from goods g inner join goods_attr gatt on g.id = gatt.goods_id " + 
+	        		"inner join attr_val attval on attval.id = gatt.attr_val_id " +
+	        		"where g.category_id = #{categoryId} and gatt.attr_val_id = #{item}" +
+	        "</foreach>" +
+	        "<foreach item='item1' index='index' collection='attrList' open='' separator='' close=''>" +
+	        		"<if test='index != 0'>"+
+	        		" ) " +
+	        		"</if>" +
+	        "</foreach>" +
+	        ")</if>"+
+	        "</script>"
+			)
+	List<ImageViewModel> getImgByCategoryId(int categoryId, List<String> attrList);
 }
