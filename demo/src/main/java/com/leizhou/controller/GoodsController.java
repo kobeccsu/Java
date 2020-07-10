@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,11 @@ public class GoodsController {
 	@Autowired
 	GoodsAttrMapper goodsAttrMapper;
 
+	@RequestMapping("/goods")
+	public String index(@RequestParam(value="id") int id) {
+		return "templates/mall-customer/goods";
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 	@PostMapping(value = "/goods/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseBody
@@ -82,6 +88,19 @@ public class GoodsController {
 	@ResponseBody
 	public List<GoodsBean> getList(@RequestParam(value = "shopId") int shopId) {
 		return mapper.getListByShopId(shopId);
+	}
+	
+	@GetMapping("/goods/getOneGoods")
+	@ResponseBody
+	public GoodsBean getOne(@RequestParam(value = "goodsId") int goodsId) {
+		return mapper.getListByGoodsId(goodsId);
+	}
+	
+	@GetMapping("/goods/getOneBanner")
+	@ResponseBody
+	public ImageViewModel getOneImgs(@RequestParam(value = "goodsId") int goodsId) {
+		ImageViewModel bean = mapper.getImgByGoodsId(goodsId);
+		return bean;
 	}
 
 	@GetMapping("/goods/listByCat")

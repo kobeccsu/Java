@@ -59,26 +59,8 @@ public interface GoodsMapper {
 	@Select("select * from goods where shop_id = #{shopid}")
 	List<GoodsBean> getListByShopId(int shopid);
 	
-
-//select g.id
-//from goods g inner join goods_attr gatt on g.id = gatt.goods_id 
-//inner join attr_val attval on attval.id = gatt.attr_val_id 
-//where g.category_id = 12 and gatt.attr_val_id = 13
-//and g.id in(
-//	select g.id
-//	from goods g inner join goods_attr gatt on g.id = gatt.goods_id 
-//	inner join attr_val attval on attval.id = gatt.attr_val_id 
-//	where g.category_id = 12 and gatt.attr_val_id = 4
-//    and g.id in (
-//		select g.id
-//		from goods g inner join goods_attr gatt on g.id = gatt.goods_id 
-//		inner join attr_val attval on attval.id = gatt.attr_val_id 
-//		where g.category_id = 12 and gatt.attr_val_id = 1
-//    )
-//)
-	//"select * from goods where category_id = #{categoryId}"
-	
-	
+	@Select("select * from goods where id = #{id}")
+	GoodsBean getListByGoodsId(int id);
 	
 	@Select({
 		"<script>",
@@ -111,6 +93,15 @@ public interface GoodsMapper {
 	})
 	@Select("select id, banner_pic, detail_pic from goods where shop_id = #{shopId}")
 	List<ImageViewModel> getImgByShopId(int shopId);
+	
+	@ResultType(com.leizhou.viewmodel.ImageViewModel.class)
+	@Results(value= {
+		@Result(property="id", column="id", jdbcType=JdbcType.INTEGER),
+		@Result(property="banner_pic", column="banner_pic", jdbcType=JdbcType.BLOB),
+		@Result(property="detail_pic", column="detail_pic", jdbcType=JdbcType.BLOB)
+	})
+	@Select("select id, banner_pic, detail_pic from goods where id = #{id}")
+	ImageViewModel getImgByGoodsId(int id);
 	
 	@Select("<script>" +
 			"select id, banner_pic, detail_pic from goods where category_id = #{categoryId}" +
