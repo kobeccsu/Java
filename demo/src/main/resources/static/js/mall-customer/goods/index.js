@@ -1,14 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
-import { getParameterByName } from '../../common/util'
- 
+import { getParameterByName, setCookie } from '../../common/util'
+import '../../../css/bootstrap.min.css'
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             goods: null
         }
+        this.addToCart = this.addToCart.bind(this);
     }
     getGoods() {
         const ex = this.state.ex;
@@ -35,12 +37,15 @@ class App extends React.Component {
         this.getGoods();
     }
 
+    addToCart(){
+        setCookie("goods", this.state.goods.goodsname, 7);
+    }
     render() {
         return (
             <React.Fragment>
                 <div className="top"></div>
                 <div><h1>{this.state.goods ? this.state.goods.goodsname : ''}</h1></div>
-                <div><button className="btn btn-danger">Add to Cart</button></div>
+                <div><button className="btn btn-danger" onClick={this.addToCart}>Add to Cart</button></div>
                 <div>
                     <img src={"data:image/png;base64," + (this.state.goods && this.state.goods.banner_pic ? this.state.goods.banner_pic : '')} />
                 </div>
