@@ -35,6 +35,11 @@
 		</form>
 		<%} else{%>
 			<%= "Welcome back " + username.toString() %>
+			<script>
+			setTimeout( function(){
+			    history.go(-1);
+			}, 1000);
+			</script>
 		<%} %>
 		
 	</div>
