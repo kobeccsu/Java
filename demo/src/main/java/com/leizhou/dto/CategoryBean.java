@@ -1,5 +1,6 @@
 package com.leizhou.dto;
 
+
 public class CategoryBean {
 	private int id;
 
@@ -50,4 +51,6 @@ public class CategoryBean {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
+
 }
